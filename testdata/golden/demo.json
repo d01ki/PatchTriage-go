@@ -1,0 +1,1460 @@
+{
+  "actions": [
+    {
+      "action_id": "upgrade:web-frontend:1.4:maven:orgspringframework:springbeans:5.3.17",
+      "asset": "web-frontend:1.4",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": true,
+        "label": "3 days & forensic triage",
+        "outcome": "3DF",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "resolved",
+        "unresolved_findings": 0
+      },
+      "cves": [
+        "CVE-2022-22965"
+      ],
+      "deadline_days": 3,
+      "ecosystem": "maven",
+      "effective_deadline_days": 3,
+      "effective_rule": "ssvc_only",
+      "finding_keys": [
+        "CVE-2022-22965|maven|orgspringframework|springbeans|5.3.17|web-frontend:1.4"
+      ],
+      "installed_version": "5.3.17",
+      "kev_count": 1,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "package": "org.springframework:spring-beans",
+      "package_namespace": "orgspringframework",
+      "rationales": [
+        "SSVC Deployer decision: E:Active / EXP:Open / A:Yes / HI:High => Immediate. PatchTriage's example service target is 3 days; the SSVC standard itself defines the categorical outcome, not this deadline."
+      ],
+      "summary": "Upgrade org.springframework:spring-beans to 5.3.18 on web-frontend:1.4",
+      "target_version": "5.3.18",
+      "target_version_candidates": [
+        "5.3.18"
+      ],
+      "top_priority": "P1"
+    },
+    {
+      "action_id": "upgrade:web-frontend:1.4:debian::libc6:2.36-9",
+      "asset": "web-frontend:1.4",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": true,
+        "label": "3 days & forensic triage",
+        "outcome": "3DF",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "resolved",
+        "unresolved_findings": 0
+      },
+      "cves": [
+        "CVE-2023-4911"
+      ],
+      "deadline_days": 14,
+      "ecosystem": "debian",
+      "effective_deadline_days": 14,
+      "effective_rule": "ssvc_only",
+      "finding_keys": [
+        "CVE-2023-4911|debian||libc6|2.36-9|web-frontend:1.4"
+      ],
+      "installed_version": "2.36-9",
+      "kev_count": 1,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "package": "libc6",
+      "package_namespace": "",
+      "rationales": [
+        "SSVC Deployer decision: E:Active / EXP:Open / A:No / HI:High => Out-of-Cycle. PatchTriage's example service target is 14 days; the SSVC standard itself defines the categorical outcome, not this deadline."
+      ],
+      "summary": "Upgrade libc6 to 2.36-9+deb12u3 on web-frontend:1.4",
+      "target_version": "2.36-9+deb12u3",
+      "target_version_candidates": [
+        "2.36-9+deb12u3"
+      ],
+      "top_priority": "P2"
+    },
+    {
+      "action_id": "upgrade:web-frontend:1.4:debian::xzutils:5.6.0-1",
+      "asset": "web-frontend:1.4",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": false,
+        "label": "3 days",
+        "outcome": "3D",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "resolved",
+        "unresolved_findings": 0
+      },
+      "cves": [
+        "CVE-2024-3094"
+      ],
+      "deadline_days": 30,
+      "ecosystem": "debian",
+      "effective_deadline_days": 30,
+      "effective_rule": "ssvc_only",
+      "finding_keys": [
+        "CVE-2024-3094|debian||xzutils|5.6.0-1|web-frontend:1.4"
+      ],
+      "installed_version": "5.6.0-1",
+      "kev_count": 0,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "package": "xz-utils",
+      "package_namespace": "",
+      "rationales": [
+        "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:High => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline."
+      ],
+      "summary": "Upgrade xz-utils to 5.6.1+really5.4.5-1 on web-frontend:1.4",
+      "target_version": "5.6.1+really5.4.5-1",
+      "target_version_candidates": [
+        "5.6.1+really5.4.5-1"
+      ],
+      "top_priority": "P3"
+    },
+    {
+      "action_id": "upgrade:web-frontend:1.4:npm::lodash:4.17.15",
+      "asset": "web-frontend:1.4",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": false,
+        "label": "14 days",
+        "outcome": "14D",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "resolved",
+        "unresolved_findings": 0
+      },
+      "cves": [
+        "CVE-2021-23337"
+      ],
+      "deadline_days": 30,
+      "ecosystem": "npm",
+      "effective_deadline_days": 30,
+      "effective_rule": "ssvc_only",
+      "finding_keys": [
+        "CVE-2021-23337|npm||lodash|4.17.15|web-frontend:1.4"
+      ],
+      "installed_version": "4.17.15",
+      "kev_count": 0,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "package": "lodash",
+      "package_namespace": "",
+      "rationales": [
+        "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:High => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline."
+      ],
+      "summary": "Upgrade lodash to 4.17.21 on web-frontend:1.4",
+      "target_version": "4.17.21",
+      "target_version_candidates": [
+        "4.17.21"
+      ],
+      "top_priority": "P3"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "errors": [],
+    "records": 7,
+    "source_type": "scanner:trivy+scanner:grype",
+    "status": "complete"
+  },
+  "evaluation": [
+    {
+      "epss_baseline": 0.372,
+      "epss_epss": 0.945,
+      "epss_kev": 0.945,
+      "epss_patchtriage": 0.945,
+      "epss_ssvc": 0.945,
+      "epss_total": 2.191,
+      "k": 1,
+      "kev_baseline": 0,
+      "kev_epss": 1,
+      "kev_kev": 1,
+      "kev_patchtriage": 1,
+      "kev_ssvc": 1,
+      "kev_total": 2,
+      "urgent_cvss": 0,
+      "urgent_epss": 1,
+      "urgent_kev": 1,
+      "urgent_ssvc": 1,
+      "urgent_total": 2
+    },
+    {
+      "epss_baseline": 1.317,
+      "epss_epss": 1.801,
+      "epss_kev": 1.801,
+      "epss_patchtriage": 1.801,
+      "epss_ssvc": 1.801,
+      "epss_total": 2.191,
+      "k": 2,
+      "kev_baseline": 1,
+      "kev_epss": 2,
+      "kev_kev": 2,
+      "kev_patchtriage": 2,
+      "kev_ssvc": 2,
+      "kev_total": 2,
+      "urgent_cvss": 1,
+      "urgent_epss": 2,
+      "urgent_kev": 2,
+      "urgent_ssvc": 2,
+      "urgent_total": 2
+    },
+    {
+      "epss_baseline": 2.191,
+      "epss_epss": 2.191,
+      "epss_kev": 2.191,
+      "epss_patchtriage": 2.191,
+      "epss_ssvc": 2.191,
+      "epss_total": 2.191,
+      "k": 4,
+      "kev_baseline": 2,
+      "kev_epss": 2,
+      "kev_kev": 2,
+      "kev_patchtriage": 2,
+      "kev_ssvc": 2,
+      "kev_total": 2,
+      "urgent_cvss": 2,
+      "urgent_epss": 2,
+      "urgent_kev": 2,
+      "urgent_ssvc": 2,
+      "urgent_total": 2
+    }
+  ],
+  "findings": [
+    {
+      "aliases": [],
+      "asset": {
+        "automatable": "unknown",
+        "bod2604_applicability": "unknown",
+        "context_notes": "customer-facing checkout",
+        "context_sources": [],
+        "criticality": "critical",
+        "identifier": "web-frontend:1.4",
+        "internet_exposed": true,
+        "kind": "container_image",
+        "mission_impact": "mef_failure",
+        "owner": "platform-team",
+        "publicly_exposed": "unknown",
+        "reachable": null,
+        "runtime_observed": null,
+        "safety_impact": "critical",
+        "system_exposure": "open"
+      },
+      "cvss_score": 10.0,
+      "description": "Malicious code was discovered in the upstream tarballs of xz.",
+      "enrichment": {
+        "cwe_ids": [
+          "CWE-506"
+        ],
+        "enriched_at": "<time>",
+        "epss_percentile": 0.971,
+        "epss_score": 0.372,
+        "exploit_lookup_errors": [],
+        "exploit_references": [],
+        "exploit_sources_checked": [
+          "nvd",
+          "cisa-vulnrichment"
+        ],
+        "in_cisa_kev": false,
+        "kev_date_added": null,
+        "kev_due_date": null,
+        "kev_ransomware": false,
+        "nvd_cvss_score": 10.0,
+        "nvd_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "nvd_cvss_version": "3.1",
+        "retrieval_errors": [],
+        "retrieval_status": {
+          "epss": "found",
+          "kev": "not_listed",
+          "nvd": "found",
+          "vulnrichment": "found"
+        },
+        "sources": [
+          "epss",
+          "kev",
+          "nvd",
+          "vulnrichment"
+        ],
+        "ssvc_automatable": "yes",
+        "ssvc_exploitation": "none",
+        "ssvc_role": "CISA Coordinator",
+        "ssvc_technical_impact": "total",
+        "ssvc_timestamp": "2024-04-02T04:00:23.138684Z",
+        "ssvc_version": "2.0.3",
+        "vendor_advisories": [],
+        "vendor_lookup_errors": [],
+        "vendor_sources_checked": []
+      },
+      "first_seen": "<time>",
+      "key": "CVE-2024-3094|debian||xzutils|5.6.0-1|web-frontend:1.4",
+      "package": {
+        "ecosystem": "debian",
+        "fixed_version": "5.6.1+really5.4.5-1",
+        "fixed_version_candidates": [
+          "5.6.1+really5.4.5-1"
+        ],
+        "name": "xz-utils",
+        "purl": "",
+        "version": "5.6.0-1",
+        "version_source": ""
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-3094"
+      ],
+      "reported_by": [
+        "trivy"
+      ],
+      "severity": "critical",
+      "ssvc_inputs": {},
+      "title": "xz: malicious code in distributed source",
+      "triage": {
+        "action": "patch_scheduled",
+        "audit": {
+          "baseline_priority": "P3",
+          "checks": [
+            "fabricated_numbers",
+            "ssvc_consistency",
+            "fix_consistency",
+            "evidence_completeness",
+            "ai_recommendation_consistency"
+          ],
+          "flags": [],
+          "ssvc_decision": "scheduled",
+          "verified": true
+        },
+        "backend": "ssvc",
+        "bod2604": {
+          "applicability": "unknown",
+          "applicability_note": "Applicability not recorded; BOD 26-04 is shown for reference only.",
+          "applied": false,
+          "candidate_outcomes": [
+            "3D"
+          ],
+          "deadline_anchor": "Calendar days from the earlier of: CISA adding the CVE to KEV, or the agency identifying it on the asset and updating the CDM dashboards (BOD 23-01). Timelines are maximums and change when inputs change.",
+          "deadline_days": 3,
+          "definition": "Remediate within 3 calendar days.",
+          "inputs": {
+            "automatable": {
+              "basis": "CISA Vulnrichment publishes Automatable",
+              "defaulted": false,
+              "point": "ssvc:A:2.0.0",
+              "resolved": true,
+              "source": "CISA Vulnrichment",
+              "value": "yes"
+            },
+            "in_kev": {
+              "basis": "Completed KEV lookup did not list this CVE",
+              "defaulted": false,
+              "point": "cisa:KEV:1.0.0",
+              "resolved": true,
+              "source": "CISA KEV",
+              "value": "no"
+            },
+            "publicly_exposed": {
+              "basis": "Target is marked internet exposed; CISA sets Publicly Exposed to Yes when any method identifies exposure",
+              "defaulted": false,
+              "point": "cisa:PE:1.0.0",
+              "resolved": true,
+              "source": "internet exposure evidence",
+              "value": "yes"
+            },
+            "technical_impact": {
+              "basis": "CISA Vulnrichment publishes Technical Impact",
+              "defaulted": false,
+              "point": "ssvc:TI:1.0.0",
+              "resolved": true,
+              "source": "CISA Vulnrichment",
+              "value": "total"
+            }
+          },
+          "kev_date_added": "",
+          "kev_due_date": "",
+          "obligations": [
+            "remediate"
+          ],
+          "outcome": "3D",
+          "outcome_group": "cisa:BOD2604:1.0.0",
+          "outcome_label": "3 days",
+          "policy": "cisa:DT_BOD2604:1.0.0",
+          "provisional_label": null,
+          "provisional_outcome": null,
+          "rationale": "cisa:DT_BOD2604:1.0.0 path In Kev:no / Publicly Exposed:yes / Automatable:yes / Technical Impact:total => 3 days.",
+          "status": "resolved",
+          "unresolved_inputs": []
+        },
+        "effective": {
+          "bod_outcome": "3D",
+          "bod_status": "resolved",
+          "deadline_days": 30,
+          "deadline_source": "SSVC workflow target",
+          "explanation": "SSVC Scheduled: PatchTriage workflow target 30 days. BOD 26-04 is not applied to this target (unknown); its result is shown for reference only.",
+          "obligations": [
+            "remediate"
+          ],
+          "requires_confirmation": false,
+          "rule": "ssvc_only",
+          "ssvc_outcome": "Scheduled",
+          "ssvc_workflow_days": 30
+        },
+        "priority": "P3",
+        "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:High => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+        "ssvc": {
+          "automatable": {
+            "confidence": "high",
+            "evidence": [
+              "CISA Vulnrichment publishes Automatable as Yes",
+              "CISA assessment timestamp 2024-04-02T04:00:23.138684Z"
+            ],
+            "inferred": true,
+            "key": "A",
+            "label": "Yes",
+            "needs_confirmation": false,
+            "source": "CISA Vulnrichment",
+            "value": "yes",
+            "version": "2.0.0"
+          },
+          "confidence": "high",
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "decision_path": "E:None / EXP:Open / A:Yes / HI:High",
+          "exploitation": {
+            "confidence": "high",
+            "evidence": [
+              "CISA Vulnrichment publishes Exploitation as None",
+              "CISA assessment timestamp 2024-04-02T04:00:23.138684Z"
+            ],
+            "inferred": true,
+            "key": "E",
+            "label": "None",
+            "needs_confirmation": false,
+            "source": "CISA Vulnrichment",
+            "value": "none",
+            "version": "1.1.0"
+          },
+          "human_impact": {
+            "confidence": "high",
+            "evidence": [
+              "MEF Failure mission impact + Critical safety impact"
+            ],
+            "inferred": true,
+            "key": "HI",
+            "label": "High",
+            "needs_confirmation": false,
+            "source": "SSVC Human Impact table",
+            "value": "high",
+            "version": "2.0.2"
+          },
+          "mission_impact": {
+            "confidence": "high",
+            "evidence": [
+              "Mission impact confirmed as MEF Failure"
+            ],
+            "inferred": false,
+            "key": "MI",
+            "label": "MEF Failure",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "mef_failure",
+            "version": "2.0.0"
+          },
+          "model": "ssvc:DT_DP:1.0.0",
+          "needs_confirmation": [],
+          "priority": "P3",
+          "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:High => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+          "recommended_action": "patch_scheduled",
+          "safety_impact": {
+            "confidence": "high",
+            "evidence": [
+              "Safety impact confirmed as Critical"
+            ],
+            "inferred": false,
+            "key": "SI",
+            "label": "Critical",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "critical",
+            "version": "2.0.1"
+          },
+          "suggested_deadline_days": 30,
+          "supplemental": {
+            "cvss": 10.0,
+            "epss": 0.372,
+            "kev": false,
+            "reachable": null,
+            "runtime_observed": null
+          },
+          "system_exposure": {
+            "confidence": "high",
+            "evidence": [
+              "System exposure confirmed as Open"
+            ],
+            "inferred": false,
+            "key": "EXP",
+            "label": "Open",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "open",
+            "version": "1.0.1"
+          },
+          "technical_impact": {
+            "confidence": "high",
+            "evidence": [
+              "CISA Vulnrichment publishes Technical Impact as Total",
+              "CISA assessment timestamp 2024-04-02T04:00:23.138684Z"
+            ],
+            "inferred": true,
+            "key": "TI",
+            "label": "Total",
+            "needs_confirmation": false,
+            "source": "CISA Vulnrichment",
+            "value": "total",
+            "version": "1.0.0"
+          }
+        },
+        "suggested_deadline_days": 30
+      },
+      "vuln_id": "CVE-2024-3094"
+    },
+    {
+      "aliases": [],
+      "asset": {
+        "automatable": "unknown",
+        "bod2604_applicability": "unknown",
+        "context_notes": "customer-facing checkout",
+        "context_sources": [],
+        "criticality": "critical",
+        "identifier": "web-frontend:1.4",
+        "internet_exposed": true,
+        "kind": "container_image",
+        "mission_impact": "mef_failure",
+        "owner": "platform-team",
+        "publicly_exposed": "unknown",
+        "reachable": null,
+        "runtime_observed": null,
+        "safety_impact": "critical",
+        "system_exposure": "open"
+      },
+      "cvss_score": 9.8,
+      "description": "Data binding on JDK 9+ allows unauthenticated remote code execution.",
+      "enrichment": {
+        "cwe_ids": [
+          "CWE-94"
+        ],
+        "enriched_at": "<time>",
+        "epss_percentile": 0.999,
+        "epss_score": 0.945,
+        "exploit_lookup_errors": [],
+        "exploit_references": [],
+        "exploit_sources_checked": [
+          "nvd",
+          "cisa-vulnrichment"
+        ],
+        "in_cisa_kev": true,
+        "kev_date_added": null,
+        "kev_due_date": "2022-04-25",
+        "kev_ransomware": true,
+        "nvd_cvss_score": 9.8,
+        "nvd_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "nvd_cvss_version": "3.1",
+        "retrieval_errors": [],
+        "retrieval_status": {
+          "epss": "found",
+          "kev": "listed",
+          "nvd": "found",
+          "vulnrichment": "found"
+        },
+        "sources": [
+          "epss",
+          "kev",
+          "nvd",
+          "vulnrichment"
+        ],
+        "ssvc_automatable": "yes",
+        "ssvc_exploitation": "active",
+        "ssvc_role": "CISA Coordinator",
+        "ssvc_technical_impact": "total",
+        "ssvc_timestamp": "2024-06-04T17:52:20.836000Z",
+        "ssvc_version": "2.0.3",
+        "vendor_advisories": [],
+        "vendor_lookup_errors": [],
+        "vendor_sources_checked": []
+      },
+      "first_seen": "<time>",
+      "key": "CVE-2022-22965|maven|orgspringframework|springbeans|5.3.17|web-frontend:1.4",
+      "package": {
+        "ecosystem": "java-archive",
+        "fixed_version": "5.3.18",
+        "fixed_version_candidates": [
+          "5.3.18"
+        ],
+        "name": "org.springframework:spring-beans",
+        "purl": "pkg:maven/org.springframework/spring-beans@5.3.17",
+        "version": "5.3.17",
+        "version_source": ""
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-22965"
+      ],
+      "reported_by": [
+        "grype",
+        "trivy"
+      ],
+      "severity": "critical",
+      "ssvc_inputs": {},
+      "title": "spring-framework: remote code execution via data binding (Spring4Shell)",
+      "triage": {
+        "action": "patch_immediately",
+        "audit": {
+          "baseline_priority": "P1",
+          "checks": [
+            "fabricated_numbers",
+            "ssvc_consistency",
+            "fix_consistency",
+            "evidence_completeness",
+            "ai_recommendation_consistency"
+          ],
+          "flags": [],
+          "ssvc_decision": "immediate",
+          "verified": true
+        },
+        "backend": "ssvc",
+        "bod2604": {
+          "applicability": "unknown",
+          "applicability_note": "Applicability not recorded; BOD 26-04 is shown for reference only.",
+          "applied": false,
+          "candidate_outcomes": [
+            "3DF"
+          ],
+          "deadline_anchor": "Calendar days from the earlier of: CISA adding the CVE to KEV, or the agency identifying it on the asset and updating the CDM dashboards (BOD 23-01). Timelines are maximums and change when inputs change.",
+          "deadline_days": 3,
+          "definition": "Remediate or mitigate within 3 calendar days and carry out a forensic triage of the asset to assess whether it is compromised.",
+          "inputs": {
+            "automatable": {
+              "basis": "CISA Vulnrichment publishes Automatable",
+              "defaulted": false,
+              "point": "ssvc:A:2.0.0",
+              "resolved": true,
+              "source": "CISA Vulnrichment",
+              "value": "yes"
+            },
+            "in_kev": {
+              "basis": "CVE is listed in the CISA KEV catalog",
+              "defaulted": false,
+              "point": "cisa:KEV:1.0.0",
+              "resolved": true,
+              "source": "CISA KEV",
+              "value": "yes"
+            },
+            "publicly_exposed": {
+              "basis": "Target is marked internet exposed; CISA sets Publicly Exposed to Yes when any method identifies exposure",
+              "defaulted": false,
+              "point": "cisa:PE:1.0.0",
+              "resolved": true,
+              "source": "internet exposure evidence",
+              "value": "yes"
+            },
+            "technical_impact": {
+              "basis": "CISA Vulnrichment publishes Technical Impact",
+              "defaulted": false,
+              "point": "ssvc:TI:1.0.0",
+              "resolved": true,
+              "source": "CISA Vulnrichment",
+              "value": "total"
+            }
+          },
+          "kev_date_added": "",
+          "kev_due_date": "2022-04-25",
+          "obligations": [
+            "remediate",
+            "forensic_triage"
+          ],
+          "outcome": "3DF",
+          "outcome_group": "cisa:BOD2604:1.0.0",
+          "outcome_label": "3 days & forensic triage",
+          "policy": "cisa:DT_BOD2604:1.0.0",
+          "provisional_label": null,
+          "provisional_outcome": null,
+          "rationale": "cisa:DT_BOD2604:1.0.0 path In Kev:yes / Publicly Exposed:yes / Automatable:yes / Technical Impact:total => 3 days & forensic triage.",
+          "status": "resolved",
+          "unresolved_inputs": []
+        },
+        "effective": {
+          "bod_outcome": "3DF",
+          "bod_status": "resolved",
+          "deadline_days": 3,
+          "deadline_source": "SSVC workflow target",
+          "explanation": "SSVC Immediate: PatchTriage workflow target 3 days. BOD 26-04 is not applied to this target (unknown); its result is shown for reference only.",
+          "obligations": [
+            "remediate"
+          ],
+          "requires_confirmation": false,
+          "rule": "ssvc_only",
+          "ssvc_outcome": "Immediate",
+          "ssvc_workflow_days": 3
+        },
+        "priority": "P1",
+        "rationale": "SSVC Deployer decision: E:Active / EXP:Open / A:Yes / HI:High => Immediate. PatchTriage's example service target is 3 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+        "ssvc": {
+          "automatable": {
+            "confidence": "high",
+            "evidence": [
+              "CISA Vulnrichment publishes Automatable as Yes",
+              "CISA assessment timestamp 2024-06-04T17:52:20.836000Z"
+            ],
+            "inferred": true,
+            "key": "A",
+            "label": "Yes",
+            "needs_confirmation": false,
+            "source": "CISA Vulnrichment",
+            "value": "yes",
+            "version": "2.0.0"
+          },
+          "confidence": "high",
+          "decision": "immediate",
+          "decision_label": "Immediate",
+          "decision_path": "E:Active / EXP:Open / A:Yes / HI:High",
+          "exploitation": {
+            "confidence": "high",
+            "evidence": [
+              "CISA KEV confirms exploitation in the wild",
+              "CISA KEV reports ransomware campaign use"
+            ],
+            "inferred": true,
+            "key": "E",
+            "label": "Active",
+            "needs_confirmation": false,
+            "source": "CISA KEV",
+            "value": "active",
+            "version": "1.1.0"
+          },
+          "human_impact": {
+            "confidence": "high",
+            "evidence": [
+              "MEF Failure mission impact + Critical safety impact"
+            ],
+            "inferred": true,
+            "key": "HI",
+            "label": "High",
+            "needs_confirmation": false,
+            "source": "SSVC Human Impact table",
+            "value": "high",
+            "version": "2.0.2"
+          },
+          "mission_impact": {
+            "confidence": "high",
+            "evidence": [
+              "Mission impact confirmed as MEF Failure"
+            ],
+            "inferred": false,
+            "key": "MI",
+            "label": "MEF Failure",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "mef_failure",
+            "version": "2.0.0"
+          },
+          "model": "ssvc:DT_DP:1.0.0",
+          "needs_confirmation": [],
+          "priority": "P1",
+          "rationale": "SSVC Deployer decision: E:Active / EXP:Open / A:Yes / HI:High => Immediate. PatchTriage's example service target is 3 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+          "recommended_action": "patch_immediately",
+          "safety_impact": {
+            "confidence": "high",
+            "evidence": [
+              "Safety impact confirmed as Critical"
+            ],
+            "inferred": false,
+            "key": "SI",
+            "label": "Critical",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "critical",
+            "version": "2.0.1"
+          },
+          "suggested_deadline_days": 3,
+          "supplemental": {
+            "cvss": 9.8,
+            "epss": 0.945,
+            "kev": true,
+            "reachable": null,
+            "runtime_observed": null
+          },
+          "system_exposure": {
+            "confidence": "high",
+            "evidence": [
+              "System exposure confirmed as Open"
+            ],
+            "inferred": false,
+            "key": "EXP",
+            "label": "Open",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "open",
+            "version": "1.0.1"
+          },
+          "technical_impact": {
+            "confidence": "high",
+            "evidence": [
+              "CISA Vulnrichment publishes Technical Impact as Total",
+              "CISA assessment timestamp 2024-06-04T17:52:20.836000Z"
+            ],
+            "inferred": true,
+            "key": "TI",
+            "label": "Total",
+            "needs_confirmation": false,
+            "source": "CISA Vulnrichment",
+            "value": "total",
+            "version": "1.0.0"
+          }
+        },
+        "suggested_deadline_days": 3
+      },
+      "vuln_id": "CVE-2022-22965"
+    },
+    {
+      "aliases": [],
+      "asset": {
+        "automatable": "unknown",
+        "bod2604_applicability": "unknown",
+        "context_notes": "customer-facing checkout",
+        "context_sources": [],
+        "criticality": "critical",
+        "identifier": "web-frontend:1.4",
+        "internet_exposed": true,
+        "kind": "container_image",
+        "mission_impact": "mef_failure",
+        "owner": "platform-team",
+        "publicly_exposed": "unknown",
+        "reachable": null,
+        "runtime_observed": null,
+        "safety_impact": "critical",
+        "system_exposure": "open"
+      },
+      "cvss_score": 7.8,
+      "description": "A buffer overflow in glibc's ld.so.",
+      "enrichment": {
+        "cwe_ids": [
+          "CWE-787"
+        ],
+        "enriched_at": "<time>",
+        "epss_percentile": 0.994,
+        "epss_score": 0.856,
+        "exploit_lookup_errors": [],
+        "exploit_references": [
+          "https://www.exploit-db.com/exploits/51710"
+        ],
+        "exploit_sources_checked": [
+          "nvd",
+          "cisa-vulnrichment"
+        ],
+        "in_cisa_kev": true,
+        "kev_date_added": null,
+        "kev_due_date": "2023-12-12",
+        "kev_ransomware": true,
+        "nvd_cvss_score": 7.8,
+        "nvd_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "nvd_cvss_version": "3.1",
+        "retrieval_errors": [],
+        "retrieval_status": {
+          "epss": "found",
+          "kev": "listed",
+          "nvd": "found",
+          "vulnrichment": "found"
+        },
+        "sources": [
+          "epss",
+          "kev",
+          "nvd",
+          "vulnrichment"
+        ],
+        "ssvc_automatable": "no",
+        "ssvc_exploitation": "active",
+        "ssvc_role": "CISA Coordinator",
+        "ssvc_technical_impact": "total",
+        "ssvc_timestamp": "2025-10-15T19:45:35.724824Z",
+        "ssvc_version": "2.0.3",
+        "vendor_advisories": [],
+        "vendor_lookup_errors": [],
+        "vendor_sources_checked": []
+      },
+      "first_seen": "<time>",
+      "key": "CVE-2023-4911|debian||libc6|2.36-9|web-frontend:1.4",
+      "package": {
+        "ecosystem": "debian",
+        "fixed_version": "2.36-9+deb12u3",
+        "fixed_version_candidates": [
+          "2.36-9+deb12u3"
+        ],
+        "name": "libc6",
+        "purl": "",
+        "version": "2.36-9",
+        "version_source": ""
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-4911",
+        "https://www.exploit-db.com/exploits/51710"
+      ],
+      "reported_by": [
+        "grype",
+        "trivy"
+      ],
+      "severity": "high",
+      "ssvc_inputs": {},
+      "title": "glibc: buffer overflow in ld.so (Looney Tunables)",
+      "triage": {
+        "action": "patch_out_of_cycle",
+        "audit": {
+          "baseline_priority": "P2",
+          "checks": [
+            "fabricated_numbers",
+            "ssvc_consistency",
+            "fix_consistency",
+            "evidence_completeness",
+            "ai_recommendation_consistency"
+          ],
+          "flags": [],
+          "ssvc_decision": "out_of_cycle",
+          "verified": true
+        },
+        "backend": "ssvc",
+        "bod2604": {
+          "applicability": "unknown",
+          "applicability_note": "Applicability not recorded; BOD 26-04 is shown for reference only.",
+          "applied": false,
+          "candidate_outcomes": [
+            "3DF"
+          ],
+          "deadline_anchor": "Calendar days from the earlier of: CISA adding the CVE to KEV, or the agency identifying it on the asset and updating the CDM dashboards (BOD 23-01). Timelines are maximums and change when inputs change.",
+          "deadline_days": 3,
+          "definition": "Remediate or mitigate within 3 calendar days and carry out a forensic triage of the asset to assess whether it is compromised.",
+          "inputs": {
+            "automatable": {
+              "basis": "CISA Vulnrichment publishes Automatable",
+              "defaulted": false,
+              "point": "ssvc:A:2.0.0",
+              "resolved": true,
+              "source": "CISA Vulnrichment",
+              "value": "no"
+            },
+            "in_kev": {
+              "basis": "CVE is listed in the CISA KEV catalog",
+              "defaulted": false,
+              "point": "cisa:KEV:1.0.0",
+              "resolved": true,
+              "source": "CISA KEV",
+              "value": "yes"
+            },
+            "publicly_exposed": {
+              "basis": "Target is marked internet exposed; CISA sets Publicly Exposed to Yes when any method identifies exposure",
+              "defaulted": false,
+              "point": "cisa:PE:1.0.0",
+              "resolved": true,
+              "source": "internet exposure evidence",
+              "value": "yes"
+            },
+            "technical_impact": {
+              "basis": "CISA Vulnrichment publishes Technical Impact",
+              "defaulted": false,
+              "point": "ssvc:TI:1.0.0",
+              "resolved": true,
+              "source": "CISA Vulnrichment",
+              "value": "total"
+            }
+          },
+          "kev_date_added": "",
+          "kev_due_date": "2023-12-12",
+          "obligations": [
+            "remediate",
+            "forensic_triage"
+          ],
+          "outcome": "3DF",
+          "outcome_group": "cisa:BOD2604:1.0.0",
+          "outcome_label": "3 days & forensic triage",
+          "policy": "cisa:DT_BOD2604:1.0.0",
+          "provisional_label": null,
+          "provisional_outcome": null,
+          "rationale": "cisa:DT_BOD2604:1.0.0 path In Kev:yes / Publicly Exposed:yes / Automatable:no / Technical Impact:total => 3 days & forensic triage.",
+          "status": "resolved",
+          "unresolved_inputs": []
+        },
+        "effective": {
+          "bod_outcome": "3DF",
+          "bod_status": "resolved",
+          "deadline_days": 14,
+          "deadline_source": "SSVC workflow target",
+          "explanation": "SSVC Out-of-Cycle: PatchTriage workflow target 14 days. BOD 26-04 is not applied to this target (unknown); its result is shown for reference only.",
+          "obligations": [
+            "remediate"
+          ],
+          "requires_confirmation": false,
+          "rule": "ssvc_only",
+          "ssvc_outcome": "Out-of-Cycle",
+          "ssvc_workflow_days": 14
+        },
+        "priority": "P2",
+        "rationale": "SSVC Deployer decision: E:Active / EXP:Open / A:No / HI:High => Out-of-Cycle. PatchTriage's example service target is 14 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+        "ssvc": {
+          "automatable": {
+            "confidence": "high",
+            "evidence": [
+              "CISA Vulnrichment publishes Automatable as No",
+              "CISA assessment timestamp 2025-10-15T19:45:35.724824Z"
+            ],
+            "inferred": true,
+            "key": "A",
+            "label": "No",
+            "needs_confirmation": false,
+            "source": "CISA Vulnrichment",
+            "value": "no",
+            "version": "2.0.0"
+          },
+          "confidence": "high",
+          "decision": "out_of_cycle",
+          "decision_label": "Out-of-Cycle",
+          "decision_path": "E:Active / EXP:Open / A:No / HI:High",
+          "exploitation": {
+            "confidence": "high",
+            "evidence": [
+              "CISA KEV confirms exploitation in the wild",
+              "CISA KEV reports ransomware campaign use"
+            ],
+            "inferred": true,
+            "key": "E",
+            "label": "Active",
+            "needs_confirmation": false,
+            "source": "CISA KEV",
+            "value": "active",
+            "version": "1.1.0"
+          },
+          "human_impact": {
+            "confidence": "high",
+            "evidence": [
+              "MEF Failure mission impact + Critical safety impact"
+            ],
+            "inferred": true,
+            "key": "HI",
+            "label": "High",
+            "needs_confirmation": false,
+            "source": "SSVC Human Impact table",
+            "value": "high",
+            "version": "2.0.2"
+          },
+          "mission_impact": {
+            "confidence": "high",
+            "evidence": [
+              "Mission impact confirmed as MEF Failure"
+            ],
+            "inferred": false,
+            "key": "MI",
+            "label": "MEF Failure",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "mef_failure",
+            "version": "2.0.0"
+          },
+          "model": "ssvc:DT_DP:1.0.0",
+          "needs_confirmation": [],
+          "priority": "P2",
+          "rationale": "SSVC Deployer decision: E:Active / EXP:Open / A:No / HI:High => Out-of-Cycle. PatchTriage's example service target is 14 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+          "recommended_action": "patch_out_of_cycle",
+          "safety_impact": {
+            "confidence": "high",
+            "evidence": [
+              "Safety impact confirmed as Critical"
+            ],
+            "inferred": false,
+            "key": "SI",
+            "label": "Critical",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "critical",
+            "version": "2.0.1"
+          },
+          "suggested_deadline_days": 14,
+          "supplemental": {
+            "cvss": 7.8,
+            "epss": 0.856,
+            "kev": true,
+            "reachable": null,
+            "runtime_observed": null
+          },
+          "system_exposure": {
+            "confidence": "high",
+            "evidence": [
+              "System exposure confirmed as Open"
+            ],
+            "inferred": false,
+            "key": "EXP",
+            "label": "Open",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "open",
+            "version": "1.0.1"
+          },
+          "technical_impact": {
+            "confidence": "high",
+            "evidence": [
+              "CISA Vulnrichment publishes Technical Impact as Total",
+              "CISA assessment timestamp 2025-10-15T19:45:35.724824Z"
+            ],
+            "inferred": true,
+            "key": "TI",
+            "label": "Total",
+            "needs_confirmation": false,
+            "source": "CISA Vulnrichment",
+            "value": "total",
+            "version": "1.0.0"
+          }
+        },
+        "suggested_deadline_days": 14
+      },
+      "vuln_id": "CVE-2023-4911"
+    },
+    {
+      "aliases": [
+        "GHSA-35jh-r3h4-6jhm"
+      ],
+      "asset": {
+        "automatable": "unknown",
+        "bod2604_applicability": "unknown",
+        "context_notes": "customer-facing checkout",
+        "context_sources": [],
+        "criticality": "critical",
+        "identifier": "web-frontend:1.4",
+        "internet_exposed": true,
+        "kind": "container_image",
+        "mission_impact": "mef_failure",
+        "owner": "platform-team",
+        "publicly_exposed": "unknown",
+        "reachable": null,
+        "runtime_observed": null,
+        "safety_impact": "critical",
+        "system_exposure": "open"
+      },
+      "cvss_score": 7.2,
+      "description": "lodash command injection",
+      "enrichment": {
+        "cwe_ids": [
+          "CWE-94"
+        ],
+        "enriched_at": "<time>",
+        "epss_percentile": 0.882,
+        "epss_score": 0.018,
+        "exploit_lookup_errors": [],
+        "exploit_references": [],
+        "exploit_sources_checked": [
+          "nvd"
+        ],
+        "in_cisa_kev": false,
+        "kev_date_added": null,
+        "kev_due_date": null,
+        "kev_ransomware": false,
+        "nvd_cvss_score": 7.2,
+        "nvd_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "nvd_cvss_version": "3.1",
+        "retrieval_errors": [],
+        "retrieval_status": {
+          "epss": "found",
+          "kev": "not_listed",
+          "nvd": "found",
+          "vulnrichment": "not_found"
+        },
+        "sources": [
+          "epss",
+          "kev",
+          "nvd",
+          "vulnrichment"
+        ],
+        "ssvc_automatable": null,
+        "ssvc_exploitation": null,
+        "ssvc_role": "",
+        "ssvc_technical_impact": null,
+        "ssvc_timestamp": "",
+        "ssvc_version": "",
+        "vendor_advisories": [],
+        "vendor_lookup_errors": [],
+        "vendor_sources_checked": []
+      },
+      "first_seen": "<time>",
+      "key": "CVE-2021-23337|npm||lodash|4.17.15|web-frontend:1.4",
+      "package": {
+        "ecosystem": "npm",
+        "fixed_version": "4.17.21",
+        "fixed_version_candidates": [
+          "4.17.21"
+        ],
+        "name": "lodash",
+        "purl": "pkg:npm/lodash@4.17.15",
+        "version": "4.17.15",
+        "version_source": ""
+      },
+      "references": [
+        "https://github.com/advisories/GHSA-35jh-r3h4-6jhm"
+      ],
+      "reported_by": [
+        "grype",
+        "trivy"
+      ],
+      "severity": "high",
+      "ssvc_inputs": {},
+      "title": "lodash: command injection via template",
+      "triage": {
+        "action": "patch_scheduled",
+        "audit": {
+          "baseline_priority": "P3",
+          "checks": [
+            "fabricated_numbers",
+            "ssvc_consistency",
+            "fix_consistency",
+            "evidence_completeness",
+            "ai_recommendation_consistency"
+          ],
+          "flags": [],
+          "ssvc_decision": "scheduled",
+          "verified": true
+        },
+        "backend": "ssvc",
+        "bod2604": {
+          "applicability": "unknown",
+          "applicability_note": "Applicability not recorded; BOD 26-04 is shown for reference only.",
+          "applied": false,
+          "candidate_outcomes": [
+            "14D"
+          ],
+          "deadline_anchor": "Calendar days from the earlier of: CISA adding the CVE to KEV, or the agency identifying it on the asset and updating the CDM dashboards (BOD 23-01). Timelines are maximums and change when inputs change.",
+          "deadline_days": 14,
+          "definition": "Remediate within 14 calendar days.",
+          "inputs": {
+            "automatable": {
+              "basis": "Neither value is published and the CVE is not in KEV; CISA's implementation guidance applies this default until metadata is published",
+              "defaulted": true,
+              "point": "ssvc:A:2.0.0",
+              "resolved": true,
+              "source": "CISA guidance default",
+              "value": "no"
+            },
+            "in_kev": {
+              "basis": "Completed KEV lookup did not list this CVE",
+              "defaulted": false,
+              "point": "cisa:KEV:1.0.0",
+              "resolved": true,
+              "source": "CISA KEV",
+              "value": "no"
+            },
+            "publicly_exposed": {
+              "basis": "Target is marked internet exposed; CISA sets Publicly Exposed to Yes when any method identifies exposure",
+              "defaulted": false,
+              "point": "cisa:PE:1.0.0",
+              "resolved": true,
+              "source": "internet exposure evidence",
+              "value": "yes"
+            },
+            "technical_impact": {
+              "basis": "Neither value is published and the CVE is not in KEV; CISA's implementation guidance applies this default until metadata is published",
+              "defaulted": true,
+              "point": "ssvc:TI:1.0.0",
+              "resolved": true,
+              "source": "CISA guidance default",
+              "value": "total"
+            }
+          },
+          "kev_date_added": "",
+          "kev_due_date": "",
+          "obligations": [
+            "remediate"
+          ],
+          "outcome": "14D",
+          "outcome_group": "cisa:BOD2604:1.0.0",
+          "outcome_label": "14 days",
+          "policy": "cisa:DT_BOD2604:1.0.0",
+          "provisional_label": null,
+          "provisional_outcome": null,
+          "rationale": "cisa:DT_BOD2604:1.0.0 path In Kev:no / Publicly Exposed:yes / Automatable:no / Technical Impact:total => 14 days.",
+          "status": "resolved",
+          "unresolved_inputs": []
+        },
+        "effective": {
+          "bod_outcome": "14D",
+          "bod_status": "resolved",
+          "deadline_days": 30,
+          "deadline_source": "SSVC workflow target",
+          "explanation": "SSVC Scheduled: PatchTriage workflow target 30 days. BOD 26-04 is not applied to this target (unknown); its result is shown for reference only.",
+          "obligations": [
+            "remediate"
+          ],
+          "requires_confirmation": false,
+          "rule": "ssvc_only",
+          "ssvc_outcome": "Scheduled",
+          "ssvc_workflow_days": 30
+        },
+        "priority": "P3",
+        "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:High => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+        "ssvc": {
+          "automatable": {
+            "confidence": "low",
+            "evidence": [
+              "Automation evidence is unknown; SSVC recommends assuming Yes"
+            ],
+            "inferred": true,
+            "key": "A",
+            "label": "Yes",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "yes",
+            "version": "2.0.0"
+          },
+          "confidence": "low",
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "decision_path": "E:None / EXP:Open / A:Yes / HI:High",
+          "exploitation": {
+            "confidence": "medium",
+            "evidence": [
+              "No active exploitation or public PoC evidence was found in: nvd"
+            ],
+            "inferred": true,
+            "key": "E",
+            "label": "None",
+            "needs_confirmation": false,
+            "source": "exploit-source coverage",
+            "value": "none",
+            "version": "1.1.0"
+          },
+          "human_impact": {
+            "confidence": "high",
+            "evidence": [
+              "MEF Failure mission impact + Critical safety impact"
+            ],
+            "inferred": true,
+            "key": "HI",
+            "label": "High",
+            "needs_confirmation": false,
+            "source": "SSVC Human Impact table",
+            "value": "high",
+            "version": "2.0.2"
+          },
+          "mission_impact": {
+            "confidence": "high",
+            "evidence": [
+              "Mission impact confirmed as MEF Failure"
+            ],
+            "inferred": false,
+            "key": "MI",
+            "label": "MEF Failure",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "mef_failure",
+            "version": "2.0.0"
+          },
+          "model": "ssvc:DT_DP:1.0.0",
+          "needs_confirmation": [
+            "automatable"
+          ],
+          "priority": "P3",
+          "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:High => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+          "recommended_action": "patch_scheduled",
+          "safety_impact": {
+            "confidence": "high",
+            "evidence": [
+              "Safety impact confirmed as Critical"
+            ],
+            "inferred": false,
+            "key": "SI",
+            "label": "Critical",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "critical",
+            "version": "2.0.1"
+          },
+          "suggested_deadline_days": 30,
+          "supplemental": {
+            "cvss": 7.2,
+            "epss": 0.018,
+            "kev": false,
+            "reachable": null,
+            "runtime_observed": null
+          },
+          "system_exposure": {
+            "confidence": "high",
+            "evidence": [
+              "System exposure confirmed as Open"
+            ],
+            "inferred": false,
+            "key": "EXP",
+            "label": "Open",
+            "needs_confirmation": false,
+            "source": "asset inventory",
+            "value": "open",
+            "version": "1.0.1"
+          },
+          "technical_impact": {
+            "confidence": "low",
+            "evidence": [
+              "No published Technical Impact assessment was found for this CVE"
+            ],
+            "inferred": true,
+            "key": "TI",
+            "label": "Unknown",
+            "needs_confirmation": false,
+            "source": "not assessed",
+            "value": "unknown",
+            "version": "1.0.0"
+          }
+        },
+        "suggested_deadline_days": 30
+      },
+      "vuln_id": "CVE-2021-23337"
+    }
+  ],
+  "response_policy": {
+    "applicability": [
+      "unknown"
+    ],
+    "applied": false,
+    "evaluated": 4,
+    "forensic_triage": 2,
+    "outcomes": {
+      "14D": 1,
+      "3D": 1,
+      "3DF": 2,
+      "60D": 0,
+      "FSU": 0
+    },
+    "policy": "cisa:DT_BOD2604:1.0.0",
+    "resolved": 4,
+    "sources": {
+      "decision_model": {
+        "data": "https://github.com/CERTCC/SSVC/blob/main/data/csv/cisa/cisa_bod_26_04_1_0_0.csv",
+        "retrieved": "2026-10-11",
+        "title": "CERT/CC SSVC: CISA BOD 26-04 decision table",
+        "url": "https://certcc.github.io/SSVC/howto/cisa_response/"
+      },
+      "directive": {
+        "issued": "2026-06-10",
+        "retrieved": "2026-10-11",
+        "title": "BOD 26-04: Prioritizing Security Updates Based on Risk",
+        "url": "https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk"
+      },
+      "implementation_guidance": {
+        "retrieved": "2026-10-11",
+        "title": "BOD 26-04 Implementation Guidance",
+        "url": "https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk"
+      }
+    },
+    "unresolved": 0
+  }
+}

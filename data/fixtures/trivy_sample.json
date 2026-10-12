@@ -1,0 +1,67 @@
+{
+  "SchemaVersion": 2,
+  "ArtifactName": "web-frontend:1.4",
+  "ArtifactType": "container_image",
+  "Results": [
+    {
+      "Target": "web-frontend:1.4 (debian 12.5)",
+      "Type": "debian",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2024-3094",
+          "PkgName": "xz-utils",
+          "InstalledVersion": "5.6.0-1",
+          "FixedVersion": "5.6.1+really5.4.5-1",
+          "Severity": "CRITICAL",
+          "Title": "xz: malicious code in distributed source",
+          "Description": "Malicious code was discovered in the upstream tarballs of xz.",
+          "CVSS": {"nvd": {"V3Score": 10.0}},
+          "References": ["https://nvd.nist.gov/vuln/detail/CVE-2024-3094"]
+        },
+        {
+          "VulnerabilityID": "CVE-2023-4911",
+          "PkgName": "libc6",
+          "InstalledVersion": "2.36-9",
+          "FixedVersion": "2.36-9+deb12u3",
+          "Severity": "HIGH",
+          "Title": "glibc: buffer overflow in ld.so (Looney Tunables)",
+          "Description": "A buffer overflow in glibc's ld.so.",
+          "CVSS": {"nvd": {"V3Score": 7.8}},
+          "References": ["https://www.exploit-db.com/exploits/51710"]
+        }
+      ]
+    },
+    {
+      "Target": "app/BOOT-INF/lib/spring-beans-5.3.17.jar",
+      "Type": "jar",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2022-22965",
+          "PkgName": "org.springframework:spring-beans",
+          "InstalledVersion": "5.3.17",
+          "FixedVersion": "5.3.18",
+          "Severity": "CRITICAL",
+          "Title": "spring-framework: remote code execution via data binding (Spring4Shell)",
+          "Description": "Data binding on JDK 9+ allows unauthenticated remote code execution.",
+          "CVSS": {"nvd": {"V3Score": 9.8}},
+          "References": ["https://nvd.nist.gov/vuln/detail/CVE-2022-22965"]
+        }
+      ]
+    },
+    {
+      "Target": "package-lock.json",
+      "Type": "npm",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2021-23337",
+          "PkgName": "lodash",
+          "InstalledVersion": "4.17.15",
+          "FixedVersion": "4.17.21",
+          "Severity": "HIGH",
+          "Title": "lodash: command injection via template",
+          "CVSS": {"nvd": {"V3Score": 7.2}}
+        }
+      ]
+    }
+  ]
+}
