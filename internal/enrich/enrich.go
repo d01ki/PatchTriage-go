@@ -186,13 +186,15 @@ func StatusError(resp *http.Response) error {
 }
 
 // ReadBody reads a response body bounded by MaxResponseBytes.
-func ReadBody(resp *http.Response) ([]byte, error) {
-	raw, err := io.ReadAll(io.LimitReader(resp.Body, MaxResponseBytes+1))
+func ReadBody(resp *http.Response) ([]byte, error) { return readLimited(resp, MaxResponseBytes) }
+
+func readLimited(resp *http.Response, limit int64) ([]byte, error) {
+	raw, err := io.ReadAll(io.LimitReader(resp.Body, limit+1))
 	if err != nil {
 		return nil, err
 	}
-	if len(raw) > MaxResponseBytes {
-		return nil, fmt.Errorf("response from %s exceeds %d bytes", resp.Request.URL, MaxResponseBytes)
+	if int64(len(raw)) > limit {
+		return nil, fmt.Errorf("response from %s exceeds %d bytes", resp.Request.URL, limit)
 	}
 	return raw, nil
 }
@@ -201,9 +203,9 @@ func ReadBody(resp *http.Response) ([]byte, error) {
 
 // Endpoints are the provider URLs; tests point them at local servers.
 type Endpoints struct {
-	EPSS, KEV, NVD, CVERecord                      string
-	MSRC, MSRCGuide, RHSA, UbuntuOSV, Debian, GHSA string
-	ExploitDB                                      string
+	EPSS, KEV, NVD, CVERecord           string
+	MSRC, RHSA, UbuntuOSV, Debian, GHSA string
+	ExploitDB                           string
 }
 
 // DefaultEndpoints returns the public provider URLs.
@@ -214,7 +216,6 @@ func DefaultEndpoints() Endpoints {
 		NVD:       "https://services.nvd.nist.gov/rest/json/cves/2.0",
 		CVERecord: "https://cveawg.mitre.org/api/cve",
 		MSRC:      "https://api.msrc.microsoft.com/cvrf/v3.0/updates/",
-		MSRCGuide: "https://msrc.microsoft.com/update-guide/vulnerability/",
 		RHSA:      "https://access.redhat.com/hydra/rest/securitydata/csaf.json",
 		UbuntuOSV: "https://api.osv.dev/v1/vulns/UBUNTU-",
 		Debian:    "https://security-tracker.debian.org/tracker/data/json",
@@ -319,9 +320,9 @@ func sleep(ctx context.Context, d time.Duration) error {
 
 // get performs one bounded GET, retrying 429/503 a bounded number of times
 // and honoring Retry-After. It returns the final response and body.
-func (c *client) get(ctx context.Context, hc *http.Client, target string, headers map[string]string, timeout time.Duration) (*http.Response, []byte, error) {
+func (c *client) get(ctx context.Context, hc *http.Client, target string, headers map[string]string, timeout time.Duration, limit int64) (*http.Response, []byte, error) {
 	for attempt := 0; ; attempt++ {
-		resp, body, err := getOnce(ctx, hc, target, headers, timeout)
+		resp, body, err := getOnce(ctx, hc, target, headers, timeout, limit)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -335,7 +336,7 @@ func (c *client) get(ctx context.Context, hc *http.Client, target string, header
 	}
 }
 
-func getOnce(ctx context.Context, hc *http.Client, target string, headers map[string]string, timeout time.Duration) (*http.Response, []byte, error) {
+func getOnce(ctx context.Context, hc *http.Client, target string, headers map[string]string, timeout time.Duration, limit int64) (*http.Response, []byte, error) {
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, target, nil)
@@ -351,13 +352,13 @@ func getOnce(ctx context.Context, hc *http.Client, target string, headers map[st
 		return nil, nil, err
 	}
 	defer resp.Body.Close()
-	body, err := ReadBody(resp)
+	body, err := readLimited(resp, limit)
 	return resp, body, err
 }
 
 // getJSON is get plus raise_for_status.
 func (c *client) getJSON(ctx context.Context, target string, headers map[string]string, timeout time.Duration) ([]byte, error) {
-	resp, body, err := c.get(ctx, c.http, target, headers, timeout)
+	resp, body, err := c.get(ctx, c.http, target, headers, timeout, MaxResponseBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -609,10 +610,10 @@ func (c *client) fetchNVD(ctx context.Context, cve string) (NVDEntry, error) {
 		headers["apiKey"] = c.o.NVDAPIKey
 	}
 	target := c.urls.NVD + "?cveId=" + url.QueryEscape(cve)
-	resp, body, err := c.get(ctx, c.http, target, headers, 30*time.Second)
+	resp, body, err := c.get(ctx, c.http, target, headers, 30*time.Second, MaxResponseBytes)
 	if err == nil && resp.StatusCode == http.StatusForbidden { // rate limited: back off once
 		if err = sleep(ctx, nvdForbiddenPause); err == nil {
-			resp, body, err = c.get(ctx, c.http, target, headers, 30*time.Second)
+			resp, body, err = c.get(ctx, c.http, target, headers, 30*time.Second, MaxResponseBytes)
 		}
 	}
 	if err != nil {
@@ -858,7 +859,7 @@ func (c *client) fetchVulnrichment(ctx context.Context, cve string) (Vulnrichmen
 			return cached, nil
 		}
 	}
-	resp, body, err := c.get(ctx, c.noRedirect, c.urls.CVERecord+"/"+cve, map[string]string{"Accept": "application/json"}, 30*time.Second)
+	resp, body, err := c.get(ctx, c.noRedirect, c.urls.CVERecord+"/"+cve, map[string]string{"Accept": "application/json"}, 30*time.Second, MaxResponseBytes)
 	if err != nil {
 		return VulnrichmentEntry{}, err
 	}
@@ -1039,6 +1040,10 @@ func Enrich(ctx context.Context, findings []*model.Finding, o Options) error {
 		} else {
 			e.RetrievalStatus["vulnrichment"] = "disabled"
 		}
+	}
+	if o.VendorSources != "" {
+		_, err := enrichVendors(ctx, findings, o)
+		return err
 	}
 	return nil
 }
