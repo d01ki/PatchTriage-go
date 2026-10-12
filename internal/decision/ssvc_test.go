@@ -10,7 +10,6 @@ import (
 	"github.com/d01ki/PatchTriage-go/internal/model"
 )
 
-func strp(s string) *string   { return &s }
 func f64p(v float64) *float64 { return &v }
 func boolp(b bool) *bool      { return &b }
 
