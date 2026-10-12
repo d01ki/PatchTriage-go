@@ -102,7 +102,7 @@ const (
 )
 
 var severityRank = map[Severity]int{
-	SeverityUnknown: 0, SeverityNegligible: 0, SeverityLow: 1,
+	SeverityUnknown: -1, SeverityNegligible: 0, SeverityLow: 1,
 	SeverityMedium: 2, SeverityHigh: 3, SeverityCritical: 4,
 }
 
@@ -121,7 +121,7 @@ func ParseSeverity(value string) Severity {
 	return SeverityUnknown
 }
 
-// SeverityRank orders severities for conservative merging (critical = 4).
+// SeverityRank orders severities for conservative merging (unknown = -1, critical = 4).
 func SeverityRank(s Severity) int { return severityRank[s] }
 
 // Package is the vulnerable component.

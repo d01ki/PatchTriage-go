@@ -47,7 +47,7 @@ func TestParseSeverity(t *testing.T) {
 			t.Errorf("ParseSeverity(%q) = %q, want %q", in, got, want)
 		}
 	}
-	if SeverityRank(SeverityCritical) != 4 || SeverityRank(SeverityUnknown) != 0 {
+	if SeverityRank(SeverityCritical) != 4 || SeverityRank(SeverityUnknown) != -1 || SeverityRank(SeverityNegligible) != 0 {
 		t.Error("severity ranks differ from dedup._SEV_ORDER")
 	}
 }
