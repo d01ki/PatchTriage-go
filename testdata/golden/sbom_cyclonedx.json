@@ -1,0 +1,1447 @@
+{
+  "actions": [
+    {
+      "action_id": "upgrade:sbom_cyclonedx.json:npm::lodash:4.17.20",
+      "asset": "sbom_cyclonedx.json",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": false,
+        "label": "14 days",
+        "outcome": "14D",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "unresolved",
+        "unresolved_findings": 1
+      },
+      "cves": [
+        "CVE-2021-23337"
+      ],
+      "deadline_days": 30,
+      "ecosystem": "npm",
+      "effective_deadline_days": 30,
+      "effective_rule": "ssvc_only",
+      "finding_keys": [
+        "CVE-2021-23337|npm||lodash|4.17.20|sbom_cyclonedx.json"
+      ],
+      "installed_version": "4.17.20",
+      "kev_count": 0,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "package": "lodash",
+      "package_namespace": "",
+      "rationales": [
+        "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline."
+      ],
+      "summary": "Upgrade lodash to 4.17.21 on sbom_cyclonedx.json",
+      "target_version": "4.17.21",
+      "target_version_candidates": [
+        "4.17.21"
+      ],
+      "top_priority": "P3"
+    },
+    {
+      "action_id": "upgrade:sbom_cyclonedx.json:pypi::django:3.2.0",
+      "asset": "sbom_cyclonedx.json",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": false,
+        "label": "14 days",
+        "outcome": "14D",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "unresolved",
+        "unresolved_findings": 2
+      },
+      "cves": [
+        "CVE-2021-33203",
+        "CVE-2022-34265"
+      ],
+      "deadline_days": 30,
+      "ecosystem": "pypi",
+      "effective_deadline_days": 30,
+      "effective_rule": "ssvc_only",
+      "finding_keys": [
+        "CVE-2022-34265|pypi||django|3.2.0|sbom_cyclonedx.json",
+        "CVE-2021-33203|pypi||django|3.2.0|sbom_cyclonedx.json"
+      ],
+      "installed_version": "3.2.0",
+      "kev_count": 0,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "package": "django",
+      "package_namespace": "",
+      "rationales": [
+        "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+        "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline."
+      ],
+      "summary": "Upgrade django to 3.2.14 on sbom_cyclonedx.json",
+      "target_version": "3.2.14",
+      "target_version_candidates": [
+        "3.2.4",
+        "3.2.14"
+      ],
+      "top_priority": "P3"
+    },
+    {
+      "action_id": "upgrade:sbom_cyclonedx.json:pypi::sqlparse:0.4.1",
+      "asset": "sbom_cyclonedx.json",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": false,
+        "label": "14 days",
+        "outcome": "14D",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "unresolved",
+        "unresolved_findings": 1
+      },
+      "cves": [
+        "CVE-2021-32839"
+      ],
+      "deadline_days": 30,
+      "ecosystem": "pypi",
+      "effective_deadline_days": 30,
+      "effective_rule": "ssvc_only",
+      "finding_keys": [
+        "CVE-2021-32839|pypi||sqlparse|0.4.1|sbom_cyclonedx.json"
+      ],
+      "installed_version": "0.4.1",
+      "kev_count": 0,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "package": "sqlparse",
+      "package_namespace": "",
+      "rationales": [
+        "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline."
+      ],
+      "summary": "Upgrade sqlparse to 0.4.2 on sbom_cyclonedx.json",
+      "target_version": "0.4.2",
+      "target_version_candidates": [
+        "0.4.2"
+      ],
+      "top_priority": "P3"
+    }
+  ],
+  "coverage": {
+    "complete": false,
+    "errors": [
+      "OSV-2099-MISSING: Client error '404 Not Found' for url 'https://api.osv.dev/v1/vulns/OSV-2099-MISSING'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    ],
+    "failed_components": 0,
+    "inferred_components": 0,
+    "inferred_versions": [],
+    "queried_components": 3,
+    "queried_ecosystems": [
+      "npm",
+      "pypi"
+    ],
+    "queryable_components": 3,
+    "source_type": "sbom:osv",
+    "status": "provider_reported",
+    "total_components": 3,
+    "unqueryable_components": 0,
+    "unqueryable_ecosystems": [],
+    "unqueryable_names": [],
+    "vulnerability_details_failed": 1,
+    "vulnerability_details_resolved": 4,
+    "vulnerability_ids": 5
+  },
+  "evaluation": [
+    {
+      "epss_baseline": 0.018,
+      "epss_epss": 0.018,
+      "epss_kev": 0.018,
+      "epss_patchtriage": 0.018,
+      "epss_ssvc": 0.018,
+      "epss_total": 0.018,
+      "k": 1,
+      "kev_baseline": 0,
+      "kev_epss": 0,
+      "kev_kev": 0,
+      "kev_patchtriage": 0,
+      "kev_ssvc": 0,
+      "kev_total": 0,
+      "urgent_cvss": 0,
+      "urgent_epss": 0,
+      "urgent_kev": 0,
+      "urgent_ssvc": 0,
+      "urgent_total": 0
+    },
+    {
+      "epss_baseline": 0.018,
+      "epss_epss": 0.018,
+      "epss_kev": 0.018,
+      "epss_patchtriage": 0.018,
+      "epss_ssvc": 0.018,
+      "epss_total": 0.018,
+      "k": 2,
+      "kev_baseline": 0,
+      "kev_epss": 0,
+      "kev_kev": 0,
+      "kev_patchtriage": 0,
+      "kev_ssvc": 0,
+      "kev_total": 0,
+      "urgent_cvss": 0,
+      "urgent_epss": 0,
+      "urgent_kev": 0,
+      "urgent_ssvc": 0,
+      "urgent_total": 0
+    },
+    {
+      "epss_baseline": 0.018,
+      "epss_epss": 0.018,
+      "epss_kev": 0.018,
+      "epss_patchtriage": 0.018,
+      "epss_ssvc": 0.018,
+      "epss_total": 0.018,
+      "k": 4,
+      "kev_baseline": 0,
+      "kev_epss": 0,
+      "kev_kev": 0,
+      "kev_patchtriage": 0,
+      "kev_ssvc": 0,
+      "kev_total": 0,
+      "urgent_cvss": 0,
+      "urgent_epss": 0,
+      "urgent_kev": 0,
+      "urgent_ssvc": 0,
+      "urgent_total": 0
+    }
+  ],
+  "findings": [
+    {
+      "aliases": [
+        "GHSA-2gwj-7jmv-h26r"
+      ],
+      "asset": {
+        "automatable": "unknown",
+        "bod2604_applicability": "unknown",
+        "context_notes": "",
+        "context_sources": [],
+        "criticality": "unknown",
+        "identifier": "sbom_cyclonedx.json",
+        "internet_exposed": null,
+        "kind": "sbom",
+        "mission_impact": "unknown",
+        "owner": "",
+        "publicly_exposed": "unknown",
+        "reachable": null,
+        "runtime_observed": null,
+        "safety_impact": "unknown",
+        "system_exposure": "unknown"
+      },
+      "cvss_score": null,
+      "description": "Trunc() and Extract() database functions are subject to SQL injection if untrusted data is used as a kind/lookup_name value.",
+      "enrichment": {
+        "cwe_ids": [],
+        "enriched_at": "<time>",
+        "epss_percentile": null,
+        "epss_score": null,
+        "exploit_lookup_errors": [],
+        "exploit_references": [],
+        "exploit_sources_checked": [],
+        "in_cisa_kev": false,
+        "kev_date_added": null,
+        "kev_due_date": null,
+        "kev_ransomware": false,
+        "nvd_cvss_score": null,
+        "nvd_cvss_vector": "",
+        "nvd_cvss_version": "",
+        "retrieval_errors": [],
+        "retrieval_status": {
+          "epss": "not_found",
+          "kev": "not_listed",
+          "nvd": "not_found",
+          "vulnrichment": "not_found"
+        },
+        "sources": [
+          "epss:snapshot",
+          "kev:snapshot",
+          "nvd:snapshot",
+          "vulnrichment:snapshot"
+        ],
+        "ssvc_automatable": null,
+        "ssvc_exploitation": null,
+        "ssvc_role": "",
+        "ssvc_technical_impact": null,
+        "ssvc_timestamp": "",
+        "ssvc_version": "",
+        "vendor_advisories": [],
+        "vendor_lookup_errors": [],
+        "vendor_sources_checked": []
+      },
+      "first_seen": "<time>",
+      "key": "CVE-2022-34265|pypi||django|3.2.0|sbom_cyclonedx.json",
+      "package": {
+        "ecosystem": "pypi",
+        "fixed_version": "3.2.14",
+        "fixed_version_candidates": [
+          "3.2.14"
+        ],
+        "name": "django",
+        "purl": "pkg:pypi/django@3.2.0",
+        "version": "3.2.0",
+        "version_source": ""
+      },
+      "references": [
+        "https://www.djangoproject.com/weblog/2022/jul/04/security-releases/"
+      ],
+      "reported_by": [
+        "osv-sbom"
+      ],
+      "severity": "critical",
+      "ssvc_inputs": {},
+      "title": "SQL Injection in Django",
+      "triage": {
+        "action": "patch_scheduled",
+        "audit": {
+          "baseline_priority": "P3",
+          "checks": [
+            "fabricated_numbers",
+            "ssvc_consistency",
+            "fix_consistency",
+            "evidence_completeness",
+            "ai_recommendation_consistency"
+          ],
+          "flags": [],
+          "ssvc_decision": "scheduled",
+          "verified": true
+        },
+        "backend": "ssvc",
+        "bod2604": {
+          "applicability": "unknown",
+          "applicability_note": "Applicability not recorded; BOD 26-04 is shown for reference only.",
+          "applied": false,
+          "candidate_outcomes": [
+            "14D",
+            "FSU"
+          ],
+          "deadline_anchor": "Calendar days from the earlier of: CISA adding the CVE to KEV, or the agency identifying it on the asset and updating the CDM dashboards (BOD 23-01). Timelines are maximums and change when inputs change.",
+          "deadline_days": 14,
+          "definition": "Remediate within 14 calendar days.",
+          "inputs": {
+            "automatable": {
+              "basis": "Neither value is published and the CVE is not in KEV; CISA's implementation guidance applies this default until metadata is published",
+              "defaulted": true,
+              "point": "ssvc:A:2.0.0",
+              "resolved": true,
+              "source": "CISA guidance default",
+              "value": "no"
+            },
+            "in_kev": {
+              "basis": "Completed KEV lookup did not list this CVE",
+              "defaulted": false,
+              "point": "cisa:KEV:1.0.0",
+              "resolved": true,
+              "source": "CISA KEV",
+              "value": "no"
+            },
+            "publicly_exposed": {
+              "basis": "Publicly Exposed is not recorded. SSVC System Exposure is a different decision point and is not used. CISA's best-effort fallback needs routable-IP and asset-type tags PatchTriage does not hold",
+              "defaulted": false,
+              "point": "cisa:PE:1.0.0",
+              "resolved": false,
+              "source": "unresolved",
+              "value": "unknown"
+            },
+            "technical_impact": {
+              "basis": "Neither value is published and the CVE is not in KEV; CISA's implementation guidance applies this default until metadata is published",
+              "defaulted": true,
+              "point": "ssvc:TI:1.0.0",
+              "resolved": true,
+              "source": "CISA guidance default",
+              "value": "total"
+            }
+          },
+          "kev_date_added": "",
+          "kev_due_date": "",
+          "obligations": [
+            "remediate"
+          ],
+          "outcome": null,
+          "outcome_group": "cisa:BOD2604:1.0.0",
+          "outcome_label": null,
+          "policy": "cisa:DT_BOD2604:1.0.0",
+          "provisional_label": "14 days",
+          "provisional_outcome": "14D",
+          "rationale": "BOD 26-04 outcome unresolved: publicly exposed not established. Candidate outcomes: 14 days, Fix on system upgrade. Provisional (most urgent): 14 days.",
+          "status": "unresolved",
+          "unresolved_inputs": [
+            "publicly_exposed"
+          ]
+        },
+        "effective": {
+          "bod_outcome": "14D",
+          "bod_status": "unresolved",
+          "deadline_days": 30,
+          "deadline_source": "SSVC workflow target",
+          "explanation": "SSVC Scheduled: PatchTriage workflow target 30 days. BOD 26-04 is not applied to this target (unknown); its result is shown for reference only.",
+          "obligations": [
+            "remediate"
+          ],
+          "requires_confirmation": false,
+          "rule": "ssvc_only",
+          "ssvc_outcome": "Scheduled",
+          "ssvc_workflow_days": 30
+        },
+        "priority": "P3",
+        "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+        "ssvc": {
+          "automatable": {
+            "confidence": "low",
+            "evidence": [
+              "Automation evidence is unknown; SSVC recommends assuming Yes"
+            ],
+            "inferred": true,
+            "key": "A",
+            "label": "Yes",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "yes",
+            "version": "2.0.0"
+          },
+          "confidence": "low",
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "decision_path": "E:None / EXP:Open / A:Yes / HI:Low",
+          "exploitation": {
+            "confidence": "low",
+            "evidence": [
+              "No completed exploit-source search is recorded; absence of evidence is not evidence of absence"
+            ],
+            "inferred": true,
+            "key": "E",
+            "label": "None",
+            "needs_confirmation": true,
+            "source": "unconfirmed default",
+            "value": "none",
+            "version": "1.1.0"
+          },
+          "human_impact": {
+            "confidence": "low",
+            "evidence": [
+              "MEF Support Crippled mission impact + Marginal safety impact"
+            ],
+            "inferred": true,
+            "key": "HI",
+            "label": "Low",
+            "needs_confirmation": true,
+            "source": "SSVC Human Impact table",
+            "value": "low",
+            "version": "2.0.2"
+          },
+          "mission_impact": {
+            "confidence": "low",
+            "evidence": [
+              "Mission impact is unknown; SSVC recommends MEF Support Crippled"
+            ],
+            "inferred": true,
+            "key": "MI",
+            "label": "MEF Support Crippled",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "mef_support_crippled",
+            "version": "2.0.0"
+          },
+          "model": "ssvc:DT_DP:1.0.0",
+          "needs_confirmation": [
+            "exploitation",
+            "system_exposure",
+            "automatable",
+            "mission_impact",
+            "safety_impact"
+          ],
+          "priority": "P3",
+          "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+          "recommended_action": "patch_scheduled",
+          "safety_impact": {
+            "confidence": "low",
+            "evidence": [
+              "Safety impact is unknown; SSVC recommends assuming Marginal"
+            ],
+            "inferred": true,
+            "key": "SI",
+            "label": "Marginal",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "marginal",
+            "version": "2.0.1"
+          },
+          "suggested_deadline_days": 30,
+          "supplemental": {
+            "cvss": null,
+            "epss": null,
+            "kev": false,
+            "reachable": null,
+            "runtime_observed": null
+          },
+          "system_exposure": {
+            "confidence": "low",
+            "evidence": [
+              "Exposure is unknown; SSVC recommends assuming Open"
+            ],
+            "inferred": true,
+            "key": "EXP",
+            "label": "Open",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "open",
+            "version": "1.0.1"
+          },
+          "technical_impact": {
+            "confidence": "low",
+            "evidence": [
+              "No published Technical Impact assessment was found for this CVE"
+            ],
+            "inferred": true,
+            "key": "TI",
+            "label": "Unknown",
+            "needs_confirmation": false,
+            "source": "not assessed",
+            "value": "unknown",
+            "version": "1.0.0"
+          }
+        },
+        "suggested_deadline_days": 30
+      },
+      "vuln_id": "CVE-2022-34265"
+    },
+    {
+      "aliases": [
+        "GHSA-35jh-r3h4-6jhm"
+      ],
+      "asset": {
+        "automatable": "unknown",
+        "bod2604_applicability": "unknown",
+        "context_notes": "",
+        "context_sources": [],
+        "criticality": "unknown",
+        "identifier": "sbom_cyclonedx.json",
+        "internet_exposed": null,
+        "kind": "sbom",
+        "mission_impact": "unknown",
+        "owner": "",
+        "publicly_exposed": "unknown",
+        "reachable": null,
+        "runtime_observed": null,
+        "safety_impact": "unknown",
+        "system_exposure": "unknown"
+      },
+      "cvss_score": null,
+      "description": "lodash versions prior to 4.17.21 are vulnerable to Command Injection via the template function.",
+      "enrichment": {
+        "cwe_ids": [
+          "CWE-94"
+        ],
+        "enriched_at": "<time>",
+        "epss_percentile": 0.882,
+        "epss_score": 0.018,
+        "exploit_lookup_errors": [],
+        "exploit_references": [],
+        "exploit_sources_checked": [
+          "nvd:snapshot"
+        ],
+        "in_cisa_kev": false,
+        "kev_date_added": null,
+        "kev_due_date": null,
+        "kev_ransomware": false,
+        "nvd_cvss_score": 7.2,
+        "nvd_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "nvd_cvss_version": "3.1",
+        "retrieval_errors": [],
+        "retrieval_status": {
+          "epss": "found",
+          "kev": "not_listed",
+          "nvd": "found",
+          "vulnrichment": "not_found"
+        },
+        "sources": [
+          "epss:snapshot",
+          "kev:snapshot",
+          "nvd:snapshot",
+          "vulnrichment:snapshot"
+        ],
+        "ssvc_automatable": null,
+        "ssvc_exploitation": null,
+        "ssvc_role": "",
+        "ssvc_technical_impact": null,
+        "ssvc_timestamp": "",
+        "ssvc_version": "",
+        "vendor_advisories": [],
+        "vendor_lookup_errors": [],
+        "vendor_sources_checked": []
+      },
+      "first_seen": "<time>",
+      "key": "CVE-2021-23337|npm||lodash|4.17.20|sbom_cyclonedx.json",
+      "package": {
+        "ecosystem": "npm",
+        "fixed_version": "4.17.21",
+        "fixed_version_candidates": [
+          "4.17.21"
+        ],
+        "name": "lodash",
+        "purl": "pkg:npm/lodash@4.17.20",
+        "version": "4.17.20",
+        "version_source": ""
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+      ],
+      "reported_by": [
+        "osv-sbom"
+      ],
+      "severity": "high",
+      "ssvc_inputs": {},
+      "title": "Command Injection in lodash",
+      "triage": {
+        "action": "patch_scheduled",
+        "audit": {
+          "baseline_priority": "P3",
+          "checks": [
+            "fabricated_numbers",
+            "ssvc_consistency",
+            "fix_consistency",
+            "evidence_completeness",
+            "ai_recommendation_consistency"
+          ],
+          "flags": [],
+          "ssvc_decision": "scheduled",
+          "verified": true
+        },
+        "backend": "ssvc",
+        "bod2604": {
+          "applicability": "unknown",
+          "applicability_note": "Applicability not recorded; BOD 26-04 is shown for reference only.",
+          "applied": false,
+          "candidate_outcomes": [
+            "14D",
+            "FSU"
+          ],
+          "deadline_anchor": "Calendar days from the earlier of: CISA adding the CVE to KEV, or the agency identifying it on the asset and updating the CDM dashboards (BOD 23-01). Timelines are maximums and change when inputs change.",
+          "deadline_days": 14,
+          "definition": "Remediate within 14 calendar days.",
+          "inputs": {
+            "automatable": {
+              "basis": "Neither value is published and the CVE is not in KEV; CISA's implementation guidance applies this default until metadata is published",
+              "defaulted": true,
+              "point": "ssvc:A:2.0.0",
+              "resolved": true,
+              "source": "CISA guidance default",
+              "value": "no"
+            },
+            "in_kev": {
+              "basis": "Completed KEV lookup did not list this CVE",
+              "defaulted": false,
+              "point": "cisa:KEV:1.0.0",
+              "resolved": true,
+              "source": "CISA KEV",
+              "value": "no"
+            },
+            "publicly_exposed": {
+              "basis": "Publicly Exposed is not recorded. SSVC System Exposure is a different decision point and is not used. CISA's best-effort fallback needs routable-IP and asset-type tags PatchTriage does not hold",
+              "defaulted": false,
+              "point": "cisa:PE:1.0.0",
+              "resolved": false,
+              "source": "unresolved",
+              "value": "unknown"
+            },
+            "technical_impact": {
+              "basis": "Neither value is published and the CVE is not in KEV; CISA's implementation guidance applies this default until metadata is published",
+              "defaulted": true,
+              "point": "ssvc:TI:1.0.0",
+              "resolved": true,
+              "source": "CISA guidance default",
+              "value": "total"
+            }
+          },
+          "kev_date_added": "",
+          "kev_due_date": "",
+          "obligations": [
+            "remediate"
+          ],
+          "outcome": null,
+          "outcome_group": "cisa:BOD2604:1.0.0",
+          "outcome_label": null,
+          "policy": "cisa:DT_BOD2604:1.0.0",
+          "provisional_label": "14 days",
+          "provisional_outcome": "14D",
+          "rationale": "BOD 26-04 outcome unresolved: publicly exposed not established. Candidate outcomes: 14 days, Fix on system upgrade. Provisional (most urgent): 14 days.",
+          "status": "unresolved",
+          "unresolved_inputs": [
+            "publicly_exposed"
+          ]
+        },
+        "effective": {
+          "bod_outcome": "14D",
+          "bod_status": "unresolved",
+          "deadline_days": 30,
+          "deadline_source": "SSVC workflow target",
+          "explanation": "SSVC Scheduled: PatchTriage workflow target 30 days. BOD 26-04 is not applied to this target (unknown); its result is shown for reference only.",
+          "obligations": [
+            "remediate"
+          ],
+          "requires_confirmation": false,
+          "rule": "ssvc_only",
+          "ssvc_outcome": "Scheduled",
+          "ssvc_workflow_days": 30
+        },
+        "priority": "P3",
+        "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+        "ssvc": {
+          "automatable": {
+            "confidence": "low",
+            "evidence": [
+              "Automation evidence is unknown; SSVC recommends assuming Yes"
+            ],
+            "inferred": true,
+            "key": "A",
+            "label": "Yes",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "yes",
+            "version": "2.0.0"
+          },
+          "confidence": "low",
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "decision_path": "E:None / EXP:Open / A:Yes / HI:Low",
+          "exploitation": {
+            "confidence": "medium",
+            "evidence": [
+              "No active exploitation or public PoC evidence was found in: nvd:snapshot"
+            ],
+            "inferred": true,
+            "key": "E",
+            "label": "None",
+            "needs_confirmation": false,
+            "source": "exploit-source coverage",
+            "value": "none",
+            "version": "1.1.0"
+          },
+          "human_impact": {
+            "confidence": "low",
+            "evidence": [
+              "MEF Support Crippled mission impact + Marginal safety impact"
+            ],
+            "inferred": true,
+            "key": "HI",
+            "label": "Low",
+            "needs_confirmation": true,
+            "source": "SSVC Human Impact table",
+            "value": "low",
+            "version": "2.0.2"
+          },
+          "mission_impact": {
+            "confidence": "low",
+            "evidence": [
+              "Mission impact is unknown; SSVC recommends MEF Support Crippled"
+            ],
+            "inferred": true,
+            "key": "MI",
+            "label": "MEF Support Crippled",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "mef_support_crippled",
+            "version": "2.0.0"
+          },
+          "model": "ssvc:DT_DP:1.0.0",
+          "needs_confirmation": [
+            "system_exposure",
+            "automatable",
+            "mission_impact",
+            "safety_impact"
+          ],
+          "priority": "P3",
+          "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+          "recommended_action": "patch_scheduled",
+          "safety_impact": {
+            "confidence": "low",
+            "evidence": [
+              "Safety impact is unknown; SSVC recommends assuming Marginal"
+            ],
+            "inferred": true,
+            "key": "SI",
+            "label": "Marginal",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "marginal",
+            "version": "2.0.1"
+          },
+          "suggested_deadline_days": 30,
+          "supplemental": {
+            "cvss": 7.2,
+            "epss": 0.018,
+            "kev": false,
+            "reachable": null,
+            "runtime_observed": null
+          },
+          "system_exposure": {
+            "confidence": "low",
+            "evidence": [
+              "Exposure is unknown; SSVC recommends assuming Open"
+            ],
+            "inferred": true,
+            "key": "EXP",
+            "label": "Open",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "open",
+            "version": "1.0.1"
+          },
+          "technical_impact": {
+            "confidence": "low",
+            "evidence": [
+              "No published Technical Impact assessment was found for this CVE"
+            ],
+            "inferred": true,
+            "key": "TI",
+            "label": "Unknown",
+            "needs_confirmation": false,
+            "source": "not assessed",
+            "value": "unknown",
+            "version": "1.0.0"
+          }
+        },
+        "suggested_deadline_days": 30
+      },
+      "vuln_id": "CVE-2021-23337"
+    },
+    {
+      "aliases": [
+        "GHSA-p5w8-wqhj-9hhf"
+      ],
+      "asset": {
+        "automatable": "unknown",
+        "bod2604_applicability": "unknown",
+        "context_notes": "",
+        "context_sources": [],
+        "criticality": "unknown",
+        "identifier": "sbom_cyclonedx.json",
+        "internet_exposed": null,
+        "kind": "sbom",
+        "mission_impact": "unknown",
+        "owner": "",
+        "publicly_exposed": "unknown",
+        "reachable": null,
+        "runtime_observed": null,
+        "safety_impact": "unknown",
+        "system_exposure": "unknown"
+      },
+      "cvss_score": null,
+      "description": "The formatter function that strips comments from a SQL contains a regular expression that is vulnerable to ReDoS.",
+      "enrichment": {
+        "cwe_ids": [],
+        "enriched_at": "<time>",
+        "epss_percentile": null,
+        "epss_score": null,
+        "exploit_lookup_errors": [],
+        "exploit_references": [],
+        "exploit_sources_checked": [],
+        "in_cisa_kev": false,
+        "kev_date_added": null,
+        "kev_due_date": null,
+        "kev_ransomware": false,
+        "nvd_cvss_score": null,
+        "nvd_cvss_vector": "",
+        "nvd_cvss_version": "",
+        "retrieval_errors": [],
+        "retrieval_status": {
+          "epss": "not_found",
+          "kev": "not_listed",
+          "nvd": "not_found",
+          "vulnrichment": "not_found"
+        },
+        "sources": [
+          "epss:snapshot",
+          "kev:snapshot",
+          "nvd:snapshot",
+          "vulnrichment:snapshot"
+        ],
+        "ssvc_automatable": null,
+        "ssvc_exploitation": null,
+        "ssvc_role": "",
+        "ssvc_technical_impact": null,
+        "ssvc_timestamp": "",
+        "ssvc_version": "",
+        "vendor_advisories": [],
+        "vendor_lookup_errors": [],
+        "vendor_sources_checked": []
+      },
+      "first_seen": "<time>",
+      "key": "CVE-2021-32839|pypi||sqlparse|0.4.1|sbom_cyclonedx.json",
+      "package": {
+        "ecosystem": "pypi",
+        "fixed_version": "0.4.2",
+        "fixed_version_candidates": [
+          "0.4.2"
+        ],
+        "name": "sqlparse",
+        "purl": "pkg:pypi/sqlparse@0.4.1",
+        "version": "0.4.1",
+        "version_source": ""
+      },
+      "references": [
+        "https://github.com/andialbrecht/sqlparse/security/advisories/GHSA-p5w8-wqhj-9hhf"
+      ],
+      "reported_by": [
+        "osv-sbom"
+      ],
+      "severity": "medium",
+      "ssvc_inputs": {},
+      "title": "Regular Expression Denial of Service in sqlparse",
+      "triage": {
+        "action": "patch_scheduled",
+        "audit": {
+          "baseline_priority": "P3",
+          "checks": [
+            "fabricated_numbers",
+            "ssvc_consistency",
+            "fix_consistency",
+            "evidence_completeness",
+            "ai_recommendation_consistency"
+          ],
+          "flags": [],
+          "ssvc_decision": "scheduled",
+          "verified": true
+        },
+        "backend": "ssvc",
+        "bod2604": {
+          "applicability": "unknown",
+          "applicability_note": "Applicability not recorded; BOD 26-04 is shown for reference only.",
+          "applied": false,
+          "candidate_outcomes": [
+            "14D",
+            "FSU"
+          ],
+          "deadline_anchor": "Calendar days from the earlier of: CISA adding the CVE to KEV, or the agency identifying it on the asset and updating the CDM dashboards (BOD 23-01). Timelines are maximums and change when inputs change.",
+          "deadline_days": 14,
+          "definition": "Remediate within 14 calendar days.",
+          "inputs": {
+            "automatable": {
+              "basis": "Neither value is published and the CVE is not in KEV; CISA's implementation guidance applies this default until metadata is published",
+              "defaulted": true,
+              "point": "ssvc:A:2.0.0",
+              "resolved": true,
+              "source": "CISA guidance default",
+              "value": "no"
+            },
+            "in_kev": {
+              "basis": "Completed KEV lookup did not list this CVE",
+              "defaulted": false,
+              "point": "cisa:KEV:1.0.0",
+              "resolved": true,
+              "source": "CISA KEV",
+              "value": "no"
+            },
+            "publicly_exposed": {
+              "basis": "Publicly Exposed is not recorded. SSVC System Exposure is a different decision point and is not used. CISA's best-effort fallback needs routable-IP and asset-type tags PatchTriage does not hold",
+              "defaulted": false,
+              "point": "cisa:PE:1.0.0",
+              "resolved": false,
+              "source": "unresolved",
+              "value": "unknown"
+            },
+            "technical_impact": {
+              "basis": "Neither value is published and the CVE is not in KEV; CISA's implementation guidance applies this default until metadata is published",
+              "defaulted": true,
+              "point": "ssvc:TI:1.0.0",
+              "resolved": true,
+              "source": "CISA guidance default",
+              "value": "total"
+            }
+          },
+          "kev_date_added": "",
+          "kev_due_date": "",
+          "obligations": [
+            "remediate"
+          ],
+          "outcome": null,
+          "outcome_group": "cisa:BOD2604:1.0.0",
+          "outcome_label": null,
+          "policy": "cisa:DT_BOD2604:1.0.0",
+          "provisional_label": "14 days",
+          "provisional_outcome": "14D",
+          "rationale": "BOD 26-04 outcome unresolved: publicly exposed not established. Candidate outcomes: 14 days, Fix on system upgrade. Provisional (most urgent): 14 days.",
+          "status": "unresolved",
+          "unresolved_inputs": [
+            "publicly_exposed"
+          ]
+        },
+        "effective": {
+          "bod_outcome": "14D",
+          "bod_status": "unresolved",
+          "deadline_days": 30,
+          "deadline_source": "SSVC workflow target",
+          "explanation": "SSVC Scheduled: PatchTriage workflow target 30 days. BOD 26-04 is not applied to this target (unknown); its result is shown for reference only.",
+          "obligations": [
+            "remediate"
+          ],
+          "requires_confirmation": false,
+          "rule": "ssvc_only",
+          "ssvc_outcome": "Scheduled",
+          "ssvc_workflow_days": 30
+        },
+        "priority": "P3",
+        "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+        "ssvc": {
+          "automatable": {
+            "confidence": "low",
+            "evidence": [
+              "Automation evidence is unknown; SSVC recommends assuming Yes"
+            ],
+            "inferred": true,
+            "key": "A",
+            "label": "Yes",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "yes",
+            "version": "2.0.0"
+          },
+          "confidence": "low",
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "decision_path": "E:None / EXP:Open / A:Yes / HI:Low",
+          "exploitation": {
+            "confidence": "low",
+            "evidence": [
+              "No completed exploit-source search is recorded; absence of evidence is not evidence of absence"
+            ],
+            "inferred": true,
+            "key": "E",
+            "label": "None",
+            "needs_confirmation": true,
+            "source": "unconfirmed default",
+            "value": "none",
+            "version": "1.1.0"
+          },
+          "human_impact": {
+            "confidence": "low",
+            "evidence": [
+              "MEF Support Crippled mission impact + Marginal safety impact"
+            ],
+            "inferred": true,
+            "key": "HI",
+            "label": "Low",
+            "needs_confirmation": true,
+            "source": "SSVC Human Impact table",
+            "value": "low",
+            "version": "2.0.2"
+          },
+          "mission_impact": {
+            "confidence": "low",
+            "evidence": [
+              "Mission impact is unknown; SSVC recommends MEF Support Crippled"
+            ],
+            "inferred": true,
+            "key": "MI",
+            "label": "MEF Support Crippled",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "mef_support_crippled",
+            "version": "2.0.0"
+          },
+          "model": "ssvc:DT_DP:1.0.0",
+          "needs_confirmation": [
+            "exploitation",
+            "system_exposure",
+            "automatable",
+            "mission_impact",
+            "safety_impact"
+          ],
+          "priority": "P3",
+          "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+          "recommended_action": "patch_scheduled",
+          "safety_impact": {
+            "confidence": "low",
+            "evidence": [
+              "Safety impact is unknown; SSVC recommends assuming Marginal"
+            ],
+            "inferred": true,
+            "key": "SI",
+            "label": "Marginal",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "marginal",
+            "version": "2.0.1"
+          },
+          "suggested_deadline_days": 30,
+          "supplemental": {
+            "cvss": null,
+            "epss": null,
+            "kev": false,
+            "reachable": null,
+            "runtime_observed": null
+          },
+          "system_exposure": {
+            "confidence": "low",
+            "evidence": [
+              "Exposure is unknown; SSVC recommends assuming Open"
+            ],
+            "inferred": true,
+            "key": "EXP",
+            "label": "Open",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "open",
+            "version": "1.0.1"
+          },
+          "technical_impact": {
+            "confidence": "low",
+            "evidence": [
+              "No published Technical Impact assessment was found for this CVE"
+            ],
+            "inferred": true,
+            "key": "TI",
+            "label": "Unknown",
+            "needs_confirmation": false,
+            "source": "not assessed",
+            "value": "unknown",
+            "version": "1.0.0"
+          }
+        },
+        "suggested_deadline_days": 30
+      },
+      "vuln_id": "CVE-2021-32839"
+    },
+    {
+      "aliases": [
+        "PYSEC-2021-98"
+      ],
+      "asset": {
+        "automatable": "unknown",
+        "bod2604_applicability": "unknown",
+        "context_notes": "",
+        "context_sources": [],
+        "criticality": "unknown",
+        "identifier": "sbom_cyclonedx.json",
+        "internet_exposed": null,
+        "kind": "sbom",
+        "mission_impact": "unknown",
+        "owner": "",
+        "publicly_exposed": "unknown",
+        "reachable": null,
+        "runtime_observed": null,
+        "safety_impact": "unknown",
+        "system_exposure": "unknown"
+      },
+      "cvss_score": null,
+      "description": "Django before 2.2.24, 3.x before 3.1.12, and 3.2.x before 3.2.4 has a potential directory traversal via django.contrib.admindocs.",
+      "enrichment": {
+        "cwe_ids": [],
+        "enriched_at": "<time>",
+        "epss_percentile": null,
+        "epss_score": null,
+        "exploit_lookup_errors": [],
+        "exploit_references": [],
+        "exploit_sources_checked": [],
+        "in_cisa_kev": false,
+        "kev_date_added": null,
+        "kev_due_date": null,
+        "kev_ransomware": false,
+        "nvd_cvss_score": null,
+        "nvd_cvss_vector": "",
+        "nvd_cvss_version": "",
+        "retrieval_errors": [],
+        "retrieval_status": {
+          "epss": "not_found",
+          "kev": "not_listed",
+          "nvd": "not_found",
+          "vulnrichment": "not_found"
+        },
+        "sources": [
+          "epss:snapshot",
+          "kev:snapshot",
+          "nvd:snapshot",
+          "vulnrichment:snapshot"
+        ],
+        "ssvc_automatable": null,
+        "ssvc_exploitation": null,
+        "ssvc_role": "",
+        "ssvc_technical_impact": null,
+        "ssvc_timestamp": "",
+        "ssvc_version": "",
+        "vendor_advisories": [],
+        "vendor_lookup_errors": [],
+        "vendor_sources_checked": []
+      },
+      "first_seen": "<time>",
+      "key": "CVE-2021-33203|pypi||django|3.2.0|sbom_cyclonedx.json",
+      "package": {
+        "ecosystem": "pypi",
+        "fixed_version": "3.2.4",
+        "fixed_version_candidates": [
+          "3.2.4"
+        ],
+        "name": "django",
+        "purl": "pkg:pypi/django@3.2.0",
+        "version": "3.2.0",
+        "version_source": ""
+      },
+      "references": [
+        "https://github.com/advisories/GHSA-68w8-qjq3-2gfm"
+      ],
+      "reported_by": [
+        "osv-sbom"
+      ],
+      "severity": "unknown",
+      "ssvc_inputs": {},
+      "title": "",
+      "triage": {
+        "action": "patch_scheduled",
+        "audit": {
+          "baseline_priority": "P3",
+          "checks": [
+            "fabricated_numbers",
+            "ssvc_consistency",
+            "fix_consistency",
+            "evidence_completeness",
+            "ai_recommendation_consistency"
+          ],
+          "flags": [],
+          "ssvc_decision": "scheduled",
+          "verified": true
+        },
+        "backend": "ssvc",
+        "bod2604": {
+          "applicability": "unknown",
+          "applicability_note": "Applicability not recorded; BOD 26-04 is shown for reference only.",
+          "applied": false,
+          "candidate_outcomes": [
+            "14D",
+            "FSU"
+          ],
+          "deadline_anchor": "Calendar days from the earlier of: CISA adding the CVE to KEV, or the agency identifying it on the asset and updating the CDM dashboards (BOD 23-01). Timelines are maximums and change when inputs change.",
+          "deadline_days": 14,
+          "definition": "Remediate within 14 calendar days.",
+          "inputs": {
+            "automatable": {
+              "basis": "Neither value is published and the CVE is not in KEV; CISA's implementation guidance applies this default until metadata is published",
+              "defaulted": true,
+              "point": "ssvc:A:2.0.0",
+              "resolved": true,
+              "source": "CISA guidance default",
+              "value": "no"
+            },
+            "in_kev": {
+              "basis": "Completed KEV lookup did not list this CVE",
+              "defaulted": false,
+              "point": "cisa:KEV:1.0.0",
+              "resolved": true,
+              "source": "CISA KEV",
+              "value": "no"
+            },
+            "publicly_exposed": {
+              "basis": "Publicly Exposed is not recorded. SSVC System Exposure is a different decision point and is not used. CISA's best-effort fallback needs routable-IP and asset-type tags PatchTriage does not hold",
+              "defaulted": false,
+              "point": "cisa:PE:1.0.0",
+              "resolved": false,
+              "source": "unresolved",
+              "value": "unknown"
+            },
+            "technical_impact": {
+              "basis": "Neither value is published and the CVE is not in KEV; CISA's implementation guidance applies this default until metadata is published",
+              "defaulted": true,
+              "point": "ssvc:TI:1.0.0",
+              "resolved": true,
+              "source": "CISA guidance default",
+              "value": "total"
+            }
+          },
+          "kev_date_added": "",
+          "kev_due_date": "",
+          "obligations": [
+            "remediate"
+          ],
+          "outcome": null,
+          "outcome_group": "cisa:BOD2604:1.0.0",
+          "outcome_label": null,
+          "policy": "cisa:DT_BOD2604:1.0.0",
+          "provisional_label": "14 days",
+          "provisional_outcome": "14D",
+          "rationale": "BOD 26-04 outcome unresolved: publicly exposed not established. Candidate outcomes: 14 days, Fix on system upgrade. Provisional (most urgent): 14 days.",
+          "status": "unresolved",
+          "unresolved_inputs": [
+            "publicly_exposed"
+          ]
+        },
+        "effective": {
+          "bod_outcome": "14D",
+          "bod_status": "unresolved",
+          "deadline_days": 30,
+          "deadline_source": "SSVC workflow target",
+          "explanation": "SSVC Scheduled: PatchTriage workflow target 30 days. BOD 26-04 is not applied to this target (unknown); its result is shown for reference only.",
+          "obligations": [
+            "remediate"
+          ],
+          "requires_confirmation": false,
+          "rule": "ssvc_only",
+          "ssvc_outcome": "Scheduled",
+          "ssvc_workflow_days": 30
+        },
+        "priority": "P3",
+        "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+        "ssvc": {
+          "automatable": {
+            "confidence": "low",
+            "evidence": [
+              "Automation evidence is unknown; SSVC recommends assuming Yes"
+            ],
+            "inferred": true,
+            "key": "A",
+            "label": "Yes",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "yes",
+            "version": "2.0.0"
+          },
+          "confidence": "low",
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "decision_path": "E:None / EXP:Open / A:Yes / HI:Low",
+          "exploitation": {
+            "confidence": "low",
+            "evidence": [
+              "No completed exploit-source search is recorded; absence of evidence is not evidence of absence"
+            ],
+            "inferred": true,
+            "key": "E",
+            "label": "None",
+            "needs_confirmation": true,
+            "source": "unconfirmed default",
+            "value": "none",
+            "version": "1.1.0"
+          },
+          "human_impact": {
+            "confidence": "low",
+            "evidence": [
+              "MEF Support Crippled mission impact + Marginal safety impact"
+            ],
+            "inferred": true,
+            "key": "HI",
+            "label": "Low",
+            "needs_confirmation": true,
+            "source": "SSVC Human Impact table",
+            "value": "low",
+            "version": "2.0.2"
+          },
+          "mission_impact": {
+            "confidence": "low",
+            "evidence": [
+              "Mission impact is unknown; SSVC recommends MEF Support Crippled"
+            ],
+            "inferred": true,
+            "key": "MI",
+            "label": "MEF Support Crippled",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "mef_support_crippled",
+            "version": "2.0.0"
+          },
+          "model": "ssvc:DT_DP:1.0.0",
+          "needs_confirmation": [
+            "exploitation",
+            "system_exposure",
+            "automatable",
+            "mission_impact",
+            "safety_impact"
+          ],
+          "priority": "P3",
+          "rationale": "SSVC Deployer decision: E:None / EXP:Open / A:Yes / HI:Low => Scheduled. PatchTriage's example service target is 30 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+          "recommended_action": "patch_scheduled",
+          "safety_impact": {
+            "confidence": "low",
+            "evidence": [
+              "Safety impact is unknown; SSVC recommends assuming Marginal"
+            ],
+            "inferred": true,
+            "key": "SI",
+            "label": "Marginal",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "marginal",
+            "version": "2.0.1"
+          },
+          "suggested_deadline_days": 30,
+          "supplemental": {
+            "cvss": null,
+            "epss": null,
+            "kev": false,
+            "reachable": null,
+            "runtime_observed": null
+          },
+          "system_exposure": {
+            "confidence": "low",
+            "evidence": [
+              "Exposure is unknown; SSVC recommends assuming Open"
+            ],
+            "inferred": true,
+            "key": "EXP",
+            "label": "Open",
+            "needs_confirmation": true,
+            "source": "SSVC conservative default",
+            "value": "open",
+            "version": "1.0.1"
+          },
+          "technical_impact": {
+            "confidence": "low",
+            "evidence": [
+              "No published Technical Impact assessment was found for this CVE"
+            ],
+            "inferred": true,
+            "key": "TI",
+            "label": "Unknown",
+            "needs_confirmation": false,
+            "source": "not assessed",
+            "value": "unknown",
+            "version": "1.0.0"
+          }
+        },
+        "suggested_deadline_days": 30
+      },
+      "vuln_id": "CVE-2021-33203"
+    }
+  ],
+  "response_policy": {
+    "applicability": [
+      "unknown"
+    ],
+    "applied": false,
+    "evaluated": 4,
+    "forensic_triage": 0,
+    "outcomes": {
+      "14D": 0,
+      "3D": 0,
+      "3DF": 0,
+      "60D": 0,
+      "FSU": 0
+    },
+    "policy": "cisa:DT_BOD2604:1.0.0",
+    "resolved": 0,
+    "sources": {
+      "decision_model": {
+        "data": "https://github.com/CERTCC/SSVC/blob/main/data/csv/cisa/cisa_bod_26_04_1_0_0.csv",
+        "retrieved": "2026-10-11",
+        "title": "CERT/CC SSVC: CISA BOD 26-04 decision table",
+        "url": "https://certcc.github.io/SSVC/howto/cisa_response/"
+      },
+      "directive": {
+        "issued": "2026-06-10",
+        "retrieved": "2026-10-11",
+        "title": "BOD 26-04: Prioritizing Security Updates Based on Risk",
+        "url": "https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk"
+      },
+      "implementation_guidance": {
+        "retrieved": "2026-10-11",
+        "title": "BOD 26-04 Implementation Guidance",
+        "url": "https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk"
+      }
+    },
+    "unresolved": 4
+  }
+}
