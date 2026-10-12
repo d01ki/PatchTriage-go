@@ -1,0 +1,1052 @@
+{
+  "action_queue": [
+    {
+      "action_id": "upgrade:Demo:maven:orgspringframework:springbeans:5.3.17",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": true,
+        "label": "3 days & forensic triage",
+        "outcome": "3DF",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "resolved",
+        "unresolved_findings": 0
+      },
+      "cves": [
+        "CVE-2022-22965"
+      ],
+      "deadline_days": 3,
+      "ecosystem": "maven",
+      "effective_deadline_days": 3,
+      "effective_rule": "ssvc_only",
+      "finding_count": 1,
+      "installed_version": "5.3.17",
+      "kev_count": 1,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "outcome_label": "Immediate",
+      "package": "org.springframework:spring-beans",
+      "summary": "Upgrade org.springframework:spring-beans to 5.3.18 on Demo",
+      "target_version": "5.3.18",
+      "top_priority": "P1"
+    },
+    {
+      "action_id": "upgrade:Demo:debian::libc6:2.36-9",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": true,
+        "label": "3 days & forensic triage",
+        "outcome": "3DF",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "resolved",
+        "unresolved_findings": 0
+      },
+      "cves": [
+        "CVE-2023-4911"
+      ],
+      "deadline_days": 14,
+      "ecosystem": "debian",
+      "effective_deadline_days": 14,
+      "effective_rule": "ssvc_only",
+      "finding_count": 1,
+      "installed_version": "2.36-9",
+      "kev_count": 1,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "outcome_label": "Out-of-Cycle",
+      "package": "libc6",
+      "summary": "Upgrade libc6 to 2.36-9+deb12u3 on Demo",
+      "target_version": "2.36-9+deb12u3",
+      "top_priority": "P2"
+    },
+    {
+      "action_id": "upgrade:Demo:debian::xzutils:5.6.0-1",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": false,
+        "label": "3 days",
+        "outcome": "3D",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "resolved",
+        "unresolved_findings": 0
+      },
+      "cves": [
+        "CVE-2024-3094"
+      ],
+      "deadline_days": 30,
+      "ecosystem": "debian",
+      "effective_deadline_days": 30,
+      "effective_rule": "ssvc_only",
+      "finding_count": 1,
+      "installed_version": "5.6.0-1",
+      "kev_count": 0,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "outcome_label": "Scheduled",
+      "package": "xz-utils",
+      "summary": "Upgrade xz-utils to 5.6.1+really5.4.5-1 on Demo",
+      "target_version": "5.6.1+really5.4.5-1",
+      "top_priority": "P3"
+    },
+    {
+      "action_id": "upgrade:Demo:npm::lodash:4.17.15",
+      "bod2604": {
+        "applicability": "unknown",
+        "applied": false,
+        "forensic_triage": false,
+        "label": "14 days",
+        "outcome": "14D",
+        "policy": "cisa:DT_BOD2604:1.0.0",
+        "status": "resolved",
+        "unresolved_findings": 0
+      },
+      "cves": [
+        "CVE-2021-23337"
+      ],
+      "deadline_days": 30,
+      "ecosystem": "npm",
+      "effective_deadline_days": 30,
+      "effective_rule": "ssvc_only",
+      "finding_count": 1,
+      "installed_version": "4.17.15",
+      "kev_count": 0,
+      "kind": "upgrade",
+      "obligations": [
+        "remediate"
+      ],
+      "outcome_label": "Scheduled",
+      "package": "lodash",
+      "summary": "Upgrade lodash to 4.17.21 on Demo",
+      "target_version": "4.17.21",
+      "top_priority": "P3"
+    }
+  ],
+  "action_queue_truncated": false,
+  "actions": 4,
+  "audit_flagged": 0,
+  "audit_rate": 100.0,
+  "audit_verified": 4,
+  "comparison": {
+    "epss_mass": {
+      "cvss": 0.372,
+      "epss": 0.945,
+      "kev": 0.945,
+      "patchtriage": 0.945,
+      "ssvc": 0.945
+    },
+    "k": 1,
+    "kev": {
+      "cvss": 0,
+      "epss": 1,
+      "kev": 1,
+      "patchtriage": 1,
+      "ssvc": 1
+    },
+    "kev_total": 2,
+    "outcome": {
+      "additional_kev_vs_cvss": 1,
+      "kev_coverage_pct": 50.0,
+      "kev_gain_points": 50.0,
+      "kev_lift_vs_cvss": null,
+      "review_reduction_pct": 75.0,
+      "reviewed": 1,
+      "urgent_coverage_pct": 50.0
+    },
+    "urgent": {
+      "cvss": 0,
+      "epss": 1,
+      "kev": 1,
+      "ssvc": 1,
+      "total": 2
+    }
+  },
+  "decision_paths": [
+    {
+      "asset": "Demo",
+      "bod2604": {
+        "applied": false,
+        "label": "3 days & forensic triage",
+        "status": "resolved"
+      },
+      "branches": [
+        {
+          "decision": "out_of_cycle",
+          "decision_label": "Out-of-Cycle",
+          "human_impact": "low",
+          "human_impact_label": "Low"
+        },
+        {
+          "decision": "out_of_cycle",
+          "decision_label": "Out-of-Cycle",
+          "human_impact": "medium",
+          "human_impact_label": "Medium"
+        },
+        {
+          "decision": "immediate",
+          "decision_label": "Immediate",
+          "human_impact": "high",
+          "human_impact_label": "High"
+        },
+        {
+          "decision": "immediate",
+          "decision_label": "Immediate",
+          "human_impact": "very_high",
+          "human_impact_label": "Very High"
+        }
+      ],
+      "decision": "immediate",
+      "decision_label": "Immediate",
+      "evidence": [
+        {
+          "label": "CVE-2022-22965",
+          "source": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-22965"
+        },
+        {
+          "label": "Known exploited",
+          "source": "CISA KEV",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog?search_api_fulltext=CVE-2022-22965"
+        }
+      ],
+      "finding_key": "CVE-2022-22965|maven|orgspringframework|springbeans|5.3.17|Demo",
+      "fixed_version": "5.3.18",
+      "model": "ssvc:DT_DP:1.0.0",
+      "package": "org.springframework:spring-beans",
+      "points": {
+        "automatable": {
+          "confidence": "high",
+          "label": "Yes",
+          "needs_confirmation": false,
+          "source": "CISA Vulnrichment",
+          "value": "yes"
+        },
+        "exploitation": {
+          "confidence": "high",
+          "label": "Active",
+          "needs_confirmation": false,
+          "source": "CISA KEV",
+          "value": "active"
+        },
+        "human_impact": {
+          "confidence": "high",
+          "label": "High",
+          "needs_confirmation": false,
+          "source": "SSVC Human Impact table",
+          "value": "high"
+        },
+        "mission_impact": {
+          "confidence": "high",
+          "label": "MEF Failure",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "mef_failure"
+        },
+        "safety_impact": {
+          "confidence": "high",
+          "label": "Critical",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "critical"
+        },
+        "system_exposure": {
+          "confidence": "high",
+          "label": "Open",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "open"
+        }
+      },
+      "version": "5.3.17",
+      "version_source": "",
+      "vuln_id": "CVE-2022-22965"
+    },
+    {
+      "asset": "Demo",
+      "bod2604": {
+        "applied": false,
+        "label": "3 days & forensic triage",
+        "status": "resolved"
+      },
+      "branches": [
+        {
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "human_impact": "low",
+          "human_impact_label": "Low"
+        },
+        {
+          "decision": "out_of_cycle",
+          "decision_label": "Out-of-Cycle",
+          "human_impact": "medium",
+          "human_impact_label": "Medium"
+        },
+        {
+          "decision": "out_of_cycle",
+          "decision_label": "Out-of-Cycle",
+          "human_impact": "high",
+          "human_impact_label": "High"
+        },
+        {
+          "decision": "immediate",
+          "decision_label": "Immediate",
+          "human_impact": "very_high",
+          "human_impact_label": "Very High"
+        }
+      ],
+      "decision": "out_of_cycle",
+      "decision_label": "Out-of-Cycle",
+      "evidence": [
+        {
+          "label": "CVE-2023-4911",
+          "source": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-4911"
+        },
+        {
+          "label": "Known exploited",
+          "source": "CISA KEV",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog?search_api_fulltext=CVE-2023-4911"
+        }
+      ],
+      "finding_key": "CVE-2023-4911|debian||libc6|2.36-9|Demo",
+      "fixed_version": "2.36-9+deb12u3",
+      "model": "ssvc:DT_DP:1.0.0",
+      "package": "libc6",
+      "points": {
+        "automatable": {
+          "confidence": "high",
+          "label": "No",
+          "needs_confirmation": false,
+          "source": "CISA Vulnrichment",
+          "value": "no"
+        },
+        "exploitation": {
+          "confidence": "high",
+          "label": "Active",
+          "needs_confirmation": false,
+          "source": "CISA KEV",
+          "value": "active"
+        },
+        "human_impact": {
+          "confidence": "high",
+          "label": "High",
+          "needs_confirmation": false,
+          "source": "SSVC Human Impact table",
+          "value": "high"
+        },
+        "mission_impact": {
+          "confidence": "high",
+          "label": "MEF Failure",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "mef_failure"
+        },
+        "safety_impact": {
+          "confidence": "high",
+          "label": "Critical",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "critical"
+        },
+        "system_exposure": {
+          "confidence": "high",
+          "label": "Open",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "open"
+        }
+      },
+      "version": "2.36-9",
+      "version_source": "",
+      "vuln_id": "CVE-2023-4911"
+    },
+    {
+      "asset": "Demo",
+      "bod2604": {
+        "applied": false,
+        "label": "3 days",
+        "status": "resolved"
+      },
+      "branches": [
+        {
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "human_impact": "low",
+          "human_impact_label": "Low"
+        },
+        {
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "human_impact": "medium",
+          "human_impact_label": "Medium"
+        },
+        {
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "human_impact": "high",
+          "human_impact_label": "High"
+        },
+        {
+          "decision": "out_of_cycle",
+          "decision_label": "Out-of-Cycle",
+          "human_impact": "very_high",
+          "human_impact_label": "Very High"
+        }
+      ],
+      "decision": "scheduled",
+      "decision_label": "Scheduled",
+      "evidence": [
+        {
+          "label": "CVE-2024-3094",
+          "source": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-3094"
+        }
+      ],
+      "finding_key": "CVE-2024-3094|debian||xzutils|5.6.0-1|Demo",
+      "fixed_version": "5.6.1+really5.4.5-1",
+      "model": "ssvc:DT_DP:1.0.0",
+      "package": "xz-utils",
+      "points": {
+        "automatable": {
+          "confidence": "high",
+          "label": "Yes",
+          "needs_confirmation": false,
+          "source": "CISA Vulnrichment",
+          "value": "yes"
+        },
+        "exploitation": {
+          "confidence": "high",
+          "label": "None",
+          "needs_confirmation": false,
+          "source": "CISA Vulnrichment",
+          "value": "none"
+        },
+        "human_impact": {
+          "confidence": "high",
+          "label": "High",
+          "needs_confirmation": false,
+          "source": "SSVC Human Impact table",
+          "value": "high"
+        },
+        "mission_impact": {
+          "confidence": "high",
+          "label": "MEF Failure",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "mef_failure"
+        },
+        "safety_impact": {
+          "confidence": "high",
+          "label": "Critical",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "critical"
+        },
+        "system_exposure": {
+          "confidence": "high",
+          "label": "Open",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "open"
+        }
+      },
+      "version": "5.6.0-1",
+      "version_source": "",
+      "vuln_id": "CVE-2024-3094"
+    },
+    {
+      "asset": "Demo",
+      "bod2604": {
+        "applied": false,
+        "label": "14 days",
+        "status": "resolved"
+      },
+      "branches": [
+        {
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "human_impact": "low",
+          "human_impact_label": "Low"
+        },
+        {
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "human_impact": "medium",
+          "human_impact_label": "Medium"
+        },
+        {
+          "decision": "scheduled",
+          "decision_label": "Scheduled",
+          "human_impact": "high",
+          "human_impact_label": "High"
+        },
+        {
+          "decision": "out_of_cycle",
+          "decision_label": "Out-of-Cycle",
+          "human_impact": "very_high",
+          "human_impact_label": "Very High"
+        }
+      ],
+      "decision": "scheduled",
+      "decision_label": "Scheduled",
+      "evidence": [
+        {
+          "label": "CVE-2021-23337",
+          "source": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+        }
+      ],
+      "finding_key": "CVE-2021-23337|npm||lodash|4.17.15|Demo",
+      "fixed_version": "4.17.21",
+      "model": "ssvc:DT_DP:1.0.0",
+      "package": "lodash",
+      "points": {
+        "automatable": {
+          "confidence": "low",
+          "label": "Yes",
+          "needs_confirmation": true,
+          "source": "SSVC conservative default",
+          "value": "yes"
+        },
+        "exploitation": {
+          "confidence": "medium",
+          "label": "None",
+          "needs_confirmation": false,
+          "source": "exploit-source coverage",
+          "value": "none"
+        },
+        "human_impact": {
+          "confidence": "high",
+          "label": "High",
+          "needs_confirmation": false,
+          "source": "SSVC Human Impact table",
+          "value": "high"
+        },
+        "mission_impact": {
+          "confidence": "high",
+          "label": "MEF Failure",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "mef_failure"
+        },
+        "safety_impact": {
+          "confidence": "high",
+          "label": "Critical",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "critical"
+        },
+        "system_exposure": {
+          "confidence": "high",
+          "label": "Open",
+          "needs_confirmation": false,
+          "source": "asset inventory",
+          "value": "open"
+        }
+      },
+      "version": "4.17.15",
+      "version_source": "",
+      "vuln_id": "CVE-2021-23337"
+    }
+  ],
+  "decision_paths_truncated": false,
+  "decision_quality": {
+    "assumed": 2,
+    "authoritative": 6,
+    "authoritative_pct": 75.0,
+    "de_escalated": 1,
+    "findings": 4,
+    "needs_confirmation": 1,
+    "points_total": 8,
+    "sources": {
+      "CISA KEV": 2,
+      "CISA Vulnrichment": 4,
+      "SSVC conservative default": 1,
+      "exploit-source coverage": 1
+    }
+  },
+  "demo": true,
+  "enrichment_errors": [],
+  "evaluated_context": {
+    "bod2604_applicability": "unknown",
+    "context_sources": [
+      "OpenTelemetry",
+      "Falco"
+    ],
+    "mission_impact": "mef_failure",
+    "publicly_exposed": "unknown",
+    "safety_impact": "critical",
+    "system_exposure": "open"
+  },
+  "explanation": {
+    "advisories": [],
+    "basis": "The SSVC Deployer path E:Active / EXP:Open / A:Yes / HI:High results in Immediate.",
+    "bod2604": {
+      "applicability": "unknown",
+      "applicability_note": "Applicability not recorded; BOD 26-04 is shown for reference only.",
+      "applied": false,
+      "candidate_outcomes": [
+        "3DF"
+      ],
+      "deadline_anchor": "Calendar days from the earlier of: CISA adding the CVE to KEV, or the agency identifying it on the asset and updating the CDM dashboards (BOD 23-01). Timelines are maximums and change when inputs change.",
+      "deadline_days": 3,
+      "definition": "Remediate or mitigate within 3 calendar days and carry out a forensic triage of the asset to assess whether it is compromised.",
+      "inputs": {
+        "automatable": {
+          "basis": "CISA Vulnrichment publishes Automatable",
+          "defaulted": false,
+          "point": "ssvc:A:2.0.0",
+          "resolved": true,
+          "source": "CISA Vulnrichment",
+          "value": "yes"
+        },
+        "in_kev": {
+          "basis": "CVE is listed in the CISA KEV catalog",
+          "defaulted": false,
+          "point": "cisa:KEV:1.0.0",
+          "resolved": true,
+          "source": "CISA KEV",
+          "value": "yes"
+        },
+        "publicly_exposed": {
+          "basis": "Target is marked internet exposed; CISA sets Publicly Exposed to Yes when any method identifies exposure",
+          "defaulted": false,
+          "point": "cisa:PE:1.0.0",
+          "resolved": true,
+          "source": "internet exposure evidence",
+          "value": "yes"
+        },
+        "technical_impact": {
+          "basis": "CISA Vulnrichment publishes Technical Impact",
+          "defaulted": false,
+          "point": "ssvc:TI:1.0.0",
+          "resolved": true,
+          "source": "CISA Vulnrichment",
+          "value": "total"
+        }
+      },
+      "kev_date_added": "",
+      "kev_due_date": "2022-04-25",
+      "obligations": [
+        "remediate",
+        "forensic_triage"
+      ],
+      "outcome": "3DF",
+      "outcome_group": "cisa:BOD2604:1.0.0",
+      "outcome_label": "3 days & forensic triage",
+      "policy": "cisa:DT_BOD2604:1.0.0",
+      "provisional_label": null,
+      "provisional_outcome": null,
+      "rationale": "cisa:DT_BOD2604:1.0.0 path In Kev:yes / Publicly Exposed:yes / Automatable:yes / Technical Impact:total => 3 days & forensic triage.",
+      "status": "resolved",
+      "unresolved_inputs": []
+    },
+    "checks": [
+      {
+        "label": "Exploitation",
+        "status": "confirmed",
+        "value": "Active \u00b7 CISA KEV confirms exploitation in the wild; CISA KEV reports ransomware campaign use (high confidence)"
+      },
+      {
+        "label": "System Exposure",
+        "status": "confirmed",
+        "value": "Open \u00b7 System exposure confirmed as Open (high confidence)"
+      },
+      {
+        "label": "Automatable",
+        "status": "confirmed",
+        "value": "Yes \u00b7 CISA Vulnrichment publishes Automatable as Yes; CISA assessment timestamp 2024-06-04T17:52:20.836000Z (high confidence)"
+      },
+      {
+        "label": "Human Impact",
+        "status": "confirmed",
+        "value": "High \u00b7 MEF Failure mission impact + Critical safety impact (high confidence)"
+      },
+      {
+        "label": "Technical Impact",
+        "status": "confirmed",
+        "value": "Total \u00b7 CISA Vulnrichment publishes Technical Impact as Total; CISA assessment timestamp 2024-06-04T17:52:20.836000Z (not an input to the Deployer decision)"
+      },
+      {
+        "label": "Fix readiness",
+        "status": "confirmed",
+        "value": "Fixed version 5.3.18 is available"
+      }
+    ],
+    "confidence": "high",
+    "cvss": 9.8,
+    "effective": {
+      "bod_outcome": "3DF",
+      "bod_status": "resolved",
+      "deadline_days": 3,
+      "deadline_source": "SSVC workflow target",
+      "explanation": "SSVC Immediate: PatchTriage workflow target 3 days. BOD 26-04 is not applied to this target (unknown); its result is shown for reference only.",
+      "obligations": [
+        "remediate"
+      ],
+      "requires_confirmation": false,
+      "rule": "ssvc_only",
+      "ssvc_outcome": "Immediate",
+      "ssvc_workflow_days": 3
+    },
+    "epss": 0.945,
+    "has_fix": true,
+    "kev": true,
+    "needs_confirmation": [],
+    "outcome_description": "SSVC calls for immediate action with all necessary resources.",
+    "outcome_label": "Immediate",
+    "package": "org.springframework:spring-beans",
+    "ransomware": true,
+    "rationale": "SSVC Deployer decision: E:Active / EXP:Open / A:Yes / HI:High => Immediate. PatchTriage's example service target is 3 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+    "retrieval_errors": [],
+    "retrieval_status": {
+      "epss": "found",
+      "kev": "listed",
+      "nvd": "found",
+      "vulnrichment": "found"
+    },
+    "ssvc": {
+      "automatable": {
+        "confidence": "high",
+        "evidence": [
+          "CISA Vulnrichment publishes Automatable as Yes",
+          "CISA assessment timestamp 2024-06-04T17:52:20.836000Z"
+        ],
+        "inferred": true,
+        "key": "A",
+        "label": "Yes",
+        "needs_confirmation": false,
+        "source": "CISA Vulnrichment",
+        "value": "yes",
+        "version": "2.0.0"
+      },
+      "confidence": "high",
+      "decision": "immediate",
+      "decision_label": "Immediate",
+      "decision_path": "E:Active / EXP:Open / A:Yes / HI:High",
+      "exploitation": {
+        "confidence": "high",
+        "evidence": [
+          "CISA KEV confirms exploitation in the wild",
+          "CISA KEV reports ransomware campaign use"
+        ],
+        "inferred": true,
+        "key": "E",
+        "label": "Active",
+        "needs_confirmation": false,
+        "source": "CISA KEV",
+        "value": "active",
+        "version": "1.1.0"
+      },
+      "human_impact": {
+        "confidence": "high",
+        "evidence": [
+          "MEF Failure mission impact + Critical safety impact"
+        ],
+        "inferred": true,
+        "key": "HI",
+        "label": "High",
+        "needs_confirmation": false,
+        "source": "SSVC Human Impact table",
+        "value": "high",
+        "version": "2.0.2"
+      },
+      "mission_impact": {
+        "confidence": "high",
+        "evidence": [
+          "Mission impact confirmed as MEF Failure"
+        ],
+        "inferred": false,
+        "key": "MI",
+        "label": "MEF Failure",
+        "needs_confirmation": false,
+        "source": "asset inventory",
+        "value": "mef_failure",
+        "version": "2.0.0"
+      },
+      "model": "ssvc:DT_DP:1.0.0",
+      "needs_confirmation": [],
+      "priority": "P1",
+      "rationale": "SSVC Deployer decision: E:Active / EXP:Open / A:Yes / HI:High => Immediate. PatchTriage's example service target is 3 days; the SSVC standard itself defines the categorical outcome, not this deadline.",
+      "recommended_action": "patch_immediately",
+      "safety_impact": {
+        "confidence": "high",
+        "evidence": [
+          "Safety impact confirmed as Critical"
+        ],
+        "inferred": false,
+        "key": "SI",
+        "label": "Critical",
+        "needs_confirmation": false,
+        "source": "asset inventory",
+        "value": "critical",
+        "version": "2.0.1"
+      },
+      "suggested_deadline_days": 3,
+      "supplemental": {
+        "cvss": 9.8,
+        "epss": 0.945,
+        "kev": true,
+        "reachable": true,
+        "runtime_observed": true
+      },
+      "system_exposure": {
+        "confidence": "high",
+        "evidence": [
+          "System exposure confirmed as Open"
+        ],
+        "inferred": false,
+        "key": "EXP",
+        "label": "Open",
+        "needs_confirmation": false,
+        "source": "asset inventory",
+        "value": "open",
+        "version": "1.0.1"
+      },
+      "technical_impact": {
+        "confidence": "high",
+        "evidence": [
+          "CISA Vulnrichment publishes Technical Impact as Total",
+          "CISA assessment timestamp 2024-06-04T17:52:20.836000Z"
+        ],
+        "inferred": true,
+        "key": "TI",
+        "label": "Total",
+        "needs_confirmation": false,
+        "source": "CISA Vulnrichment",
+        "value": "total",
+        "version": "1.0.0"
+      }
+    },
+    "vuln_id": "CVE-2022-22965"
+  },
+  "kev": 2,
+  "name": "Demo",
+  "outcomes": {
+    "defer": 0,
+    "immediate": 1,
+    "out_of_cycle": 1,
+    "scheduled": 2
+  },
+  "response_policy": {
+    "applicability": [
+      "unknown"
+    ],
+    "applied": false,
+    "evaluated": 4,
+    "forensic_triage": 2,
+    "outcomes": {
+      "14D": 1,
+      "3D": 1,
+      "3DF": 2,
+      "60D": 0,
+      "FSU": 0
+    },
+    "policy": "cisa:DT_BOD2604:1.0.0",
+    "resolved": 4,
+    "sources": {
+      "decision_model": {
+        "data": "https://github.com/CERTCC/SSVC/blob/main/data/csv/cisa/cisa_bod_26_04_1_0_0.csv",
+        "retrieved": "2026-10-11",
+        "title": "CERT/CC SSVC: CISA BOD 26-04 decision table",
+        "url": "https://certcc.github.io/SSVC/howto/cisa_response/"
+      },
+      "directive": {
+        "issued": "2026-06-10",
+        "retrieved": "2026-10-11",
+        "title": "BOD 26-04: Prioritizing Security Updates Based on Risk",
+        "url": "https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk"
+      },
+      "implementation_guidance": {
+        "retrieved": "2026-10-11",
+        "title": "BOD 26-04 Implementation Guidance",
+        "url": "https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk"
+      }
+    },
+    "unresolved": 0
+  },
+  "result_message": "",
+  "result_state": "assessed",
+  "source": {
+    "coverage_status": "complete",
+    "format": "trivy",
+    "kind": "demo",
+    "name": "trivy_sample.json",
+    "provenance": {
+      "coverage": {
+        "complete": true,
+        "errors": [],
+        "reason": "Bundled scanner fixture",
+        "records": 4,
+        "source_type": "scanner:trivy",
+        "status": "complete"
+      },
+      "coverage_status": "complete",
+      "offline": true,
+      "provider": "bundled-demo"
+    },
+    "sha256": "e1de0199b053da0ff4f323d46c66032d4fab58b67f18cef19c275ba24a51c9ad",
+    "size": 2292
+  },
+  "ssvc_confirmation_fields": [
+    "automatable"
+  ],
+  "ssvc_inputs": [
+    {
+      "automatable": {
+        "confidence": "high",
+        "evidence": [
+          "CISA Vulnrichment publishes Automatable as Yes",
+          "CISA assessment timestamp 2024-06-04T17:52:20.836000Z"
+        ],
+        "inferred": true,
+        "key": "A",
+        "label": "Yes",
+        "needs_confirmation": false,
+        "source": "CISA Vulnrichment",
+        "value": "yes",
+        "version": "2.0.0"
+      },
+      "exploitation": {
+        "confidence": "high",
+        "evidence": [
+          "CISA KEV confirms exploitation in the wild",
+          "CISA KEV reports ransomware campaign use"
+        ],
+        "inferred": true,
+        "key": "E",
+        "label": "Active",
+        "needs_confirmation": false,
+        "source": "CISA KEV",
+        "value": "active",
+        "version": "1.1.0"
+      },
+      "finding_key": "CVE-2022-22965|maven|orgspringframework|springbeans|5.3.17|Demo",
+      "needs_review": false,
+      "override": {},
+      "package": "org.springframework:spring-beans",
+      "vuln_id": "CVE-2022-22965"
+    },
+    {
+      "automatable": {
+        "confidence": "high",
+        "evidence": [
+          "CISA Vulnrichment publishes Automatable as No",
+          "CISA assessment timestamp 2025-10-15T19:45:35.724824Z"
+        ],
+        "inferred": true,
+        "key": "A",
+        "label": "No",
+        "needs_confirmation": false,
+        "source": "CISA Vulnrichment",
+        "value": "no",
+        "version": "2.0.0"
+      },
+      "exploitation": {
+        "confidence": "high",
+        "evidence": [
+          "CISA KEV confirms exploitation in the wild",
+          "CISA KEV reports ransomware campaign use"
+        ],
+        "inferred": true,
+        "key": "E",
+        "label": "Active",
+        "needs_confirmation": false,
+        "source": "CISA KEV",
+        "value": "active",
+        "version": "1.1.0"
+      },
+      "finding_key": "CVE-2023-4911|debian||libc6|2.36-9|Demo",
+      "needs_review": false,
+      "override": {},
+      "package": "libc6",
+      "vuln_id": "CVE-2023-4911"
+    },
+    {
+      "automatable": {
+        "confidence": "high",
+        "evidence": [
+          "CISA Vulnrichment publishes Automatable as Yes",
+          "CISA assessment timestamp 2024-04-02T04:00:23.138684Z"
+        ],
+        "inferred": true,
+        "key": "A",
+        "label": "Yes",
+        "needs_confirmation": false,
+        "source": "CISA Vulnrichment",
+        "value": "yes",
+        "version": "2.0.0"
+      },
+      "exploitation": {
+        "confidence": "high",
+        "evidence": [
+          "CISA Vulnrichment publishes Exploitation as None",
+          "CISA assessment timestamp 2024-04-02T04:00:23.138684Z"
+        ],
+        "inferred": true,
+        "key": "E",
+        "label": "None",
+        "needs_confirmation": false,
+        "source": "CISA Vulnrichment",
+        "value": "none",
+        "version": "1.1.0"
+      },
+      "finding_key": "CVE-2024-3094|debian||xzutils|5.6.0-1|Demo",
+      "needs_review": false,
+      "override": {},
+      "package": "xz-utils",
+      "vuln_id": "CVE-2024-3094"
+    },
+    {
+      "automatable": {
+        "confidence": "low",
+        "evidence": [
+          "Automation evidence is unknown; SSVC recommends assuming Yes"
+        ],
+        "inferred": true,
+        "key": "A",
+        "label": "Yes",
+        "needs_confirmation": true,
+        "source": "SSVC conservative default",
+        "value": "yes",
+        "version": "2.0.0"
+      },
+      "exploitation": {
+        "confidence": "medium",
+        "evidence": [
+          "No active exploitation or public PoC evidence was found in: nvd:snapshot"
+        ],
+        "inferred": true,
+        "key": "E",
+        "label": "None",
+        "needs_confirmation": false,
+        "source": "exploit-source coverage",
+        "value": "none",
+        "version": "1.1.0"
+      },
+      "finding_key": "CVE-2021-23337|npm||lodash|4.17.15|Demo",
+      "needs_review": true,
+      "override": {},
+      "package": "lodash",
+      "vuln_id": "CVE-2021-23337"
+    }
+  ],
+  "ssvc_inputs_review_total": 1,
+  "ssvc_inputs_total": 4,
+  "ssvc_inputs_truncated": false,
+  "top_action": "Upgrade org.springframework:spring-beans to 5.3.18 on Demo",
+  "top_deadline_days": 3,
+  "top_ssvc_decision": "Immediate",
+  "total": 4,
+  "url": "",
+  "vendor_advisories": 0,
+  "vendor_errors": [],
+  "vendor_sources": []
+}

@@ -117,6 +117,25 @@ def main() -> None:
                         snapshot=_snapshot(), vendor_sources=None)
         _write(name, _report(result))
 
+    # The GUI demo target, created exactly like POST /api/demo, then run.
+    from patchtriage import targets as tstore
+    from patchtriage.webapp.runner import run_target
+    target = tstore.add_target(
+        name="Demo", criticality="critical", internet_exposed=True,
+        reachable=True, runtime_observed=True, system_exposure="open",
+        mission_impact="mef_failure", safety_impact="critical",
+        context_sources=["OpenTelemetry", "Falco"], demo=True)
+    tstore.save_source(
+        target["id"], (DATA / "fixtures" / "trivy_sample.json").read_text("utf-8"),
+        "trivy", filename="trivy_sample.json", source_kind="demo",
+        provenance={"provider": "bundled-demo", "offline": True,
+                    "coverage": {"status": "complete",
+                                 "reason": "Bundled scanner fixture"}})
+    summary = run_target(tstore.get_target(target["id"]), backend="rules")
+    for volatile in ("target_id", "report_url", "duration_ms"):
+        summary.pop(volatile, None)
+    _write("web_demo_summary", summary)
+
     # The CLI demo seeds an isolated cache and runs the regular enrichment.
     with tempfile.TemporaryDirectory() as work:
         out = Path(work) / "demo.json"
