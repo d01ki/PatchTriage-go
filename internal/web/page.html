@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0a0d14">
+<meta name="theme-color" content="#303b58">
 <title>PatchTriage</title>
 <style>
   :root{
@@ -222,6 +222,150 @@
   @media(max-width:1100px){.brand small{display:none}.workspaceinner{grid-template-columns:220px minmax(0,1fr)}.landing{justify-content:flex-start}.landing .hero,.landing .benchmark{grid-template-columns:1fr}.landing .proof{margin-top:8px}.landing .benchmarkcopy{border-bottom:0}}
   @media(max-width:1000px){.sidebar .kpis{flex:none}.treecanvas svg{min-width:920px}.landing{overflow:visible}.landing .hero{gap:24px}.landing .outcomes{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:700px){.brand{font-size:14px}.topbar{height:auto;min-height:64px;gap:8px}.topactions .btn{font-size:13px;padding:7px 9px}.topactions{flex-wrap:wrap;justify-content:flex-end;padding:8px 0}.workspaceinner{display:flex}.sidebar{max-height:none}.sidebar .kpis{grid-template-columns:repeat(3,1fr);gap:10px;padding-top:12px}.sidebar .kpi:last-child{grid-column:auto}.sidebar .kpi .value{font-size:18px}.sidebarfoot .hint{display:none}.targetlist{max-height:180px}.sectiontitle span{font-size:14px}.outcomerow .name{font-size:14px}.resulthead{grid-template-columns:100px minmax(0,1fr)}.resulttabs{gap:18px}.landing{padding:28px 20px;gap:24px}.landing h1{font-size:52px}.landing .hero p{font-size:17px}.landing .proofhead{flex-wrap:wrap;gap:5px}.landing .node{min-height:0}.landing .decision{flex-wrap:wrap}.landing .outcome{border-left:1px solid var(--line)}.landing .heroactions{flex-direction:column;align-items:stretch}.landing .heroactions .btn{text-align:center}}
+</style>
+<style id="glass-theme">
+  /* Presentation-only theme. Keep the assessment controls and responsive layout. */
+  :root{
+    color-scheme:dark;
+    --void:#27324c;--void2:#303b58;--panel:#384563;--panel2:#424f70;
+    --ink:#f3f5ff;--muted:#bdc7de;--line:rgba(204,216,255,.18);
+    --hot:#baadff;--amber:#ffd18a;--blue:#a9bfff;--cyan:#8ce4ef;
+    --paper:#303b58;--dark:#f3f5ff;
+    --immediate:#e77789;--outofcycle:#e8b668;--scheduled:#8b9cf0;--defer:#8ba1b8;
+    --c-immediate:#cf526c;--c-outofcycle:#e8b668;--c-scheduled:#687ed4;--c-defer:#647d98;
+    --glass:linear-gradient(135deg,rgba(103,120,158,.34),rgba(59,72,105,.55));
+    --surface:rgba(34,45,70,.52);--accent:#d1c7ff;
+    --ui-font:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  body{
+    padding:20px;gap:0;
+    background:radial-gradient(ellipse at 18% 0%,#9ba8c6 0,transparent 53%),
+      radial-gradient(ellipse at 100% 35%,#7889ae 0,transparent 56%),#566587;
+    color:var(--ink);font-family:var(--ui-font);font-weight:400;letter-spacing:.005em;
+  }
+  ::selection{background:#9985dd;color:#fff}
+  *{scrollbar-width:thin;scrollbar-color:#7987a9 transparent}
+  .topbar{
+    min-height:64px;padding:0 24px;border:1px solid var(--line);border-bottom:0;
+    border-radius:20px 20px 0 0;background:rgba(46,58,87,.9);backdrop-filter:blur(24px);
+    box-shadow:0 -4px 36px #26304718;
+  }
+  .brand{font-weight:650;letter-spacing:.025em;gap:7px}
+  .brand span{color:var(--accent)}.brand small{color:var(--muted);font-size:13px}
+  .brandmark{border-radius:9px;border-color:#b4a6f0;background:#8979cf22}
+  .brandmark:before,.brandmark:after{background:#d2c7ff}
+  .btn{border-radius:10px;border-color:var(--line);background:#687a9d29;color:var(--ink);font-weight:600;transition:background .18s,border-color .18s,transform .18s}
+  .btn:hover{background:#8d9dc53d;border-color:#b2bfe68c}
+  .btn.primary{background:linear-gradient(125deg,#bcacf5,#94b8ec);color:#202b47;border-color:#cbbefa;font-weight:700}
+  .btn.primary:hover{background:linear-gradient(125deg,#d0c2ff,#b0cdf7);border-color:#e2d8ff}
+  .btn.ghost{background:transparent}.btn.attach{background:#ac9cee20;color:#e0d8ff;border-color:#a598d96b}
+  .btn.danger{color:#ffb0bd}.btn:disabled{opacity:.45;transform:none}
+  .btn:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+  .landing,.workspace{
+    background:radial-gradient(ellipse at 85% 0%,#9383cc24,transparent 60%),rgba(42,54,82,.94);
+    border:1px solid var(--line);border-radius:0 0 20px 20px;
+    box-shadow:0 24px 60px #1a23374d;color:var(--ink);
+  }
+  .landing{padding:28px 32px;gap:26px}
+  .landing h1{font-weight:650;letter-spacing:-.045em}.landing h1 em{color:#c6b7ff}
+  .landing .hero p,.landing .benchmarkcopy p{color:var(--muted)}
+  .eyebrow,.landing .eyebrow{color:#c6b7ff;font-family:var(--ui-font);font-weight:650;letter-spacing:.12em}
+  .proof,.benchmarkcopy,.outcome,.node,.lightpanel,.result,.target{
+    background:var(--glass);border-color:var(--line);border-radius:16px;
+    box-shadow:inset 0 1px 0 #e4eaff0a,0 10px 26px #15233c1c;
+  }
+  .proof{backdrop-filter:blur(18px)}.proof:after{background:#bb8bff;opacity:.2}
+  .proofhead,.node small,.decision span{color:var(--muted)}
+  .landing .node{border-radius:12px;background:var(--surface)}
+  .landing .benchmark{gap:14px}.landing .outcomes{gap:10px}.landing .outcome{border:1px solid var(--line)}
+  .factorcode{background:#8ce4ef12;border-color:#8ce4ef42;color:#a6eaf4}
+  .factorquestion,.outcome small b{color:#e0e7f8}.outcome small{color:var(--muted)}
+  .decision{border-radius:12px;background:#af97ee17;border-left-color:#bbaaff}
+  .decision .outcome-now{color:#dacfff}.arrow{color:#a6b5d2}
+  .workspace{padding:18px}.workspaceinner{gap:20px}
+  .sidebar{border-color:var(--line);padding-right:18px}
+  .sidebarhint,.sidebarfoot .hint,.hint,.sectiontitle span,.enginelabel{color:var(--muted)}
+  .sectiontitle h2{font-weight:600;letter-spacing:-.025em}
+  .target{border-radius:13px;overflow:hidden}.target:hover{border-color:#a4b3d769}
+  .target.selected{border-color:#bfaff5;box-shadow:0 0 0 1px #baa6f038,0 8px 22px #14213c26}
+  .targetselect{color:var(--ink);border-radius:12px}
+  .targetselect[aria-pressed=true]{background:linear-gradient(120deg,#ac99e82e,#87b9ec18)}
+  .targetname{font-weight:600}.targetmeta{color:var(--muted)}.targetstate{color:#bcbaff}.targetstate.failed{color:#ffb0bd}
+  .sidebar .kpis{border-color:var(--line)}.sidebar .kpi .value{color:var(--ink);font-family:var(--ui-font);font-weight:600}
+  .sidebar .kpi .label{color:var(--muted)}.sidebarfoot .btn{background:#9aacd015}
+  .enginevalue{color:#dcd5fa}.outcomesummary{background:var(--glass);border-radius:14px}
+  .outcomesummary .microtitle,.microtitle{color:var(--muted);font-family:var(--ui-font);letter-spacing:.055em}
+  .outcomerow .name,.outcomerow .count{color:var(--ink)}.outcomerow .count{font-family:var(--ui-font);font-weight:600}
+  .outcomerow .count small,.outcomerow .meaning{color:var(--muted)}
+  .donutlabel{fill:var(--ink)}.donutsub{fill:#d0d9ef}.donut circle:not(.seg){stroke:#8a9abb40}
+  .result{background:linear-gradient(140deg,#4f608161,#354462b3);border-radius:16px}
+  .resulthead{border-color:var(--line);background:#91a3cc08}
+  .priority{font-family:var(--ui-font);font-weight:700;border-radius:9px;background:#73869e;color:#162136}
+  .priority.immediate{color:#281720}.priority.scheduled{color:#17203e}.priority.no-findings{background:#8796b0;color:#1b263f}
+  .prioritymeaning,.prioritydue,.rname{color:var(--muted)}.action{font-weight:600}
+  .reportlink,.textbutton,.source.ready{color:#d0c6ff}
+  .resulttabs{border-color:var(--line);background:#18233a14;gap:22px}
+  .resulttab{color:var(--muted);font-weight:500}.resulttab:hover{color:#fff}
+  .resulttab[aria-selected=true]{color:#e0d7ff;border-color:#bca8fa}
+  .tabcount,.metric,.tag{background:#aec0e519;color:#d5def3;border-color:var(--line);border-radius:8px}
+  .tag.hot,.metric.alert{background:#e7778926;color:#ffbac5;border-color:#e777895c}
+  .tag.demo,.tag.warn,.tabcount.warn{background:#e8b66820;color:#ffe0aa;border-color:#e8b66852}
+  .treecanvas{background:var(--surface);border-color:var(--line);border-radius:12px}
+  .tree .edge{stroke:#8d9eb94d}.tree .edge.on{stroke:#c6b6ff;stroke-width:2.6}
+  .tree .node rect{fill:#475674;stroke:#8d9abb66}.tree .node text{fill:#d0d8ec;font-family:var(--ui-font);font-weight:400}
+  .tree .node.on rect{fill:#7867ab;stroke:#c5b5f4}.tree .node.on text{fill:#fff;font-weight:600}
+  .tree .node.on.assumed rect{fill:#5c507c;stroke:#f1c780}
+  .tree .root rect{fill:#4a4d76;stroke:#b5a7eb}.tree .root text{fill:#f1ebff}
+  .tree .colhead{fill:#c5cee3;font-family:var(--ui-font);font-weight:500}
+  .tree .leaf.off{opacity:.6}.tree .leaf.on rect{stroke:#e9e4ff}.tree .leaf text{font-family:var(--ui-font)}
+  .treelegend,.pathsource,.pathcontext,.pathsentence,.pathsentence .src{color:var(--muted)}
+  .pathsource{border-color:#a898df6b}.pathsource strong,.pathcontext b{color:#edf0fc}
+  .pathsource.assumed{background:#e8b66813;border-color:#e8b668;border-radius:0 7px 7px 0}
+  .pathcontext .policyhint{color:#e9cd9d}
+  .evidencelinks a,.evidencelinks span,.advisoryline a,.advisoryline span{color:#d9d0ff;background:#9e8fd01a;border-color:#b7a8e738;border-radius:7px}
+  .evidencelinks a:hover,.reportlink:hover,.textbutton:hover{color:#fff}
+  .queuetable th,.queuetable td,.ssvcinputtable th,.ssvcinputtable td,.metricrow,.breakdown,.form,.bodpanel{border-color:var(--line)}
+  .queuetable th,.ssvcinputtable th,.queuetable .cves,.inputsource,.bodcell.reference b{color:var(--muted)}
+  .queuetable tbody tr:hover,.ssvcinputtable tbody tr:hover{background:#b2bfe80a}
+  .kindtag{background:#a8b9df14;border-color:var(--line);color:#d6e0f5;border-radius:6px}
+  .outcomepill.immediate i{background:var(--c-immediate)}.outcomepill.out-of-cycle i{background:var(--c-outofcycle)}.outcomepill.scheduled i{background:var(--c-scheduled)}
+  .breakdown .chip{color:var(--ink);border-color:var(--line)}
+  .emptycontent .eyebrow{color:#d0c0ff}.emptycontent h3{font-weight:600}.emptycontent p,.statecard span,.previousresult{color:var(--muted)}
+  .startstep,.emptyresult,.factor,.signal,.outcomemicro,.decisionnote,.ssvcfield,.derived{background:var(--surface);border-color:var(--line);border-radius:12px;color:var(--ink)}
+  .startstep b,.fieldname,.fieldnow b,.derivedvalue b,.signal b,.decisionnote b{color:var(--ink)}
+  .startstep{color:var(--muted)}.startstep span{color:#cfbfff}
+  .emptyresult span,.factor span,.factor small,.signal span,.comparefoot,.outcomemicro span,.ssvcinputreview p,.actionqueue p,.evidence small{color:var(--muted)}
+  .outcomemicro b{color:#d0c0ff}.basis{background:#bca8fa1a;color:#e7dfff;border-left-color:#bca8fa;border-radius:10px}
+  .decisionline{background:#252f49;border-radius:10px}.decisionline b{color:#cfbfff}.decisionline span{color:var(--muted)}
+  .metric.audit{background:#8ce4ef1a;color:#b4f0f7}.metricrow,.ssvcinputreview{background:transparent}
+  .evidence li{border-color:var(--line);border-radius:10px}.evidenceicon{background:#c0cbea20;color:#e0e7f9}
+  .evidenceicon.confirmed{background:#83d7b02b;color:#b0f1d3}.evidenceicon.attention{background:#e8b66826;color:#ffdda0}
+  .track,.scanline{background:#bcc9ea26}.fill.pt,.scanline:after{background:#baa8f4}
+  .privacy,.confirmbar,.resultnotice,.fieldnow.fallback,.patchtriagenote,.kindtag.mitigate{background:#e8b66817;color:#ffe0af;border-color:#e8b66855}
+  .privacy,.confirmbar{border-radius:10px}.reviewflag{color:#ffd59a}.patchtriagenote{color:#ffe0af!important}
+  .patchtriagenote b,.fieldnow.fallback b{color:#ffe8c6}
+  dialog,#contextdialog{background:#36435f;color:var(--ink);border:1px solid #aabce44d;border-radius:18px;box-shadow:0 30px 90px #111b3e88}
+  dialog::backdrop{background:#18213999;backdrop-filter:blur(7px)}
+  #contextdialog .add{background:transparent}.dialogbody p,.addhead .hint,.fieldhelp,.fieldq,.fieldnow,.derivednote,.derivedvalue span,.ssvcabout{color:var(--muted)}
+  input[type=text],select{background:#26334e;color:var(--ink);border-color:#a5b5d94a;border-radius:9px;accent-color:#bca8fa}
+  input::placeholder{color:#a7b4ce}select option{background:#26334e;color:var(--ink)}
+  .fieldlabel,.fieldhelp b,.advgroup,.advanced summary{color:#d1dbef}
+  .advanced,.advcol+.advcol{border-color:var(--line)}
+  .ssvcblock,.contextintro{background:#a0b6e00b;border-color:var(--line);border-radius:12px}
+  .ssvcfield.set{border-left-color:#bca8fa}.ssvcfield.pending{border-left-color:#e8b668}
+  .fieldnum,.ssvcfield.set .fieldnum{background:#7363a5;color:#fff}
+  .standardtag{background:#baa6f51a;border-color:#bca8fa55;color:#e4daff}
+  .ssvcprogress{background:#e8b6681a;border-color:#e8b66855;color:#ffdfa8}
+  .ssvcprogress.done{background:#83d7b01a;border-color:#83d7b055;color:#b0f1d3}
+  .derivedlabel,.contextintro a,.ssvcabout a,.ssvcabout>summary{color:#d1c4ff}.contextintro span{color:var(--muted)}
+  .toast{background:#34415d;border-color:#a6b9e666;border-radius:12px;color:var(--ink)}.toast.error{border-color:#ee8da1}
+  @media(max-width:1100px){body{padding:12px}.workspace{padding:14px}.landing{padding:24px}}
+  @media(max-width:700px){
+    body{padding:8px}.topbar{padding:8px 12px;border-radius:16px 16px 0 0}
+    .brand{font-size:13px}.topactions .btn{font-size:12px}.workspace{padding:14px 12px;border-radius:0 0 16px 16px}
+    .sidebar{padding-right:0}.landing{padding:24px 18px}.landing h1{font-size:46px}
+    .landing .benchmark{gap:12px}.landing .outcomes{gap:8px}.outcomesummary{padding:10px}
+  }
 </style></head>
 <body>
 <header class="topbar">
@@ -622,7 +766,7 @@ function pathDetail(path){
   const sources=TREE_LEVELS.map(([key,label])=>{const point=P[key]||{};return `<div class="pathsource ${point.needs_confirmation?"assumed":""}"><strong>${esc(label)} · ${esc(point.label||"Unknown")}${point.needs_confirmation?" ?":""}</strong><span>${esc(point.source||"Source unavailable")}</span></div>`;}).join("");
   const evidence=(path.evidence||[]).map(e=>{const more=e.more?` (+${esc(e.more)} more in the report)`:"";return e.url?`<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.source)} · ${esc(e.label)} ↗${more}</a>`:`<span>${esc(e.source)} · ${esc(e.label)}${more}</span>`;}).join("");
   return `<div class="treecanvas">${treeSvg(path)}</div>
-    <div class="treelegend">Dark boxes = selected path · ? = assumed input, needs confirmation · Other outcomes vary Human Impact.</div>
+    <div class="treelegend">Highlighted boxes = selected path · ? = assumed input, needs confirmation · Other outcomes vary Human Impact.</div>
     <div class="pathsources">${sources}</div>
     <div class="pathcontext"><span>Human Impact: <b>${esc((P.mission_impact||{}).label)}</b> mission + <b>${esc((P.safety_impact||{}).label)}</b> safety</span>${path.version_source?`<span class="reviewflag">Version inferred: ${esc(path.version_source)}</span>`:""}${path.bod2604?`<span class="policyhint">BOD 26-04: ${esc(path.bod2604.label)}${path.bod2604.applied?"":" · reference only"}</span>`:""}</div>
     ${evidence?`<div class="evidencelinks" aria-label="Vulnerability evidence">${evidence}</div>`:""}`;
@@ -630,7 +774,7 @@ function pathDetail(path){
 
 function treeBlock(summary){
   const paths=summary.decision_paths||[];
-  if(!paths.length)return `<div class="emptyresult"><b>${summary.total?"No decision path available":"No findings reported"}</b><span>${esc(summary.result_message||"Review coverage and evidence in the full report.")}</span></div>`;
+  if(!paths.length)return `<div class="emptyresult"><b>${summary.result_state==="coverage_incomplete"?"Coverage incomplete":summary.total?"No decision path available":"No findings reported"}</b><span>${esc(summary.result_message||"Review coverage and evidence in the full report.")}</span></div>`;
   const selected=Math.min(VIEWS.get(summary.target_id)?.finding||0,paths.length-1);
   const options=paths.map((path,i)=>`<option value="${i}" ${i===selected?"selected":""}>${esc(path.decision_label)} · ${esc(path.vuln_id)} · ${esc(path.package)} ${esc(path.version)}</option>`).join("");
   return `<section class="treeview" aria-label="Decision path · why each finding reached its SSVC outcome">
