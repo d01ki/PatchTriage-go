@@ -124,6 +124,9 @@ def main() -> None:
                         "--html", str(Path(work) / "demo.html"), "--output", str(out)],
                        cwd=work, check=True, stdout=subprocess.DEVNULL)
         _write("demo", json.loads(out.read_text("utf-8")))
+        html = (Path(work) / "demo.html").read_text("utf-8")
+        (GOLDEN / "demo.html").write_text(html, encoding="utf-8", newline="\n")
+        print("wrote demo.html")
 
 
 if __name__ == "__main__":
