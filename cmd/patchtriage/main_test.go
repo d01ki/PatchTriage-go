@@ -124,3 +124,14 @@ func TestCLIVerify(t *testing.T) {
 		t.Error("repeats below 2 must fail")
 	}
 }
+
+func TestCLIServeRejectsBadFlags(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"serve", "--port", "not-a-port"}, &stdout, &stderr); code != 1 {
+		t.Errorf("exit %d for an invalid port", code)
+	}
+	if code := run([]string{"serve", "--port", "70000", "--no-browser"}, &stdout, &stderr); code != 1 ||
+		!strings.Contains(stderr.String(), "port") {
+		t.Errorf("exit %d, stderr %q", code, stderr.String())
+	}
+}

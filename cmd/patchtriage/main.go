@@ -20,6 +20,7 @@ import (
 	"github.com/d01ki/PatchTriage-go/internal/pipeline"
 	"github.com/d01ki/PatchTriage-go/internal/report"
 	"github.com/d01ki/PatchTriage-go/internal/validation"
+	"github.com/d01ki/PatchTriage-go/internal/web"
 )
 
 const usage = `usage: patchtriage <command> [options]
@@ -28,6 +29,7 @@ commands:
   run FILES...   scanner JSON (Trivy/Grype/OSV) or CycloneDX/SPDX SBOM -> decisions and reports
   demo           fully offline demo with bundled evidence
   verify         offline SSVC conformance and reproducibility proof
+  serve          GUI console (default http://127.0.0.1:8765)
 `
 
 func main() {
@@ -52,6 +54,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		err = demo(ctx, args[1:], stdout)
 	case "verify":
 		err = verify(args[1:], stdout)
+	case "serve":
+		err = serve(ctx, args[1:])
 	default:
 		fmt.Fprintf(stderr, "unknown command %q\n%s", args[0], usage)
 		return 2
@@ -311,4 +315,22 @@ func verify(args []string, stdout io.Writer) error {
 		return errors.New("verification failed")
 	}
 	return nil
+}
+
+// serve starts the GUI. It binds to localhost unless told otherwise.
+func serve(ctx context.Context, args []string) error {
+	fs := flag.NewFlagSet("serve", flag.ContinueOnError)
+	host := fs.String("host", "127.0.0.1", "bind address")
+	port := fs.Int("port", 8765, "TCP port")
+	noBrowser := fs.Bool("no-browser", false, "do not open a browser")
+	if _, err := parseInterleaved(fs, args); err != nil {
+		return err
+	}
+	if *port < 1 || *port > 65535 {
+		return fmt.Errorf("--port must be between 1 and 65535")
+	}
+	store := &web.Store{Root: web.DefaultConfigDir()}
+	runner := &web.Runner{Store: store, Enrich: enrich.Options{UseNVD: true, NVDAPIKey: os.Getenv("NVD_API_KEY"),
+		VendorSources: "auto", UseVulnrichment: true}}
+	return web.Serve(ctx, *host, *port, !*noBrowser, runner)
 }
