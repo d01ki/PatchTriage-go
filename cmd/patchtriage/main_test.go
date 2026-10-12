@@ -104,3 +104,23 @@ func TestUnknownCommandShowsUsage(t *testing.T) {
 		t.Errorf("exit %d, stderr %q", code, stderr.String())
 	}
 }
+
+func TestCLIVerify(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "verification_report.json")
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"verify", "--repeats", "3", "--output", path}, &stdout, &stderr); code != 0 {
+		t.Fatalf("exit %d: %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"official ssvc deployer table", "72", "PASS", "Input fingerprint:", "Decision fingerprint:"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("verify output lacks %q:\n%s", want, out)
+		}
+	}
+	if _, err := os.Stat(path); err != nil {
+		t.Errorf("report not written: %v", err)
+	}
+	if code := run([]string{"verify", "--repeats", "1", "--output", path}, &stdout, &stderr); code == 0 {
+		t.Error("repeats below 2 must fail")
+	}
+}

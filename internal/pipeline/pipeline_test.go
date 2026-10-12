@@ -294,3 +294,21 @@ func TestDecisionQuality(t *testing.T) {
 		t.Errorf("sources keep count order then first-seen order: %s", raw)
 	}
 }
+
+func TestAssetFromTarget(t *testing.T) {
+	var target map[string]any
+	_ = json.Unmarshal([]byte(`{"name": "checkout", "source_format": "spdx", "criticality": "high", "internet_exposed": true,
+		"system_exposure": "open", "mission_impact": "mef_failure", "safety_impact": "critical", "automatable": "yes",
+		"publicly_exposed": "yes", "bod2604_applicability": "voluntary", "context_sources": ["reviewer"]}`), &target)
+	a := AssetFromTarget(target)
+	if a.Identifier != "checkout" || a.Kind != "sbom" || a.Criticality != "high" || a.InternetExposed == nil || !*a.InternetExposed ||
+		a.Reachable != nil || a.SystemExposure != "open" || a.MissionImpact != "mef_failure" || a.SafetyImpact != "critical" ||
+		a.Automatable != "unknown" || a.PubliclyExposed != "yes" || a.BOD2604Applicability != "voluntary" ||
+		strings.Join(a.ContextSources, ",") != "reviewer" {
+		t.Errorf("asset = %+v", a)
+	}
+	if AssetFromTarget(map[string]any{"name": "r", "source_kind": "repository"}).Kind != "repository" ||
+		AssetFromTarget(map[string]any{"name": "h"}).Kind != "host" {
+		t.Error("asset kind mapping")
+	}
+}

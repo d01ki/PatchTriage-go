@@ -354,3 +354,37 @@ func ReportJSON(a *Assessment) map[string]any {
 	return map[string]any{"findings": findings, "actions": a.Actions, "evaluation": a.EvalRows,
 		"response_policy": decision.SummarizePolicy(a.Findings), "coverage": a.Coverage}
 }
+
+// AssetFromTarget builds the exact asset context the SSVC engine consumes
+// from a GUI target record. Automatable is vulnerability-specific, so a
+// target never applies one value to every finding.
+func AssetFromTarget(target map[string]any) model.Asset {
+	text := func(key, fallback string) string {
+		if v, ok := target[key].(string); ok && v != "" {
+			return v
+		}
+		return fallback
+	}
+	flag := func(key string) *bool {
+		if v, ok := target[key].(bool); ok {
+			return &v
+		}
+		return nil
+	}
+	a := model.NewAsset(text("name", ""))
+	switch {
+	case target["source_kind"] == "repository":
+		a.Kind = "repository"
+	case target["source_format"] == "cyclonedx" || target["source_format"] == "spdx":
+		a.Kind = "sbom"
+	default:
+		a.Kind = "host"
+	}
+	a.Criticality = text("criticality", "unknown")
+	a.InternetExposed, a.Reachable, a.RuntimeObserved = flag("internet_exposed"), flag("reachable"), flag("runtime_observed")
+	a.SystemExposure, a.MissionImpact = text("system_exposure", "unknown"), text("mission_impact", "unknown")
+	a.SafetyImpact, a.PubliclyExposed = text("safety_impact", "unknown"), text("publicly_exposed", "unknown")
+	a.BOD2604Applicability = text("bod2604_applicability", "unknown")
+	a.ContextSources = append([]string{}, asStrings(target["context_sources"])...)
+	return a
+}

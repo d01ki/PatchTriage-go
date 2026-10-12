@@ -19,6 +19,7 @@ import (
 	"github.com/d01ki/PatchTriage-go/internal/model"
 	"github.com/d01ki/PatchTriage-go/internal/pipeline"
 	"github.com/d01ki/PatchTriage-go/internal/report"
+	"github.com/d01ki/PatchTriage-go/internal/validation"
 )
 
 const usage = `usage: patchtriage <command> [options]
@@ -26,6 +27,7 @@ const usage = `usage: patchtriage <command> [options]
 commands:
   run FILES...   scanner JSON (Trivy/Grype/OSV) or CycloneDX/SPDX SBOM -> decisions and reports
   demo           fully offline demo with bundled evidence
+  verify         offline SSVC conformance and reproducibility proof
 `
 
 func main() {
@@ -48,6 +50,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		}
 	case "demo":
 		err = demo(ctx, args[1:], stdout)
+	case "verify":
+		err = verify(args[1:], stdout)
 	default:
 		fmt.Fprintf(stderr, "unknown command %q\n%s", args[0], usage)
 		return 2
@@ -274,5 +278,37 @@ func demo(ctx context.Context, args []string, stdout io.Writer) error {
 		return err
 	}
 	fmt.Fprintf(stdout, "\nDemo complete. Open %s in a browser.\n", strings.TrimSpace(*html))
+	return nil
+}
+
+// verify runs the offline conformance and reproducibility proof.
+func verify(args []string, stdout io.Writer) error {
+	fs := flag.NewFlagSet("verify", flag.ContinueOnError)
+	output := fs.String("output", "verification_report.json", "write the reviewer-readable JSON evidence report")
+	repeats := fs.Int("repeats", 25, "repeat each fixed target-context decision this many times (2-1000)")
+	if _, err := parseInterleaved(fs, args); err != nil {
+		return err
+	}
+	if *repeats < 2 || *repeats > 1000 {
+		return fmt.Errorf("--repeats must be between 2 and 1000")
+	}
+	result, err := validation.WriteReport(*output, *repeats)
+	if err != nil {
+		return err
+	}
+	fmt.Fprintln(stdout, "Reviewer verification")
+	for _, c := range result["checks"].([]map[string]any) {
+		status := "PASS"
+		if c["passed"] != true {
+			status = "FAIL"
+		}
+		fmt.Fprintf(stdout, "  %-40s %6v  %s\n", strings.ReplaceAll(c["name"].(string), "_", " "), c["cases"], status)
+	}
+	fmt.Fprintln(stdout, "Input fingerprint:", result["input_fingerprint"])
+	fmt.Fprintln(stdout, "Decision fingerprint:", result["decision_fingerprint"])
+	fmt.Fprintln(stdout, "JSON evidence:", *output)
+	if result["status"] != "pass" {
+		return errors.New("verification failed")
+	}
 	return nil
 }
