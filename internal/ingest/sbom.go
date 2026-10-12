@@ -261,7 +261,8 @@ func (c *osvCoverage) asMap() model.Coverage {
 	}
 }
 
-func sortedNonEmpty(values []string) []string {
+// SortedNonEmpty returns the sorted set of non-empty values.
+func SortedNonEmpty(values []string) []string {
 	var out []string
 	for _, v := range unique(values) {
 		if v != "" {
@@ -431,7 +432,7 @@ func loadSBOM(ctx context.Context, raw []byte, path string, asset *model.Asset, 
 		}
 	}
 	cov.queryable = len(queries)
-	cov.queriedEcosystems, cov.unqueryableEcosystems = sortedNonEmpty(checkedEco), sortedNonEmpty(skippedEco)
+	cov.queriedEcosystems, cov.unqueryableEcosystems = SortedNonEmpty(checkedEco), SortedNonEmpty(skippedEco)
 	if cov.unqueryable > 0 {
 		cov.errors = append(cov.errors, fmt.Sprintf("%d component(s) lacked a queryable package version/purl", cov.unqueryable))
 	}

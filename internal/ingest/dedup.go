@@ -246,7 +246,7 @@ func merge(key string, group []model.RawFinding, aliasMap map[string]string) *mo
 			firstSeen = r.DetectedAt
 		}
 	}
-	candidates = sortedNonEmpty(candidates)
+	candidates = SortedNonEmpty(candidates)
 	if fixedVersion == "" && len(candidates) > 0 {
 		fixedVersion = candidates[0]
 	}
@@ -262,7 +262,7 @@ func merge(key string, group []model.RawFinding, aliasMap map[string]string) *mo
 	pkg := component.Package
 	pkg.FixedVersion = fixedVersion
 	pkg.FixedVersionCandidates = nonNilStrings(candidates)
-	refs = sortedNonEmpty(refs)
+	refs = SortedNonEmpty(refs)
 	if len(refs) > 20 {
 		refs = refs[:20]
 	}
