@@ -225,18 +225,17 @@ func (a Asset) MarshalJSON() ([]byte, error) {
 
 // RawFinding is one vulnerability record exactly as one scanner reported it.
 type RawFinding struct {
-	VulnID        string          `json:"vuln_id"`
-	Aliases       []string        `json:"aliases"`
-	SourceScanner string          `json:"source_scanner"`
-	Package       Package         `json:"package"`
-	Asset         Asset           `json:"asset"`
-	Severity      Severity        `json:"severity"`
-	CVSSScore     *float64        `json:"cvss_score"`
-	Title         string          `json:"title"`
-	Description   string          `json:"description"`
-	References    []string        `json:"references"`
-	DetectedAt    time.Time       `json:"detected_at"`
-	Raw           json.RawMessage `json:"-"` // original record for audit
+	VulnID        string    `json:"vuln_id"`
+	Aliases       []string  `json:"aliases"`
+	SourceScanner string    `json:"source_scanner"`
+	Package       Package   `json:"package"`
+	Asset         Asset     `json:"asset"`
+	Severity      Severity  `json:"severity"`
+	CVSSScore     *float64  `json:"cvss_score"`
+	Title         string    `json:"title"`
+	Description   string    `json:"description"`
+	References    []string  `json:"references"`
+	DetectedAt    time.Time `json:"detected_at"`
 }
 
 func (r RawFinding) MarshalJSON() ([]byte, error) {

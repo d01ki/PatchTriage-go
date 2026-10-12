@@ -85,8 +85,4 @@ func TestFindingJSONShape(t *testing.T) {
 			t.Errorf("marshalled finding lacks %s:\n%s", want, s)
 		}
 	}
-	rf, _ := json.Marshal(RawFinding{VulnID: "CVE-1", Raw: json.RawMessage(`{"x":1}`)})
-	if strings.Contains(string(rf), `"raw"`) {
-		t.Errorf("raw record must not be serialized: %s", rf)
-	}
 }
