@@ -227,15 +227,15 @@
   /* Presentation-only theme. Keep the assessment controls and responsive layout. */
   :root{
     color-scheme:dark;
-    --void:#10151e;--void2:#151c28;--panel:#1b2432;--panel2:#243044;
-    --ink:#e1e7f0;--muted:#a8b5c9;--line:#303d51;
+    --void:#090b11;--void2:#10131b;--panel:#171c28;--panel2:#20283b;
+    --ink:#edf0f7;--muted:#9da8bd;--line:#2b3244;
     --hot:#baadff;--amber:#ffd18a;--blue:#a9bfff;--cyan:#8ce4ef;
-    --paper:#151c28;--dark:#e1e7f0;
-    --immediate:#b78190;--outofcycle:#baa17e;--scheduled:#8799bf;--defer:#758597;
-    --c-immediate:#996777;--c-outofcycle:#9b8668;--c-scheduled:#647a9f;--c-defer:#50647b;
-    --glass:#1b2432;
-    --surface:#141c28;--accent:#b3bdd7;
-    --ui-font:"Cascadia Code","Cascadia Mono","SFMono-Regular",Consolas,"Liberation Mono",monospace;
+    --paper:#10131b;--dark:#edf0f7;
+    --immediate:#c0647b;--outofcycle:#b79552;--scheduled:#657edb;--defer:#65728d;
+    --c-immediate:#c0647b;--c-outofcycle:#b79552;--c-scheduled:#657edb;--c-defer:#48546e;
+    --glass:#171c28;
+    --surface:#10151f;--accent:#87a8fa;
+    --ui-font:"Segoe UI Variable Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   }
   body{
     padding:0;gap:0;background:var(--void);
@@ -248,13 +248,13 @@
     border-radius:0;background:var(--void);box-shadow:none;
   }
   .brand{font-weight:650;letter-spacing:.025em;gap:7px}
-  .brand span{color:var(--accent)}.brand small{color:var(--muted);font-size:13px}
+  .brand,.brand span{color:var(--ink)}.brand small{color:var(--muted);font-size:13px}
   .brandmark{border-radius:9px;border-color:#b4a6f0;background:#8979cf22}
   .brandmark:before,.brandmark:after{background:#d2c7ff}
   .btn{border-radius:10px;border-color:var(--line);background:#687a9d29;color:var(--ink);font-weight:600;transition:background .18s,border-color .18s,transform .18s}
   .btn:hover{background:#8d9dc53d;border-color:#b2bfe68c}
-  .btn.primary{background:#8c9ec3;color:#101824;border-color:#9cadd1;font-weight:700}
-  .btn.primary:hover{background:#a4b4d6;border-color:#b9c7e2}
+  .btn.primary{background:#3c5caa;color:#f5f7ff;border-color:#5877c4;font-weight:600}
+  .btn.primary:hover{background:#486bbd;border-color:#7896df}
   .btn.ghost{background:transparent}.btn.attach{background:#ac9cee20;color:#e0d8ff;border-color:#a598d96b}
   .btn.danger{color:#ffb0bd}.btn:disabled{opacity:.45;transform:none}
   .btn:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
@@ -285,7 +285,7 @@
   .target{border-radius:13px;overflow:hidden}.target:hover{border-color:#a4b3d769}
   .target.selected{border-color:#bfaff5;box-shadow:0 0 0 1px #baa6f038,0 8px 22px #14213c26}
   .targetselect{color:var(--ink);border-radius:12px}
-  .targetselect[aria-pressed=true]{background:#263247}
+  .targetselect[aria-pressed=true]{background:#1e2944}
   .targetname{font-weight:600}.targetmeta{color:var(--muted)}.targetstate{color:#bcbaff}.targetstate.failed{color:#ffb0bd}
   .sidebar .kpis{border-color:var(--line)}.sidebar .kpi .value{color:var(--ink);font-family:var(--ui-font);font-weight:600}
   .sidebar .kpi .label{color:var(--muted)}.sidebarfoot .btn{background:#9aacd015}
@@ -362,6 +362,17 @@
     .sidebar{padding-right:0}.landing{padding:24px 18px}.landing h1{font-size:46px}
     .landing .benchmark{gap:12px}.landing .outcomes{gap:8px}.outcomesummary{padding:10px}
   }
+  /* Proportional UI typography, with aligned digits for metrics and tables. */
+  .mono,.eyebrow,.proofhead,.nodecode,.decision .outcome-now,.factorcode,.kpi .value,.kpi .label,
+  .sectiontitle span,.enginelabel,.standardtag,.ssvcprogress,.fieldnum,.derivedlabel,.targetid,.tag,
+  .priority,.prioritydue,.metric,.microtitle,.barvalue,.outcomemicro b,.factor span,.decisionline b,
+  .signal b,.evidenceicon,.advisoryline a,.advisoryline span,.outcomerow .count small,
+  .breakdown .chip b,.queuetable td.num,.startstep span,.vs{font-family:var(--ui-font)}
+  .kpi .value,.outcomerow .count,.donutlabel,.donutcount,.metric,.queuetable td.num{font-variant-numeric:tabular-nums}
+  .brand{font-weight:600;letter-spacing:.01em}
+  .sectiontitle h2,.emptycontent h3,.dialogbody h3,.addhead h3{font-weight:500;letter-spacing:-.015em}
+  .targetname,.action,.btn,.resulttab,.fieldlabel,.outcomerow .name{font-weight:600}
+  .proofhead,.microtitle,.enginelabel,.kpi .label{letter-spacing:.03em}
   /* Flat console surfaces and readable counts at every viewport size. */
   .proof,.benchmarkcopy,.outcome,.node,.lightpanel,.target,.outcomesummary,.treecanvas,.emptyresult,
   .startstep,.factor,.signal,.ssvcfield,.derived,.decisionnote,.btn{border-radius:6px;box-shadow:none}
@@ -375,27 +386,36 @@
   .resulttab[aria-selected=true]{color:#d1dcf0;border-color:#90a5c9}
   .tree .node text,.tree .root text,.tree .leaf text{font-family:var(--ui-font);font-size:12px}
   .tree .colhead{font-size:11px}.tree .node rect{fill:#263246;stroke:#43536c}
-  .tree .node.on rect{fill:#4b5c7a;stroke:#9bacca}.tree .edge.on{stroke:#98adcf}
-  .tree .root rect{fill:#273347;stroke:#7086ab}.tree .node.on.assumed rect{fill:#3d3a3e;stroke:#b5a081}
+  .tree .node.on rect{fill:#2c4277;stroke:#7392d1}.tree .edge.on{stroke:#6d8ed3}
+  .tree .root rect{fill:#1b263c;stroke:#50658c}.tree .node.on.assumed rect{fill:#3b3043;stroke:#b79552}
   .tree .leaf.on rect{stroke:#ccd7e8}.tree .leaf.off{opacity:.55}
-  .priority{font-size:13px}.priority.immediate,.priority.scheduled{color:#111923}
+  .priority{font-size:13px}.priority.immediate{background:#512936;color:#f3bdcc}.priority.scheduled{background:#263762;color:#c2d0ff}
+  .priority.out-of-cycle{background:#493b25;color:#efd3a1}
   dialog,#contextdialog{background:var(--panel);border-color:var(--line);border-radius:8px}
   input[type=text],select,select option{background:var(--surface);color:var(--ink)}
-  .donutlabel{font:700 25px var(--ui-font);fill:var(--ink)}
-  .donutsub{font:500 10px var(--ui-font);fill:var(--muted);letter-spacing:.06em}
-  .donutcount{font:700 12px var(--ui-font);fill:#fff;paint-order:stroke;stroke:#172130;stroke-width:2px;pointer-events:none}
-  .outcomesummary{grid-template-columns:112px minmax(0,1fr);min-height:140px;padding:14px 18px;gap:22px}
-  .outcomesummary .donut{width:112px;height:112px;overflow:visible}
+  .donutlabel{font:500 28px var(--ui-font);fill:var(--ink)}
+  .donutsub{font:400 10px var(--ui-font);fill:var(--muted);letter-spacing:.04em}
+  .outcomesummary{grid-template-columns:100px minmax(0,1fr);min-height:120px;padding:12px 20px;gap:26px}
+  .outcomesummary .donut{width:100px;height:100px;overflow:visible}
   .outcomesummary .microtitle{display:block;margin-bottom:14px;font-size:11px}
-  .outcomerows{gap:16px}.outcomerow{display:block;border-left:2px solid var(--line);padding-left:12px}
+  .outcomerows{gap:16px}.outcomerow{display:block;border:0;padding-left:0}
   .outcomerow .name{font-size:12px;white-space:nowrap}.outcomerow .count{display:flex;align-items:baseline;gap:8px;font-size:25px;margin-top:6px}
   .outcomerow .count small{display:inline;font-size:12px;margin:0;color:var(--muted)}
+  .outcomerow .count{font-weight:500}.outcomerow .name{color:#b0bad0;font-weight:400}
+  .pathsources{gap:0;margin-top:16px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .pathsource{border:0;padding:0 16px;font-family:var(--ui-font);line-height:1.5}
+  .pathsource:first-child{padding-left:0}.pathsource+.pathsource{border-left:1px solid var(--line)}
+  .pathsource .sourcekey{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:0}
+  .pathsource strong{font-size:16px;font-weight:500;color:var(--ink);margin:3px 0}
+  .pathsource .sourcevia{font-size:12px;font-weight:400;color:#9aa6be}
+  .pathsource.assumed{background:transparent;border-radius:0}.pathsource.assumed strong{color:#dfbf88}
   @media(max-width:1100px){.outcomerows{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.outcomerow .count{font-size:20px;margin-top:2px}}
   @media(max-width:700px){
     .outcomesummary{grid-template-columns:100px minmax(0,1fr);padding:12px;gap:12px}
     .outcomesummary .donut{width:100px;height:100px}.outcomesummary .microtitle{font-size:10px;margin-bottom:10px}
     .outcomerow{padding-left:7px}.outcomerow .name{font-size:10px;white-space:normal}.outcomerow .count{font-size:18px;gap:5px}
     .outcomerow .count small{font-size:10px}.brand{font-size:12px}.topactions .btn{font-size:11px}
+    .pathsources{row-gap:16px}.pathsource{padding:0 10px}.pathsource:nth-child(odd){border-left:0;padding-left:0}
   }
 </style></head>
 <body>
@@ -741,20 +761,15 @@ const OUTCOME_ORDER=[["immediate","Immediate","Act now · example local SLA 3 da
 const OUTCOME_COLOR={immediate:"var(--c-immediate)",out_of_cycle:"var(--c-outofcycle)",scheduled:"var(--c-scheduled)",defer:"var(--c-defer)"};
 const OUTCOME_KEY={"Immediate":"immediate","Out-of-Cycle":"out_of_cycle","Scheduled":"scheduled","Defer":"defer"};
 function donutSvg(outcomes,size,caption){
-  const total=OUTCOME_ORDER.reduce((n,[k])=>n+(outcomes[k]||0),0),stroke=Math.max(10,Math.round(size*0.16)),r=(size-stroke)/2-2,cx=size/2,cy=size/2;
-  const circ=2*Math.PI*r,gap=total>1?2:0;let offset=0,labels="";
+  const total=OUTCOME_ORDER.reduce((n,[k])=>n+(outcomes[k]||0),0),stroke=Math.max(6,Math.round(size*.085)),r=(size-stroke)/2-2,cx=size/2,cy=size/2;
+  const circ=2*Math.PI*r,gap=OUTCOME_ORDER.filter(([k])=>outcomes[k]>0).length>1?4:0;let offset=0;
   const segs=total?OUTCOME_ORDER.filter(([k])=>outcomes[k]).map(([k,label])=>{
     const n=outcomes[k],len=Math.max(0,n/total*circ-gap);
     const seg=`<circle class="seg" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${OUTCOME_COLOR[k]}" stroke-width="${stroke}" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${cx} ${cy})"><title>${esc(label)}: ${n} of ${total} (${Math.round(n/total*100)}%)</title></circle>`;
-    // Keep tiny slices legible via the always-visible numeric legend.
-    if(size>=100&&len>=String(n).length*9+6){
-      const angle=(offset+len/2)/circ*2*Math.PI-Math.PI/2;
-      labels+=`<text class="donutcount" x="${cx+r*Math.cos(angle)}" y="${cy+r*Math.sin(angle)}" text-anchor="middle" dominant-baseline="central" aria-hidden="true">${n}</text>`;
-    }
     offset+=n/total*circ;return seg;
   }).join(""):`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--line)" stroke-width="${stroke}"></circle>`;
   const text=OUTCOME_ORDER.map(([k,label])=>`${label} ${outcomes[k]||0}`).join(", ");
-  return `<svg class="donut" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${esc(caption)}: ${esc(text)}">${segs}${labels}${size>=100?`<text class="donutlabel" x="${cx}" y="${cy+2}" text-anchor="middle">${total}</text><text class="donutsub" x="${cx}" y="${cy+19}" text-anchor="middle">FINDINGS</text>`:`<text class="donutsub" x="${cx}" y="${cy+4}" text-anchor="middle">${total}</text>`}</svg>`;
+  return `<svg class="donut" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${esc(caption)}: ${esc(text)}">${segs}${size>=100?`<text class="donutlabel" x="${cx}" y="${cy+3}" text-anchor="middle">${total}</text><text class="donutsub" x="${cx}" y="${cy+20}" text-anchor="middle">findings</text>`:`<text class="donutsub" x="${cx}" y="${cy+4}" text-anchor="middle">${total}</text>`}</svg>`;
 }
 function renderOutcomeSummary(){
   const el=document.getElementById("outcomesummary");if(!el)return;
@@ -803,7 +818,7 @@ function treeSvg(path){
 function pathSentencePlain(path){const P=path.points||{};return `${path.asset}: ${path.vuln_id} in ${path.package} ${path.version} — Exploitation ${(P.exploitation||{}).label}, System Exposure ${(P.system_exposure||{}).label}, Automatable ${(P.automatable||{}).label}, Human Impact ${(P.human_impact||{}).label} → ${path.decision_label}`;}
 function pathDetail(path){
   const P=path.points||{};
-  const sources=TREE_LEVELS.map(([key,label])=>{const point=P[key]||{};return `<div class="pathsource ${point.needs_confirmation?"assumed":""}"><strong>${esc(label)} · ${esc(point.label||"Unknown")}${point.needs_confirmation?" ?":""}</strong><span>${esc(point.source||"Source unavailable")}</span></div>`;}).join("");
+  const sources=TREE_LEVELS.map(([key,label])=>{const point=P[key]||{};return `<div class="pathsource ${point.needs_confirmation?"assumed":""}"><span class="sourcekey">${esc(label)}</span><strong>${esc(point.label||"Unknown")}${point.needs_confirmation?" ?":""}</strong><span class="sourcevia">${esc(point.source||"Source unavailable")}</span></div>`;}).join("");
   const evidence=(path.evidence||[]).map(e=>{const more=e.more?` (+${esc(e.more)} more in the report)`:"";return e.url?`<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.source)} · ${esc(e.label)} ↗${more}</a>`:`<span>${esc(e.source)} · ${esc(e.label)}${more}</span>`;}).join("");
   return `<div class="treecanvas">${treeSvg(path)}</div>
     <div class="treelegend">Highlighted boxes = selected path · ? = assumed input, needs confirmation · Other outcomes vary Human Impact.</div>
