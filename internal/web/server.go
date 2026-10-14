@@ -19,12 +19,14 @@ import (
 	"os/exec"
 	"regexp"
 	"runtime"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/d01ki/PatchTriage-go/internal/ai"
 	"github.com/d01ki/PatchTriage-go/internal/decision"
 	"github.com/d01ki/PatchTriage-go/internal/ingest"
 	"github.com/d01ki/PatchTriage-go/internal/repository"
@@ -299,7 +301,7 @@ func now() float64 { return float64(time.Now().UnixNano()) / 1e9 }
 func (s *Server) execute(id string) {
 	s.mu.Lock()
 	j := s.jobs[id]
-	ws, targetID := j["workspace"].(string), j["target_id"].(string)
+	ws, targetID, backend := j["workspace"].(string), j["target_id"].(string), j["backend"].(string)
 	s.mu.Unlock()
 	finish := func(err error) {
 		s.mu.Lock()
@@ -326,12 +328,12 @@ func (s *Server) execute(id string) {
 	}
 	lock := s.runLock(ws, targetID)
 	lock.Lock()
-	_, err = s.runner.Run(context.Background(), ws, target)
+	_, err = s.runner.Run(context.Background(), ws, target, backend)
 	lock.Unlock()
 	finish(err)
 }
 
-func (s *Server) startJob(ws string, target Target) (job, error) {
+func (s *Server) startJob(ws string, target Target, backend string) (job, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.pruneJobsLocked()
@@ -355,7 +357,7 @@ func (s *Server) startJob(ws string, target Target) (job, error) {
 		return nil, badRequest(429, "anonymous workspace assessment limit reached; wait for an active run to finish")
 	}
 	jobID := randomHex(12)
-	j := job{"job_id": jobID, "workspace": ws, "target_id": id, "backend": "rules", "state": "queued",
+	j := job{"job_id": jobID, "workspace": ws, "target_id": id, "backend": backend, "state": "queued",
 		"created_at": now(), "input_revision": intOf(target["input_revision"]), "source_sha256": strOf(target["source_sha256"])}
 	s.jobs[jobID] = j
 	go s.execute(jobID)
@@ -426,7 +428,30 @@ func githubImportToken() string {
 	return envOr("GITHUB_TOKEN", os.Getenv("GH_TOKEN"))
 }
 
+// validateBackend accepts ai/cascade only when an AI provider is
+// configured (and the pre-0.7 "claude" name for Anthropic).
+func validateBackend(backend string) (string, error) {
+	allowed := []string{"rules"}
+	if ai.HasConfiguration() {
+		allowed = append(allowed, "ai", "cascade")
+		if provider, _ := ai.ResolveProviderName(""); provider == "anthropic" {
+			allowed = append(allowed, "claude")
+		}
+	}
+	if !slices.Contains(allowed, backend) {
+		return "", badRequest(400, "backend is not available")
+	}
+	return backend, nil
+}
+
 func (s *Server) config() map[string]any {
+	hasAI := ai.HasConfiguration()
+	backends := []string{"rules"}
+	var aiProvider any
+	if hasAI {
+		backends = append(backends, "ai", "cascade")
+		aiProvider, _ = ai.ResolveProviderName("")
+	}
 	generic := "unavailable"
 	if repository.GenericEnabled() {
 		generic = "local-osv-scanner"
@@ -436,7 +461,7 @@ func (s *Server) config() map[string]any {
 		token = "token"
 	}
 	return map[string]any{
-		"backends": []string{"rules"}, "has_key": false, "has_ai": false, "ai_provider": nil,
+		"backends": backends, "has_key": hasAI, "has_ai": hasAI, "ai_provider": aiProvider,
 		"capabilities": []string{"offline-demo", "ssvc-deployer", "epss-baseline", "kev-baseline", "reachability",
 			"runtime-context", "vendor-advisories", "async-runs", "github-repository-sbom", "fleet-import"},
 		"version": appVersion, "build_sha": envOr("PATCHTRIAGE_BUILD_SHA", "development"), "ui_schema_version": 2,
@@ -659,10 +684,11 @@ func (s *Server) post(w http.ResponseWriter, r *http.Request, ws string) error {
 		if err != nil {
 			return err
 		}
-		if backend := fmt.Sprint(orDefault(body["backend"], "rules")); backend != "rules" {
-			return badRequest(400, "backend is not available")
+		backend, err := validateBackend(fmt.Sprint(orDefault(body["backend"], "rules")))
+		if err != nil {
+			return err
 		}
-		j, err := s.startJob(ws, target)
+		j, err := s.startJob(ws, target, backend)
 		if err != nil {
 			return err
 		}
@@ -675,8 +701,9 @@ func (s *Server) post(w http.ResponseWriter, r *http.Request, ws string) error {
 		if err != nil {
 			return err
 		}
-		if backend := fmt.Sprint(orDefault(body["backend"], "rules")); backend != "rules" {
-			return badRequest(400, "backend is not available")
+		backend, err := validateBackend(fmt.Sprint(orDefault(body["backend"], "rules")))
+		if err != nil {
+			return err
 		}
 		select {
 		case s.runSlots <- struct{}{}:
@@ -686,7 +713,7 @@ func (s *Server) post(w http.ResponseWriter, r *http.Request, ws string) error {
 		defer func() { <-s.runSlots }()
 		lock := s.runLock(ws, m[1])
 		lock.Lock()
-		summary, err := s.runner.Run(r.Context(), ws, target)
+		summary, err := s.runner.Run(r.Context(), ws, target, backend)
 		lock.Unlock()
 		if err != nil {
 			return badRequest(400, exceptionMessage(err))

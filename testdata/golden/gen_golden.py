@@ -238,7 +238,57 @@ def manifest_cases() -> None:
     print("wrote manifests_python.json")
 
 
+# AI recommendation merge + audit (patchtriage.triage.engine / audit) over
+# the findings of existing golden reports. "<baseline>" is replaced by the
+# finding's deterministic action.
+AI_RECOMMENDATIONS = [
+    {"action": "<baseline>", "rationale": "Explain the supplied SSVC path.",
+     "remediation_steps": ["Review the vendor advisory."], "uncertainties": []},
+    {"action": "<baseline>", "rationale": "EPSS of 0.99 suggests high risk.",
+     "remediation_steps": ["Upgrade within 3 days"], "uncertainties": []},
+    {"action": "monitor", "rationale": "  Low urgency.  ", "remediation_steps": [], "uncertainties": ["  "]},
+    {"action": "patch_immediately", "rationale": "Escalate.", "remediation_steps": [], "uncertainties": []},
+    {"action": "<baseline>", "rationale": "There is no known exploitation of this flaw.",
+     "remediation_steps": [], "uncertainties": ["exploitation unlikely within 30 days"]},
+    {"action": "<baseline>", "rationale": "Apply vendor guidance.",
+     "remediation_steps": ["Upgrade the package to the latest version", "Install the patch"],
+     "uncertainties": ["EPSS percentile 97% may be stale", "CVSS score 9.8 is from NVD"]},
+]
+
+
+def ai_audit_cases() -> None:
+    from patchtriage.models import Finding
+    from patchtriage.triage.audit import audit_finding
+    from patchtriage.triage.engine import (RulesBackend, _merge_ai_recommendation,
+                                           _validate_recommendation)
+    rules = RulesBackend()
+    cases = []
+    for golden in ("trivy_context", "grype", "demo"):
+        report = json.loads((GOLDEN / f"{golden}.json").read_text("utf-8"))
+        for index, raw in enumerate(report["findings"]):
+            raw = {k: v for k, v in raw.items() if k != "triage"}
+            for key in ("enriched_at",):
+                raw["enrichment"][key] = None
+            raw.pop("detected_at", None)
+            raw.pop("first_seen", None)
+            finding = Finding.model_validate(raw)
+            baseline = rules.triage(finding)["action"]
+            for rec in AI_RECOMMENDATIONS:
+                rec = {k: (baseline if v == "<baseline>" else v) for k, v in rec.items()}
+                finding.triage = _merge_ai_recommendation(
+                    finding, _validate_recommendation(rec), "test:model")
+                audit = audit_finding(finding, rules)
+                cases.append({"golden": golden, "index": index, "recommendation": rec,
+                              "rationale": finding.triage["rationale"],
+                              "ai_recommendation": finding.triage["ai_recommendation"],
+                              "flags": audit["flags"]})
+    out = ROOT / "testdata" / "ai_audit_python.json"
+    out.write_text(json.dumps(cases, indent=1) + "\n", encoding="utf-8", newline="\n")
+    print(f"wrote ai_audit_python.json ({len(cases)} cases)")
+
+
 if __name__ == "__main__":
     main()
     choose_cases()
     manifest_cases()
+    ai_audit_cases()

@@ -473,9 +473,21 @@ type Triage struct {
 	SuggestedDeadlineDays int             `json:"suggested_deadline_days"`
 	Backend               string          `json:"backend"`
 	SSVC                  *SSVCAssessment `json:"ssvc"`
-	Audit                 map[string]any  `json:"audit,omitempty"`
-	BOD2604               *BODResult      `json:"bod2604,omitempty"`
-	Effective             *Effective      `json:"effective,omitempty"`
+	// AI assistance never replaces the SSVC fields above; it explains them.
+	AIRecommendation  *AIRecommendation `json:"ai_recommendation,omitempty"`
+	Escalated         *bool             `json:"escalated,omitempty"`
+	EscalationReasons []string          `json:"escalation_reasons,omitempty"`
+	Error             string            `json:"error,omitempty"`
+	Audit             map[string]any    `json:"audit,omitempty"`
+	BOD2604           *BODResult        `json:"bod2604,omitempty"`
+	Effective         *Effective        `json:"effective,omitempty"`
+}
+
+// AIRecommendation is a model's advisory output for one finding.
+type AIRecommendation struct {
+	Action           string   `json:"action"`
+	RemediationSteps []string `json:"remediation_steps"`
+	Uncertainties    []string `json:"uncertainties"`
 }
 
 // Coverage records which evidence was and was not checked.

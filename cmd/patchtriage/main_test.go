@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/d01ki/PatchTriage-go/internal/pipeline"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -57,10 +58,21 @@ func TestCLIDemoWritesReports(t *testing.T) {
 	}
 }
 
-func TestCLIRunRejectsAITriage(t *testing.T) {
+func TestParseRunAIOptions(t *testing.T) {
+	t.Setenv("PATCHTRIAGE_CONFIG_DIR", t.TempDir())
+	cfg, err := parseRun([]string{"scan.json", "--triage", "cascade", "--provider", "ollama", "--ai-base-url",
+		"http://localhost:11434/v1", "--model", "small", "--escalation-model", "big", "--jobs", "8"})
+	want := pipeline.TriageOptions{Backend: "cascade", Model: "small", EscalationModel: "big", Provider: "ollama",
+		BaseURL: "http://localhost:11434/v1", Jobs: 8}
+	if err != nil || cfg.options.Triage != want {
+		t.Errorf("triage options = %+v, %v", cfg.options.Triage, err)
+	}
+	if cfg, _ := parseRun([]string{"scan.json"}); cfg.options.Triage.Backend != "rules" {
+		t.Errorf("default backend = %q", cfg.options.Triage.Backend)
+	}
 	var stdout, stderr bytes.Buffer
-	if code := run([]string{"run", "scan.json", "--triage", "ai"}, &stdout, &stderr); code == 0 ||
-		!strings.Contains(stderr.String(), "rules") {
+	if code := run([]string{"run", "scan.json", "--triage", "magic"}, &stdout, &stderr); code == 0 ||
+		!strings.Contains(stderr.String(), "Unknown triage backend: magic") {
 		t.Errorf("exit %d, stderr %q", code, stderr.String())
 	}
 }

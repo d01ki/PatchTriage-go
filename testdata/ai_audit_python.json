@@ -1,0 +1,1516 @@
+[
+ {
+  "golden": "trivy_context",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "trivy_context",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": [
+   "fabricated_number:ai_remediation_steps[0]:3"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 0,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_out_of_cycle->monitor"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_mismatch:patch_out_of_cycle->patch_immediately"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": [
+   "fabricated_number:ai_uncertainties[0]:30"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_number:ai_uncertainties[1]:9.8"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "trivy_context",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "trivy_context",
+  "index": 1,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_immediately->monitor"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "trivy_context",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": [
+   "fabricated_number:ai_uncertainties[0]:30",
+   "ai_kev_exploitation_downgrade_claim"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_percentage:ai_uncertainties[0]:97%"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "trivy_context",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "trivy_context",
+  "index": 2,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_immediately->monitor"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "trivy_context",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": [
+   "fabricated_number:ai_uncertainties[0]:30",
+   "ai_kev_exploitation_downgrade_claim"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_percentage:ai_uncertainties[0]:97%",
+   "fabricated_number:ai_uncertainties[1]:9.8"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 3,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "trivy_context",
+  "index": 3,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": [
+   "fabricated_number:rationale:0.99",
+   "fabricated_number:ai_remediation_steps[0]:3"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 3,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_out_of_cycle->monitor"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 3,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_mismatch:patch_out_of_cycle->patch_immediately"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 3,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": [
+   "fabricated_number:ai_uncertainties[0]:30"
+  ]
+ },
+ {
+  "golden": "trivy_context",
+  "index": 3,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_percentage:ai_uncertainties[0]:97%",
+   "fabricated_number:ai_uncertainties[1]:9.8"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "grype",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": [
+   "fabricated_number:ai_remediation_steps[0]:3"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 0,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_out_of_cycle->monitor"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_mismatch:patch_out_of_cycle->patch_immediately"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": [
+   "fabricated_number:ai_uncertainties[0]:30",
+   "ai_kev_exploitation_downgrade_claim"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_percentage:ai_uncertainties[0]:97%"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "grype",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": [
+   "fabricated_number:ai_remediation_steps[0]:3"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 1,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_scheduled->monitor"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_mismatch:patch_scheduled->patch_immediately"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": [
+   "ai_kev_exploitation_downgrade_claim"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_percentage:ai_uncertainties[0]:97%",
+   "fabricated_number:ai_uncertainties[1]:9.8"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "grype",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": [
+   "fabricated_number:rationale:0.99",
+   "fabricated_number:ai_remediation_steps[0]:3"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 2,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_scheduled->monitor"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_mismatch:patch_scheduled->patch_immediately"
+  ]
+ },
+ {
+  "golden": "grype",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": []
+ },
+ {
+  "golden": "grype",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_percentage:ai_uncertainties[0]:97%",
+   "fabricated_number:ai_uncertainties[1]:9.8"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "demo",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": [
+   "fabricated_number:ai_remediation_steps[0]:3"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 0,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_scheduled->monitor"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_mismatch:patch_scheduled->patch_immediately"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": []
+ },
+ {
+  "golden": "demo",
+  "index": 0,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_number:ai_uncertainties[1]:9.8"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "demo",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "demo",
+  "index": 1,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_immediately->monitor"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "demo",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": [
+   "fabricated_number:ai_uncertainties[0]:30",
+   "ai_kev_exploitation_downgrade_claim"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 1,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_percentage:ai_uncertainties[0]:97%"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "demo",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": [
+   "fabricated_number:ai_remediation_steps[0]:3"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 2,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_out_of_cycle->monitor"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_mismatch:patch_out_of_cycle->patch_immediately"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": [
+   "fabricated_number:ai_uncertainties[0]:30",
+   "ai_kev_exploitation_downgrade_claim"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 2,
+  "recommendation": {
+   "action": "patch_out_of_cycle",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_out_of_cycle",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_percentage:ai_uncertainties[0]:97%",
+   "fabricated_number:ai_uncertainties[1]:9.8"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 3,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "Explain the supplied SSVC path.",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "rationale": "Explain the supplied SSVC path.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Review the vendor advisory."
+   ],
+   "uncertainties": []
+  },
+  "flags": []
+ },
+ {
+  "golden": "demo",
+  "index": 3,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "EPSS of 0.99 suggests high risk.",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "rationale": "EPSS of 0.99 suggests high risk.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Upgrade within 3 days"
+   ],
+   "uncertainties": []
+  },
+  "flags": [
+   "fabricated_number:rationale:0.99",
+   "fabricated_number:ai_remediation_steps[0]:3"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 3,
+  "recommendation": {
+   "action": "monitor",
+   "rationale": "  Low urgency.  ",
+   "remediation_steps": [],
+   "uncertainties": [
+    "  "
+   ]
+  },
+  "rationale": "Low urgency.",
+  "ai_recommendation": {
+   "action": "monitor",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_downgrade:patch_scheduled->monitor"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 3,
+  "recommendation": {
+   "action": "patch_immediately",
+   "rationale": "Escalate.",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "rationale": "Escalate.",
+  "ai_recommendation": {
+   "action": "patch_immediately",
+   "remediation_steps": [],
+   "uncertainties": []
+  },
+  "flags": [
+   "ai_action_mismatch:patch_scheduled->patch_immediately"
+  ]
+ },
+ {
+  "golden": "demo",
+  "index": 3,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "There is no known exploitation of this flaw.",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "rationale": "There is no known exploitation of this flaw.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [],
+   "uncertainties": [
+    "exploitation unlikely within 30 days"
+   ]
+  },
+  "flags": []
+ },
+ {
+  "golden": "demo",
+  "index": 3,
+  "recommendation": {
+   "action": "patch_scheduled",
+   "rationale": "Apply vendor guidance.",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "rationale": "Apply vendor guidance.",
+  "ai_recommendation": {
+   "action": "patch_scheduled",
+   "remediation_steps": [
+    "Upgrade the package to the latest version",
+    "Install the patch"
+   ],
+   "uncertainties": [
+    "EPSS percentile 97% may be stale",
+    "CVSS score 9.8 is from NVD"
+   ]
+  },
+  "flags": [
+   "fabricated_percentage:ai_uncertainties[0]:97%",
+   "fabricated_number:ai_uncertainties[1]:9.8"
+  ]
+ }
+]

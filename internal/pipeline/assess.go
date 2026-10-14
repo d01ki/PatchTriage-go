@@ -18,6 +18,10 @@ import (
 	"github.com/d01ki/PatchTriage-go/internal/enrich"
 	"github.com/d01ki/PatchTriage-go/internal/ingest"
 	"github.com/d01ki/PatchTriage-go/internal/model"
+
+	"errors"
+
+	"time"
 )
 
 // Options are the inputs of one assessment besides the evidence files.
@@ -34,8 +38,10 @@ type Options struct {
 	Enrich           enrich.Options
 	OSV              *ingest.OSVClient
 	Limit            int
-	Progress         func(string)
-	OnCoverage       func(model.Coverage)
+	// Triage selects an AI backend for the reported subset; zero is rules.
+	Triage     TriageOptions
+	Progress   func(string)
+	OnCoverage func(model.Coverage)
 }
 
 // Assessment is the result of one assessment run.
@@ -338,11 +344,40 @@ func Assess(ctx context.Context, files []string, o Options) (*Assessment, error)
 	if o.Limit > 0 && o.Limit < len(subset) {
 		subset = subset[:o.Limit]
 	}
+	if err := triageSubset(ctx, subset, o.Triage, progress); err != nil {
+		return nil, err
+	}
 	audit := AuditAll(subset)
 	// BOD 26-04 is evaluated next to, never instead of, the SSVC result.
 	decision.ApplyPolicy(findings)
 	return &Assessment{Findings: findings, Subset: subset, Actions: BuildPlan(subset),
 		EvalRows: Evaluate(subset, nil), Coverage: coverage, Audit: audit}, nil
+}
+
+// batchPoll is how often a Message Batches run is polled.
+var batchPoll = 15 * time.Second
+
+func triageSubset(ctx context.Context, subset []*model.Finding, o TriageOptions, progress func(string)) error {
+	backend := o.Backend
+	switch {
+	case o.Batch && (backend == "ai" || backend == "claude"):
+		provider := o.Provider
+		if backend == "claude" {
+			provider = "anthropic"
+		}
+		return RunTriageBatch(ctx, subset, o.Model, provider, batchPoll, progress)
+	case o.Batch:
+		return errors.New("--batch is supported only with the 'ai' backend and the Anthropic provider")
+	case backend == "" || backend == "rules":
+		return nil
+	}
+	b, err := GetBackend(o)
+	if err != nil {
+		return err
+	}
+	workers := max(1, o.Jobs)
+	progress(fmt.Sprintf("triaging %d findings via '%s' (%d workers)...", len(subset), backend, workers))
+	return RunTriage(ctx, subset, b, workers, nil)
 }
 
 // ReportJSON is the full JSON report (the CLI's -o output).

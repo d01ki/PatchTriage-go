@@ -16,6 +16,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/d01ki/PatchTriage-go/internal/ai"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -46,16 +47,7 @@ var (
 )
 
 // DefaultConfigDir honors PATCHTRIAGE_CONFIG_DIR, else ~/.config/patchtriage-go.
-func DefaultConfigDir() string {
-	if dir := os.Getenv("PATCHTRIAGE_CONFIG_DIR"); dir != "" {
-		return dir
-	}
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return filepath.Join(os.TempDir(), "patchtriage-go-config")
-	}
-	return filepath.Join(home, ".config", "patchtriage-go")
-}
+func DefaultConfigDir() string { return ai.ConfigDir() }
 
 // Store persists targets, evidence and run artifacts under Root.
 type Store struct {
