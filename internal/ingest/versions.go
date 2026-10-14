@@ -20,17 +20,21 @@ package ingest
 // the version as inferred and keeps coverage incomplete.
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"regexp"
+	"slices"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/d01ki/PatchTriage-go/internal/enrich"
 	"github.com/d01ki/PatchTriage-go/internal/model"
 )
@@ -469,8 +473,8 @@ func (c registryClient) getBytes(ctx context.Context, url string, headers map[st
 	return raw, nil
 }
 
-// pyQuote is urllib.parse.quote: unreserved characters and safe stay as is.
-func pyQuote(s, safe string) string {
+// PyQuote is urllib.parse.quote: unreserved characters and safe stay as is.
+func PyQuote(s, safe string) string {
 	var b strings.Builder
 	for i := 0; i < len(s); i++ {
 		c := s[i]
@@ -499,7 +503,7 @@ func (c registryClient) getJSON(ctx context.Context, url string, headers map[str
 func shapeError(what string) error { return fmt.Errorf("unexpected %s response shape", what) }
 
 func (c registryClient) pypi(ctx context.Context, name string) ([]release, string, error) {
-	raw, err := c.getJSON(ctx, c.base("PyPI")+"/pypi/"+pyQuote(name, "")+"/json", nil)
+	raw, err := c.getJSON(ctx, c.base("PyPI")+"/pypi/"+PyQuote(name, "")+"/json", nil)
 	if err != nil {
 		return nil, "", err
 	}
@@ -551,7 +555,7 @@ func truthy(v any) bool {
 }
 
 func (c registryClient) npm(ctx context.Context, name string) ([]release, string, error) {
-	raw, err := c.getJSON(ctx, c.base("npm")+"/"+pyQuote(name, "@/"),
+	raw, err := c.getJSON(ctx, c.base("npm")+"/"+PyQuote(name, "@/"),
 		map[string]string{"Accept": "application/vnd.npm.install-v1+json"})
 	if err != nil {
 		return nil, "", err
@@ -588,7 +592,7 @@ func flagSet(f map[string]json.RawMessage, key string) bool {
 }
 
 func (c registryClient) crates(ctx context.Context, name string) ([]release, string, error) {
-	raw, err := c.getJSON(ctx, c.base("crates.io")+"/api/v1/crates/"+pyQuote(name, ""),
+	raw, err := c.getJSON(ctx, c.base("crates.io")+"/api/v1/crates/"+PyQuote(name, ""),
 		map[string]string{"User-Agent": "patchtriage (version resolution)"})
 	if err != nil {
 		return nil, "", err
@@ -602,7 +606,7 @@ func (c registryClient) crates(ctx context.Context, name string) ([]release, str
 }
 
 func (c registryClient) rubygems(ctx context.Context, name string) ([]release, string, error) {
-	raw, err := c.getJSON(ctx, c.base("RubyGems")+"/api/v1/versions/"+pyQuote(name, "")+".json", nil)
+	raw, err := c.getJSON(ctx, c.base("RubyGems")+"/api/v1/versions/"+PyQuote(name, "")+".json", nil)
 	if err != nil {
 		return nil, "", err
 	}
@@ -614,7 +618,7 @@ func (c registryClient) rubygems(ctx context.Context, name string) ([]release, s
 }
 
 func (c registryClient) nuget(ctx context.Context, name string) ([]release, string, error) {
-	raw, err := c.getJSON(ctx, c.base("NuGet")+"/v3-flatcontainer/"+pyQuote(strings.ToLower(name), "")+"/index.json", nil)
+	raw, err := c.getJSON(ctx, c.base("NuGet")+"/v3-flatcontainer/"+PyQuote(strings.ToLower(name), "")+"/index.json", nil)
 	if err != nil {
 		return nil, "", err
 	}
@@ -636,7 +640,7 @@ var upperASCII = regexp.MustCompile(`[A-Z]`)
 func (c registryClient) goProxy(ctx context.Context, name string) ([]release, string, error) {
 	// The module proxy escapes capitals as "!" + lowercase.
 	escaped := upperASCII.ReplaceAllStringFunc(name, func(s string) string { return "!" + strings.ToLower(s) })
-	raw, err := c.getBytes(ctx, c.base("Go")+"/"+pyQuote(escaped, "/!")+"/@v/list", nil)
+	raw, err := c.getBytes(ctx, c.base("Go")+"/"+PyQuote(escaped, "/!")+"/@v/list", nil)
 	if err != nil {
 		return nil, "", err
 	}
@@ -644,7 +648,7 @@ func (c registryClient) goProxy(ctx context.Context, name string) ([]release, st
 }
 
 func (c registryClient) packagist(ctx context.Context, name string) ([]release, string, error) {
-	raw, err := c.getJSON(ctx, c.base("Packagist")+"/p2/"+pyQuote(name, "/")+".json", nil)
+	raw, err := c.getJSON(ctx, c.base("Packagist")+"/p2/"+PyQuote(name, "/")+".json", nil)
 	if err != nil {
 		return nil, "", err
 	}
@@ -663,7 +667,7 @@ func (c registryClient) githubActions(ctx context.Context, name string) ([]relea
 	ownerRepo := strings.Join(parts[:min(2, len(parts))], "/")
 	// Deliberately unauthenticated: the action name comes from untrusted SBOM
 	// content, and a service token could reveal private repositories' tags.
-	raw, err := c.getJSON(ctx, c.base("GitHub Actions")+"/repos/"+pyQuote(ownerRepo, "/")+"/git/matching-refs/tags",
+	raw, err := c.getJSON(ctx, c.base("GitHub Actions")+"/repos/"+PyQuote(ownerRepo, "/")+"/git/matching-refs/tags",
 		map[string]string{"Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"})
 	if err != nil {
 		return nil, "", err
@@ -781,4 +785,340 @@ func resolveOne(ctx context.Context, r resolveRequest, c registryClient) resolut
 		return fail(err)
 	}
 	return resolution{request: r, version: chosen.version, basis: basis}
+}
+
+// ------------------------------------------------------------ manifests
+
+// requirementsPattern matches requirements.txt, requirements-dev.in,
+// dev-requirements.txt and any .txt under a requirements/ directory.
+var requirementsPattern = regexp.MustCompile(`(?i)(^|/)([^/]*requirements[^/]*\.(txt|in)|requirements/[^/]+\.txt)$`)
+
+// IsManifest reports whether path is a manifest whose declared ranges
+// GitHub's SBOM drops.
+func IsManifest(path string) bool {
+	for _, part := range strings.Split(path, "/") {
+		if part == "node_modules" || part == "vendor" || part == "site-packages" {
+			return false
+		}
+	}
+	base := path[strings.LastIndex(path, "/")+1:]
+	return base == "pyproject.toml" || base == "package.json" || requirementsPattern.MatchString(path)
+}
+
+var pypiSeparators = regexp.MustCompile(`[-_.]+`)
+
+// PyPIKey is the PEP 503 normalized project name.
+func PyPIKey(name string) string { return strings.ToLower(pypiSeparators.ReplaceAllString(name, "-")) }
+
+var (
+	requirementName = regexp.MustCompile(`(?i)^([A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9])`)
+	extrasList      = regexp.MustCompile(`(?i)^\[\s*(?:[A-Z0-9][A-Z0-9._-]*(?:\s*,\s*[A-Z0-9][A-Z0-9._-]*)*)?\s*\]`)
+)
+
+// parseRequirement reads a PEP 508 requirement as packaging.Requirement
+// does and returns its name and str(requirement.specifier): the specifiers
+// sorted and comma-joined.
+func parseRequirement(line string) (name, spec string, ok bool) {
+	line = strings.TrimSpace(line)
+	name = requirementName.FindString(line)
+	if name == "" {
+		return "", "", false
+	}
+	rest := strings.TrimSpace(line[len(name):])
+	if strings.HasPrefix(rest, "[") {
+		extras := extrasList.FindString(rest)
+		if extras == "" {
+			return "", "", false
+		}
+		rest = strings.TrimSpace(rest[len(extras):])
+	}
+	if strings.HasPrefix(rest, "@") {
+		return name, "", true
+	}
+	if before, marker, found := strings.Cut(rest, ";"); found {
+		if strings.TrimSpace(marker) == "" {
+			return "", "", false // packaging requires a marker after ";"
+		}
+		rest = before
+	}
+	rest = strings.TrimSpace(rest)
+	if strings.HasPrefix(rest, "(") && strings.HasSuffix(rest, ")") {
+		rest = strings.TrimSpace(rest[1 : len(rest)-1])
+	}
+	if rest == "" {
+		return name, "", true
+	}
+	pieces := strings.Split(rest, ",")
+	if len(pieces) > 1 && strings.TrimSpace(pieces[len(pieces)-1]) == "" {
+		pieces = pieces[:len(pieces)-1] // packaging accepts a trailing comma
+	}
+	var specs []string
+	for _, piece := range pieces {
+		s, valid := parseSpecifier(piece)
+		if !valid {
+			return "", "", false
+		}
+		specs = append(specs, s.op+s.version)
+	}
+	sort.Strings(specs)
+	return name, strings.Join(specs, ","), true
+}
+
+type nameSpec struct{ name, spec string }
+
+func requirementSpecs(lines []string) []nameSpec {
+	var out []nameSpec
+	for _, line := range lines {
+		line, _, _ = strings.Cut(line, " #")
+		line = strings.TrimSpace(line)
+		if line == "" || strings.HasPrefix(line, "#") || strings.HasPrefix(line, "-") || strings.Contains(line, "://") {
+			continue
+		}
+		if name, spec, ok := parseRequirement(line); ok {
+			out = append(out, nameSpec{name, spec})
+		}
+	}
+	return out
+}
+
+// tomlDoc is a decoded TOML document with its key order (Python's tomllib
+// keeps insertion order, which decides how ranges are joined).
+type tomlDoc struct {
+	data map[string]any
+	keys []toml.Key
+}
+
+// table returns the table at path; a missing key is an empty table, any
+// other type an error (Python would fail on .get()).
+func (d tomlDoc) table(path ...string) (map[string]any, error) {
+	current := d.data
+	for i, key := range path {
+		v, ok := current[key]
+		if !ok || v == nil {
+			return map[string]any{}, nil
+		}
+		next, ok := v.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("'%s' is not a table", strings.Join(path[:i+1], "."))
+		}
+		current = next
+	}
+	return current, nil
+}
+
+// children lists the direct keys of the table at path in document order.
+func (d tomlDoc) children(path ...string) []string {
+	var out []string
+	seen := map[string]bool{}
+	for _, key := range d.keys {
+		// Implicit parent tables ([a.b.c] defines a.b) appear only as prefixes.
+		if len(key) <= len(path) || seen[key[len(path)]] || !slices.Equal([]string(key[:len(path)]), path) {
+			continue
+		}
+		seen[key[len(path)]] = true
+		out = append(out, key[len(path)])
+	}
+	return out
+}
+
+func stringItems(v any, onlyStrings bool) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	items, ok := v.([]any)
+	if !ok {
+		return nil, fmt.Errorf("expected an array, got %T", v)
+	}
+	var out []string
+	for _, item := range items {
+		if s, isString := item.(string); isString {
+			out = append(out, s)
+		} else if !onlyStrings {
+			out = append(out, fmt.Sprint(item))
+		}
+	}
+	return out, nil
+}
+
+func pyprojectSpecs(text string) ([]nameSpec, error) {
+	var doc tomlDoc
+	md, err := toml.Decode(text, &doc.data)
+	if err != nil {
+		return nil, err
+	}
+	doc.keys = md.Keys()
+	var lines []string
+	for _, field := range [][]string{{"project", "dependencies"}, {"build-system", "requires"}} {
+		table, err := doc.table(field[0])
+		if err != nil {
+			return nil, err
+		}
+		items, err := stringItems(table[field[1]], false)
+		if err != nil {
+			return nil, err
+		}
+		lines = append(lines, items...)
+	}
+	for _, path := range [][]string{{"project", "optional-dependencies"}, {"dependency-groups"}} {
+		table, err := doc.table(path...)
+		if err != nil {
+			return nil, err
+		}
+		for _, group := range doc.children(path...) {
+			// dependency-groups may include {include-group = ...} tables.
+			items, err := stringItems(table[group], path[0] == "dependency-groups")
+			if err != nil {
+				return nil, err
+			}
+			lines = append(lines, items...)
+		}
+	}
+	specs := requirementSpecs(lines)
+	// Poetry: {name = "^1.2"} or {name = {version = "^1.2", ...}}
+	tables := [][]string{{"tool", "poetry", "dependencies"}, {"tool", "poetry", "dev-dependencies"}}
+	for _, group := range doc.children("tool", "poetry", "group") {
+		tables = append(tables, []string{"tool", "poetry", "group", group, "dependencies"})
+	}
+	for _, path := range tables {
+		table, err := doc.table(path...)
+		if err != nil {
+			return nil, err
+		}
+		for _, name := range doc.children(path...) {
+			value := table[name]
+			if inline, ok := value.(map[string]any); ok {
+				value = inline["version"]
+			}
+			if s, ok := value.(string); ok && strings.ToLower(name) != "python" {
+				if strings.TrimSpace(s) == "*" {
+					s = ""
+				}
+				specs = append(specs, nameSpec{name, s})
+			}
+		}
+	}
+	return specs, nil
+}
+
+// jsonStr is Python's str() of a decoded JSON value; numbers keep their
+// literal text.
+func jsonStr(raw json.RawMessage) string {
+	var v any
+	if json.Unmarshal(raw, &v) != nil {
+		return ""
+	}
+	if _, isNumber := v.(float64); isNumber {
+		return strings.TrimSpace(string(raw))
+	}
+	return pyStr(v)
+}
+
+func packageJSONSpecs(text string) ([]nameSpec, error) {
+	var data map[string]json.RawMessage
+	if err := json.Unmarshal([]byte(text), &data); err != nil {
+		return nil, err
+	}
+	var specs []nameSpec
+	for _, key := range []string{"dependencies", "devDependencies", "optionalDependencies"} {
+		raw := bytes.TrimSpace(data[key])
+		if len(raw) == 0 || string(raw) == "null" {
+			continue
+		}
+		names, values := enrich.OrderedKeys(raw)
+		if values == nil {
+			return nil, fmt.Errorf("'%s' is not an object", key)
+		}
+		for _, name := range names {
+			value := strings.TrimSpace(jsonStr(values[name]))
+			// file:, git+, workspace:, npm: aliases and URLs are not ranges.
+			if strings.ContainsAny(value, ":/") {
+				continue
+			}
+			if value == "*" || value == "latest" || value == "x" {
+				value = ""
+			}
+			specs = append(specs, nameSpec{name, value})
+		}
+	}
+	return specs, nil
+}
+
+// RegistryKey identifies a package by OSV ecosystem and package key (the
+// PEP 503 name for PyPI).
+type RegistryKey struct{ Ecosystem, Name string }
+
+// Declared is a manifest constraint and the manifests declaring it.
+type Declared struct {
+	Constraint string
+	Paths      []string
+}
+
+var lineContinuation = regexp.MustCompile(`\\\r?\n`)
+
+// DeclaredConstraints maps each declared package to its constraint. PyPI
+// ranges declared in several files are intersected (pip must satisfy all of
+// them); for npm the shallowest manifest wins, as for a workspace root.
+// Unparseable manifests are reported, never guessed at.
+func DeclaredConstraints(manifests map[string]string) (map[RegistryKey]Declared, []string) {
+	paths := make([]string, 0, len(manifests))
+	for path := range manifests {
+		paths = append(paths, path)
+	}
+	SortByDepth(paths)
+	type found struct{ constraints, paths []string }
+	all := map[RegistryKey]*found{}
+	var warnings []string
+	for _, path := range paths {
+		text, base := manifests[path], path[strings.LastIndex(path, "/")+1:]
+		ecosystem := "PyPI"
+		var specs []nameSpec
+		var err error
+		switch base {
+		case "package.json":
+			ecosystem = "npm"
+			specs, err = packageJSONSpecs(text)
+		case "pyproject.toml":
+			specs, err = pyprojectSpecs(text)
+		default:
+			// Join backslash line continuations before parsing.
+			joined := lineContinuation.ReplaceAllString(text, " ")
+			specs = requirementSpecs(strings.Split(strings.ReplaceAll(joined, "\r\n", "\n"), "\n"))
+		}
+		if err != nil {
+			warnings = append(warnings, fmt.Sprintf("%s could not be parsed: %s", path, err))
+			continue
+		}
+		for _, s := range specs {
+			key := RegistryKey{ecosystem, s.name}
+			if ecosystem == "PyPI" {
+				key.Name = PyPIKey(s.name)
+			}
+			f := all[key]
+			if f == nil {
+				f = &found{}
+				all[key] = f
+			}
+			if !slices.Contains(f.paths, path) {
+				f.paths = append(f.paths, path)
+			}
+			if s.spec != "" && !slices.Contains(f.constraints, s.spec) && (ecosystem == "PyPI" || len(f.constraints) == 0) {
+				f.constraints = append(f.constraints, s.spec)
+			}
+		}
+	}
+	out := make(map[RegistryKey]Declared, len(all))
+	for key, f := range all {
+		out[key] = Declared{strings.Join(f.constraints, ","), f.paths}
+	}
+	return out, warnings
+}
+
+// SortByDepth orders paths shallowest first, then lexically.
+func SortByDepth(paths []string) {
+	sort.Slice(paths, func(i, j int) bool {
+		if a, b := strings.Count(paths[i], "/"), strings.Count(paths[j], "/"); a != b {
+			return a < b
+		}
+		return paths[i] < paths[j]
+	})
 }

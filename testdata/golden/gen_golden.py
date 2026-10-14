@@ -192,6 +192,53 @@ def choose_cases() -> None:
     print("wrote choose_python.json")
 
 
+# Manifest ranges (patchtriage.ingest.versions.declared_constraints).
+MANIFESTS = {
+    "requirements.txt": (
+        "# core\nfastapi>=0.104.0\nuvicorn[standard]>=0.24.0  # server\n"
+        "-r dev.txt\ngit+https://example.com/x.git\nflask \\\n  >=2.0\n"
+        "Pillow>=10.1.0\nDjango (>=3.2, <4)\nrequests>=2.0 ; python_version > '3.8'\n"
+        "attrs==23.*\nbad name>=1\nnumpy>=1.0,\nzope.interface~=5.4\nmy_pkg @ file.whl\n"
+        "six\r\nclick!=8.0.0,>=7\n"),
+    "pyproject.toml": (
+        '[project]\ndependencies = ["pillow<12", "httpx", "Django>=4.0"]\n'
+        '[project.optional-dependencies]\ndev = ["pytest>=7", "fastapi<1"]\ndocs = ["sphinx"]\n'
+        '[build-system]\nrequires = ["setuptools>=68"]\n'
+        '[dependency-groups]\ntest = ["coverage>=7", {include-group = "dev"}]\n'
+        '[tool.poetry.dependencies]\npython = "^3.10"\n'
+        'requests = {version = "^2.31", extras = ["socks"]}\nrich = "*"\n'
+        '[tool.poetry.group.lint.dependencies]\nruff = "^0.4"\n'),
+    "app/package.json": json.dumps({
+        "dependencies": {"react": "^18.2.0", "local": "file:../x", "num": 5},
+        "devDependencies": {"lodash": "*", "react": "^17"},
+        "optionalDependencies": {"fsevents": "latest"}}),
+    "app/web/package.json": json.dumps({"dependencies": {"react": "^16", "vue": "3.x"}}),
+    "svc/requirements/prod.txt": "fastapi<0.200\nPILLOW>=9\n",
+    "broken/package.json": "{not json",
+    "broken/pyproject.toml": "[project\n",
+    "odd/pyproject.toml": 'project = "x"\n',
+}
+MANIFEST_PATHS = [
+    "requirements.txt", "requirements-dev.in", "dev-requirements.txt", "requirements/prod.txt",
+    "svc/pyproject.toml", "web/package.json", "web/node_modules/x/package.json", "setup.py",
+    "notes.txt", "package-lock.json", "vendor/requirements.txt", "REQUIREMENTS.TXT", "a/b/Requirements-x.in",
+]
+
+
+def manifest_cases() -> None:
+    from patchtriage.ingest import versions
+    constraints, warnings = versions.declared_constraints(MANIFESTS)
+    out = ROOT / "testdata" / "manifests_python.json"
+    out.write_text(json.dumps({
+        "manifests": MANIFESTS,
+        "constraints": sorted([eco, name, spec, paths] for (eco, name), (spec, paths) in constraints.items()),
+        "warning_paths": [w.split(" could not be parsed")[0] for w in warnings],
+        "is_manifest": {p: versions.is_manifest(p) for p in MANIFEST_PATHS},
+    }, indent=1) + "\n", encoding="utf-8", newline="\n")
+    print("wrote manifests_python.json")
+
+
 if __name__ == "__main__":
     main()
     choose_cases()
+    manifest_cases()

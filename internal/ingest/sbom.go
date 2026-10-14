@@ -531,3 +531,9 @@ func loadSBOM(ctx context.Context, raw []byte, path string, asset *model.Asset, 
 	_ = enrich.MergeEntryCache(c.CacheDir, osvCacheFile, updates) // a cache write failure never fails the run
 	return LoadResult{Findings: findings, Coverage: cov.asMap()}, nil
 }
+
+// SPDXPackagePurl returns the purl recorded on one SPDX package object.
+func SPDXPackagePurl(raw []byte) string {
+	fields, _ := objectFields(raw)
+	return spdxPurl(fields)
+}
