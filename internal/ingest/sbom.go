@@ -236,10 +236,14 @@ type osvCoverage struct {
 	ids, resolved, detailFailed                    int
 	errors, unqueryableNames                       []string
 	queriedEcosystems, unqueryableEcosystems       []string
+	// Components checked at a registry release chosen from a constraint:
+	// what a fresh install resolves today, not necessarily what is deployed,
+	// so they never count as complete.
+	inferred []map[string]string
 }
 
 func (c *osvCoverage) complete() bool {
-	return c.unqueryable == 0 && c.failed == 0 && c.detailFailed == 0 && c.queried == c.total
+	return c.unqueryable == 0 && len(c.inferred) == 0 && c.failed == 0 && c.detailFailed == 0 && c.queried == c.total
 }
 
 func (c *osvCoverage) asMap() model.Coverage {
@@ -257,7 +261,7 @@ func (c *osvCoverage) asMap() model.Coverage {
 		"vulnerability_details_resolved": c.resolved, "vulnerability_details_failed": c.detailFailed,
 		"errors": nonNil(c.errors), "unqueryable_names": nonNil(c.unqueryableNames),
 		"queried_ecosystems": nonNil(c.queriedEcosystems), "unqueryable_ecosystems": nonNil(c.unqueryableEcosystems),
-		"inferred_components": 0, "inferred_versions": []map[string]string{},
+		"inferred_components": len(c.inferred), "inferred_versions": c.inferred[:min(len(c.inferred), maxUnqueryableNames)],
 	}
 }
 
@@ -396,6 +400,45 @@ func rawFromOSVVuln(v OSVVuln, pkg model.Package, asset model.Asset, now time.Ti
 	}
 }
 
+// resolveComponents gives components with only a constraint a concrete
+// registry release to check (see versions.go); the choice and its basis are
+// recorded on the package and in coverage.
+func (c *OSVClient) resolveComponents(ctx context.Context, components []model.Package) ([]model.Package, []map[string]string, []string) {
+	var requests []resolveRequest
+	for i, component := range components {
+		if componentQuery(component) != nil {
+			continue
+		}
+		ecosystem := osvEcosystem(component.Ecosystem)
+		if _, ok := RegistryLabels[ecosystem]; !ok {
+			continue
+		}
+		_, _, _, constraint := model.ParsePurl(component.Purl)
+		if constraint == "" {
+			constraint = component.Version
+		}
+		requests = append(requests, resolveRequest{i, ecosystem, osvName(component), strings.TrimSpace(constraint)})
+	}
+	if len(requests) == 0 {
+		return components, nil, nil
+	}
+	results, errs := resolveVersions(ctx, requests, registryClient{http: c.HTTP, urls: c.RegistryURLs})
+	retrievedAt := time.Now().UTC().Format("2006-01-02T15:04:05+00:00")
+	resolved := append([]model.Package(nil), components...)
+	var inferred []map[string]string
+	for _, r := range results {
+		if r.err != "" {
+			continue
+		}
+		q := r.request
+		source := fmt.Sprintf("%s (%s, %s)", r.basis, RegistryLabels[q.ecosystem], retrievedAt)
+		resolved[q.index].Version, resolved[q.index].VersionSource = r.version, source
+		inferred = append(inferred, map[string]string{"name": q.name, "ecosystem": q.ecosystem,
+			"constraint": q.constraint, "version": r.version, "basis": r.basis, "source": source})
+	}
+	return resolved, inferred, errs
+}
+
 func loadSBOM(ctx context.Context, raw []byte, path string, asset *model.Asset, c *OSVClient) (LoadResult, error) {
 	components, err := ParseSBOMComponents(raw)
 	if err != nil {
@@ -415,7 +458,11 @@ func loadSBOM(ctx context.Context, raw []byte, path string, asset *model.Asset, 
 		defaultAsset = *asset
 	}
 
-	cov := &osvCoverage{total: len(components)}
+	components, inferred, resolutionErrors := c.resolveComponents(ctx, components)
+	cov := &osvCoverage{total: len(components), inferred: inferred}
+	if cov.inferred == nil {
+		cov.inferred = []map[string]string{}
+	}
 	var queries []map[string]any
 	var queryIndex []int
 	var checkedEco, skippedEco []string
@@ -454,6 +501,7 @@ func loadSBOM(ctx context.Context, raw []byte, path string, asset *model.Asset, 
 	for _, group := range ids {
 		cov.ids += len(group)
 	}
+	cov.errors = append(cov.errors, resolutionErrors...)
 
 	cache := enrich.LoadEntryCache(c.CacheDir, osvCacheFile, osvCacheMaxAge)
 	updates := map[string]json.RawMessage{}

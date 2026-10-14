@@ -148,5 +148,50 @@ def main() -> None:
         print("wrote demo.html")
 
 
+# Constraint-to-release choices (patchtriage.ingest.versions.choose) over
+# release lists shaped like real registry answers.
+CHOOSE_RELEASES = {
+    "semver": ["0.0.3", "0.0.4", "0.2.3", "0.2.9", "0.3.0", "1.2.3", "1.2.9", "1.3.0",
+               "1.9.0", "2.0.0", "2.1.0rc1", "2.0.1"],
+    "pep440": ["1.0", "1.0.0", "1.0.post1", "1.0.1", "1.1.dev0", "1.1", "1.4.5", "1.4.10",
+               "1!0.5", "2.0a1", "2.0", "2.0.0.1", "01.5", "3.0+local", "10.0"],
+    "tags": ["v5.0.0", "v6", "v6.0.0", "v6.0.1", "v6.1", "v7.0.0-beta", "6", "v6.0"],
+    "none": ["1.0a1", "2.0rc1"],
+}
+CHOOSE_CONSTRAINTS = [
+    "", "*", "x", "1", "1.*", "1.*.*", "1.x", "1.x.x", "v1.*", "6.*.*", "6.0.*", "1.*.3",
+    "==1.2.*", "==1.*", "!=1.0.*", "== 1.0", "==1.0", "==1.0.0", "= 1.3.0", "=1.0",
+    "^1.2.3", "^0.2.3", "^0.0.3", "^0", "^0.0", "^1", "~1.2.3", "~1.2", "~1", "^ v1.2",
+    "~=1.0", "~=1.4.5", "~=1", "~= 2.0", ">=1.2, <1.3", ">= 1.2.3 < 2", ">=1.2.4", ">1.0",
+    ">1.0.0", ">=v1.0", "<1.3", "<=1.4.5", "<2", "<2.0", ">=1.0,<2.0,!=1.4.5", "> 1.0 < 2",
+    ">=1.0 <2 !=1.0.1", "===1.0", "===1.0.post1", "1.2.3", "latest", "main", "release/v1",
+    "1.2.3 || 2.0.0", ">=9", "^9.0.0", ">=1.0,,<1.1", ">=1!0", "!=2.0", "<1.0.post1",
+    ">=1.0.post1", ">0.9", ">=0.0.0", "v6", "6", ">=1.0a1",
+]
+
+
+def choose_cases() -> None:
+    from patchtriage.ingest import versions
+    cases = []
+    for set_name, values in CHOOSE_RELEASES.items():
+        releases = versions._releases(values, strip_v=set_name == "tags")
+        for preferred in ("", "1.3.0", "6.0.0"):
+            for constraint in CHOOSE_CONSTRAINTS:
+                if preferred and constraint:
+                    continue
+                case = {"releases": set_name, "constraint": constraint, "preferred": preferred}
+                try:
+                    chosen, basis = versions.choose(releases, constraint, preferred)
+                    case.update(version=chosen.version, basis=basis)
+                except versions.ResolutionError as exc:
+                    case["error"] = str(exc)
+                cases.append(case)
+    out = ROOT / "testdata" / "choose_python.json"
+    out.write_text(json.dumps({"releases": CHOOSE_RELEASES, "cases": cases}, indent=1) + "\n",
+                   encoding="utf-8", newline="\n")
+    print("wrote choose_python.json")
+
+
 if __name__ == "__main__":
     main()
+    choose_cases()

@@ -76,7 +76,9 @@ func fakeOSV(t *testing.T, r osvResponses, batch http.HandlerFunc) (*OSVClient, 
 		http.Error(w, `{"code":5}`, http.StatusNotFound)
 	}))
 	t.Cleanup(server.Close)
-	return &OSVClient{HTTP: server.Client(), BaseURL: server.URL, CacheDir: t.TempDir()}, &details
+	registries, _ := fakeRegistry(t, nil) // no test reaches a real registry
+	return &OSVClient{HTTP: server.Client(), BaseURL: server.URL, CacheDir: t.TempDir(),
+		RegistryURLs: registries.urls}, &details
 }
 
 func readTestdata(t *testing.T, name string) []byte {
@@ -165,20 +167,87 @@ func TestLoadSBOMAgainstRecordedOSV(t *testing.T) {
 	}
 }
 
-func TestLoadSBOMConstraintVersionIsUnqueryable(t *testing.T) {
-	client, _ := fakeOSV(t, loadOSVResponses(t), nil)
+func pypiReleases(versions ...string) string {
+	releases := map[string]any{}
+	for _, v := range versions {
+		releases[v] = []map[string]bool{{"yanked": false}}
+	}
+	raw, _ := json.Marshal(map[string]any{"releases": releases})
+	return string(raw)
+}
+
+// recordingOSV answers every query with no vulnerabilities and records it.
+func recordingOSV(t *testing.T, routes map[string]string) (*OSVClient, *[]string) {
+	t.Helper()
+	var queries []string
+	client, _ := fakeOSV(t, osvResponses{}, func(w http.ResponseWriter, r *http.Request) {
+		var body struct{ Queries []json.RawMessage }
+		_ = json.NewDecoder(r.Body).Decode(&body)
+		results := []map[string]any{}
+		for _, q := range body.Queries {
+			queries = append(queries, string(q))
+			results = append(results, map[string]any{})
+		}
+		_ = json.NewEncoder(w).Encode(map[string]any{"results": results})
+	})
+	registries, _ := fakeRegistry(t, routes)
+	client.RegistryURLs = registries.urls
+	return client, &queries
+}
+
+func TestLoadSBOMResolvesVersionlessAndWildcardComponents(t *testing.T) {
+	// GitHub drops ">=2.5" entirely and records actions/checkout@v6 as 6.*.*.
+	client, queries := recordingOSV(t, map[string]string{
+		"/pypi/pydantic/": pypiReleases("2.10.0", "2.11.7", "3.0.0b1"),
+		"/@scope/ui":      `{"dist-tags": {"latest": "3.1.0"}, "versions": {"3.1.0": {}, "3.2.0-rc.1": {}, "2.9.9": {}}}`,
+		"/repos/actions/checkout/git/matching-refs/tags": `[{"ref": "refs/tags/v5.0.0"}, {"ref": "refs/tags/v6.0.1"},
+			{"ref": "refs/tags/v6"}, {"ref": "refs/tags/v7.0.0-beta"}]`,
+	})
 	doc := `{"bomFormat": "CycloneDX", "components": [
-		{"name": "lodash", "version": "4.17.20", "purl": "pkg:npm/lodash@4.17.20"},
-		{"name": "fastapi", "version": ">=0.104.0", "purl": "pkg:pypi/fastapi"}]}`
+		{"name": "pydantic", "purl": "pkg:pypi/pydantic"},
+		{"name": "@scope/ui", "purl": "pkg:npm/%40scope/ui"},
+		{"name": "actions/checkout", "version": "6.*.*", "purl": "pkg:githubactions/actions/checkout@6.%2A.%2A"}]}`
 	result, err := LoadFile(context.Background(), writeTemp(t, "bom.json", doc), "", nil, client)
 	if err != nil {
 		t.Fatal(err)
 	}
 	cov := result.Coverage
-	if cov["unqueryable_components"] != 1 || cov["complete"] != false ||
-		strings.Join(cov["unqueryable_names"].([]string), ",") != "fastapi" ||
-		strings.Join(cov["unqueryable_ecosystems"].([]string), ",") != "pypi" ||
-		cov["errors"].([]string)[0] != "1 component(s) lacked a queryable package version/purl" {
+	inferred := cov["inferred_versions"].([]map[string]string)
+	var got []string
+	for _, item := range inferred {
+		got = append(got, item["version"]+"|"+item["basis"])
+	}
+	if strings.Join(got, ",") != "2.11.7|newest release,3.1.0|newest release,6.0.1|newest release matching 6.*.*" ||
+		inferred[2]["constraint"] != "6.*.*" || !strings.HasPrefix(inferred[0]["source"], "newest release (PyPI, ") {
+		t.Errorf("inferred = %v", inferred)
+	}
+	if cov["queried_components"] != 3 || cov["unqueryable_components"] != 0 || cov["inferred_components"] != 3 ||
+		cov["complete"] != false || len(cov["errors"].([]string)) != 0 {
+		t.Errorf("coverage = %v", cov)
+	}
+	joined := strings.Join(*queries, " ")
+	// OSV cannot compare GitHub Actions versions; ranges are checked locally.
+	if !strings.Contains(joined, `{"package":{"ecosystem":"PyPI","name":"pydantic"},"version":"2.11.7"}`) ||
+		!strings.Contains(joined, `{"package":{"ecosystem":"GitHub Actions","name":"actions/checkout"}}`) {
+		t.Errorf("queries = %v", *queries)
+	}
+}
+
+func TestLoadSBOMUnresolvableRefsStayUncheckedAndVisible(t *testing.T) {
+	client, queries := recordingOSV(t, nil) // every registry request 404s
+	doc := `{"bomFormat": "CycloneDX", "components": [
+		{"name": "pydantic", "purl": "pkg:pypi/pydantic"},
+		{"name": "pypa/gh-action-pypi-publish", "version": "release/v1",
+		 "purl": "pkg:githubactions/pypa/gh-action-pypi-publish@release%2Fv1"}]}`
+	result, err := LoadFile(context.Background(), writeTemp(t, "bom.json", doc), "", nil, client)
+	if err != nil {
+		t.Fatal(err)
+	}
+	cov := result.Coverage
+	errs := strings.Join(cov["errors"].([]string), " ")
+	if cov["queried_components"] != 0 || cov["unqueryable_components"] != 2 || cov["inferred_components"] != 0 ||
+		len(*queries) != 0 || !strings.Contains(errs, "pydantic (no version): PyPI lookup failed") ||
+		!strings.Contains(errs, "release/v1") || !strings.Contains(errs, "not a version range") {
 		t.Errorf("coverage = %v", cov)
 	}
 }

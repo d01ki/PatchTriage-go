@@ -241,9 +241,9 @@ func parseUSN(raw []byte, cve string) ([]model.VendorAdvisory, error) {
 	return out, nil
 }
 
-// orderedKeys returns an object's members in document order (Python dicts
+// OrderedKeys returns an object's members in document order (Python dicts
 // keep insertion order; the products list depends on it).
-func orderedKeys(raw []byte) ([]string, map[string]json.RawMessage) {
+func OrderedKeys(raw []byte) ([]string, map[string]json.RawMessage) {
 	var members map[string]json.RawMessage
 	if json.Unmarshal(raw, &members) != nil {
 		return nil, nil
@@ -274,7 +274,7 @@ type debianDocument struct {
 }
 
 func parseDebianDocument(raw []byte) (debianDocument, error) {
-	order, packages := orderedKeys(raw)
+	order, packages := OrderedKeys(raw)
 	if packages == nil {
 		return debianDocument{}, valueError("Debian Security Tracker returned an unexpected document")
 	}
@@ -305,7 +305,7 @@ func (doc debianDocument) advisories(cve string) []model.VendorAdvisory {
 		if truthy(r["description"]) {
 			descriptions = append(descriptions, str(r["description"]))
 		}
-		order, _ := orderedKeys(objectRaw(recordRaw, "releases"))
+		order, _ := OrderedKeys(objectRaw(recordRaw, "releases"))
 		releases := obj(r["releases"])
 		for _, release := range order {
 			state := obj(releases[release])
