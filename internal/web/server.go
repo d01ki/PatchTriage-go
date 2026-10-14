@@ -438,7 +438,7 @@ func (s *Server) config() map[string]any {
 	return map[string]any{
 		"backends": []string{"rules"}, "has_key": false, "has_ai": false, "ai_provider": nil,
 		"capabilities": []string{"offline-demo", "ssvc-deployer", "epss-baseline", "kev-baseline", "reachability",
-			"runtime-context", "vendor-advisories", "async-runs", "github-repository-sbom"},
+			"runtime-context", "vendor-advisories", "async-runs", "github-repository-sbom", "fleet-import"},
 		"version": appVersion, "build_sha": envOr("PATCHTRIAGE_BUILD_SHA", "development"), "ui_schema_version": 2,
 		"deployment_mode": envOr("PATCHTRIAGE_DEPLOYMENT_MODE", "local"),
 		"repository_import": map[string]any{"github": "dependency-graph-sbom",
@@ -618,7 +618,7 @@ func (s *Server) post(w http.ResponseWriter, r *http.Request, ws string) error {
 		sendJSON(w, 201, publicTarget(target))
 		return nil
 	case "/api/fleet/import":
-		return badRequest(501, "organization import is not available in this Go version yet")
+		return s.fleetImport(w, r, ws)
 	}
 	m := targetPath.FindStringSubmatch(r.URL.Path)
 	if m == nil || m[2] == "" {
@@ -796,6 +796,66 @@ func (s *Server) source(w http.ResponseWriter, r *http.Request, ws, id string) e
 	sendJSON(w, 200, map[string]any{"ok": true, "format": format, "filename": filename,
 		"sha256": strOf(target["source_sha256"]), "size": size})
 	return nil
+}
+
+func (s *Server) fleetImport(w http.ResponseWriter, r *http.Request, ws string) error {
+	body, err := s.readJSON(r)
+	if err != nil {
+		return err
+	}
+	ownerURL, _ := body["owner_url"].(string)
+	if strings.TrimSpace(ownerURL) == "" {
+		return badRequest(400, "owner_url is required")
+	}
+	limit := s.limits.fleetImportRepos
+	if raw := body["limit"]; ingest.Truthy(raw) {
+		n, ok := pyInt(raw)
+		if !ok {
+			return badRequest(400, "limit must be a number")
+		}
+		limit = n
+	}
+	limit = max(1, min(limit, s.limits.fleetImportRepos))
+	shared := map[string]string{}
+	for _, key := range FleetContextFields {
+		if v, ok := body[key].(string); ok {
+			shared[key] = v
+		}
+	}
+	select {
+	case s.importSlots <- struct{}{}:
+	default:
+		return badRequest(429, "repository import capacity is busy; retry later")
+	}
+	defer func() { <-s.importSlots }()
+	report, err := FleetImport{Store: s.store, GitHub: s.Repository.GitHub, Token: githubImportToken(),
+		MaxTargets: s.limits.targets, MaxWorkspaceSourceBytes: s.limits.sessionSourceBytes}.Import(r.Context(), ws,
+		ownerURL, limit, ingest.Truthy(body["include_forks"]), ingest.Truthy(body["include_archived"]), shared)
+	var repoErr *repository.Error
+	if errors.As(err, &repoErr) {
+		return badRequest(repoErr.Status, repoErr.Message)
+	} else if err != nil {
+		return err
+	}
+	sendJSON(w, 200, report)
+	return nil
+}
+
+// pyInt is Python's int() for a JSON number or numeric string.
+func pyInt(v any) (int, bool) {
+	switch x := v.(type) {
+	case float64:
+		return int(x), true
+	case bool:
+		if x {
+			return 1, true
+		}
+		return 0, true
+	case string:
+		n, err := strconv.Atoi(strings.TrimSpace(x))
+		return n, err == nil
+	}
+	return 0, false
 }
 
 func (s *Server) repositoryImport(w http.ResponseWriter, r *http.Request, ws, id string) error {

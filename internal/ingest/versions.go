@@ -523,7 +523,7 @@ func (c registryClient) pypi(ctx context.Context, name string) ([]release, strin
 			var f struct {
 				Yanked any `json:"yanked"`
 			}
-			if json.Unmarshal(entry, &f) != nil || !truthy(f.Yanked) {
+			if json.Unmarshal(entry, &f) != nil || !Truthy(f.Yanked) {
 				allYanked = false
 				break
 			}
@@ -535,8 +535,8 @@ func (c registryClient) pypi(ctx context.Context, name string) ([]release, strin
 	return releasesOf(live, false), "", nil
 }
 
-// truthy is Python's bool() for a decoded JSON value.
-func truthy(v any) bool {
+// Truthy is Python's bool() for a decoded JSON value.
+func Truthy(v any) bool {
 	switch x := v.(type) {
 	case nil:
 		return false
@@ -588,7 +588,7 @@ func textsOf(raw json.RawMessage, field string, skip func(map[string]json.RawMes
 func flagSet(f map[string]json.RawMessage, key string) bool {
 	var v any
 	_ = json.Unmarshal(f[key], &v)
-	return truthy(v)
+	return Truthy(v)
 }
 
 func (c registryClient) crates(ctx context.Context, name string) ([]release, string, error) {

@@ -100,7 +100,7 @@ func TestConfigAdvertisesAvailableFeatures(t *testing.T) {
 	caps, _ := json.Marshal(cfg["capabilities"])
 	limits := cfg["limits"].(map[string]any)
 	imports := cfg["repository_import"].(map[string]any)
-	if string(backends) != `["rules"]` || strings.Contains(string(caps), "fleet-import") ||
+	if string(backends) != `["rules"]` || !strings.Contains(string(caps), "fleet-import") ||
 		!strings.Contains(string(caps), "github-repository-sbom") || imports["github"] != "dependency-graph-sbom" ||
 		imports["generic_https_git"] != "unavailable" || cfg["ui_schema_version"] != 2.0 ||
 		limits["targets"] != 25.0 || limits["ssvc_review_rows"] != 250.0 || cfg["has_ai"] != false {
@@ -195,11 +195,31 @@ func TestServerRejectsOversizeAndForeignSession(t *testing.T) {
 	}
 }
 
-func TestUnportedEndpointsReturn501(t *testing.T) {
-	c, _ := newServerClient(t)
-	status, raw, _ := c.do("POST", "/api/fleet/import", map[string]any{"owner_url": "https://github.com/x"})
-	if status != 501 || !strings.Contains(strings.ToLower(string(raw)), "not available") {
-		t.Errorf("/api/fleet/import = %d %s", status, raw)
+func TestFleetImportEndpoint(t *testing.T) {
+	c, _ := newServerWithGitHub(t, func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/users/acme/repos" && r.URL.Query().Get("page") == "1":
+			_, _ = w.Write([]byte(`[{"full_name": "acme/app", "html_url": "https://github.com/acme/app"}]`))
+		case r.URL.Path == "/users/acme/repos":
+			_, _ = w.Write([]byte(`[]`))
+		case r.URL.Path == "/repos/acme/app/dependency-graph/sbom":
+			_, _ = w.Write([]byte(`{"sbom": {"spdxVersion": "SPDX-2.3", "packages": []}}`))
+		default:
+			http.NotFound(w, r)
+		}
+	})
+	if status, _, _ := c.do("POST", "/api/fleet/import", map[string]any{}); status != 400 {
+		t.Errorf("missing owner_url = %d", status)
+	}
+	if status, _, _ := c.do("POST", "/api/fleet/import", map[string]any{"owner_url": "https://github.com/acme", "limit": "x"}); status != 400 {
+		t.Errorf("bad limit = %d", status)
+	}
+	if status, _, _ := c.do("POST", "/api/fleet/import", map[string]any{"owner_url": "https://github.com/ghost"}); status != 404 {
+		t.Errorf("unknown owner = %d", status)
+	}
+	report := c.json("POST", "/api/fleet/import", map[string]any{"owner_url": "https://github.com/acme", "criticality": "high"}, 200)
+	if report["imported"] != 1.0 || report["owner"] != "acme" || len(report["imported_target_ids"].([]any)) != 1 {
+		t.Errorf("report = %v", report)
 	}
 }
 

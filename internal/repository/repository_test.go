@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -304,5 +305,84 @@ func TestUnavailableFileListLeavesSBOMUsable(t *testing.T) {
 	warnings := strings.Join(result.Provenance["warnings"].([]string), "\n")
 	if strings.Contains(result.Content, "versionInfo") || !strings.Contains(warnings, "file list") || !strings.Contains(warnings, "HTTP 403") {
 		t.Errorf("content %s warnings %s", result.Content, warnings)
+	}
+}
+
+func TestNormalizeOwnerURL(t *testing.T) {
+	ref, err := NormalizeOwner("https://github.com/Example-Org")
+	if err != nil || ref.Owner != "Example-Org" || ref.NormalizedURL != "https://github.com/Example-Org" {
+		t.Errorf("owner = %+v, %v", ref, err)
+	}
+	for _, url := range []string{"https://github.com/owner/repository", "https://github.com/", "https://gitlab.com/owner",
+		"http://github.com/owner", "https://github.com/owner?tab=repos", "https://user:pass@github.com/owner",
+		"https://github.com/-bad-", "", "https://github.com:444/owner", "https://github.com/owner#x"} {
+		if _, err := NormalizeOwner(url); err == nil || err.(*Error).Status != 400 {
+			t.Errorf("NormalizeOwner(%q) err = %v", url, err)
+		}
+	}
+}
+
+func ownerRepo(name string, fork, archived bool) map[string]any {
+	return map[string]any{"full_name": "acme/" + name, "html_url": "https://github.com/acme/" + name,
+		"default_branch": "main", "pushed_at": "2026-07-01T00:00:00Z", "fork": fork, "archived": archived}
+}
+
+func listOwner(t *testing.T, repos []map[string]any, limit int) (OwnerListing, *[]string) {
+	t.Helper()
+	var queries []string
+	g := fakeGitHub(t, func(w http.ResponseWriter, r *http.Request) {
+		queries = append(queries, r.URL.RawQuery)
+		if r.URL.Query().Get("page") != "1" {
+			writeJSON(w, 200, []any{})
+			return
+		}
+		writeJSON(w, 200, repos)
+	})
+	ref, _ := NormalizeOwner("https://github.com/acme")
+	listing, err := g.ListOwner(context.Background(), ref, "", limit, false, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return listing, &queries
+}
+
+func TestListingFiltersForksArchivedAndCapsSelection(t *testing.T) {
+	listing, queries := listOwner(t, []map[string]any{ownerRepo("app", false, false), ownerRepo("fork-of-lib", true, false),
+		ownerRepo("museum", false, true), ownerRepo("api", false, false), {"full_name": "bad"}}, 10)
+	var names []string
+	for _, r := range listing.Repositories {
+		names = append(names, r.FullName)
+	}
+	if strings.Join(names, ",") != "acme/app,acme/api" || listing.SkippedForks != 1 || listing.SkippedArchived != 1 ||
+		listing.TotalListed != 4 || listing.Truncated || len(*queries) != 1 ||
+		(*queries)[0] != "per_page=100&page=1&sort=pushed&direction=desc" {
+		t.Errorf("listing = %+v queries %v", listing, *queries)
+	}
+	var five []map[string]any
+	for i := range 5 {
+		five = append(five, ownerRepo(fmt.Sprintf("repo%d", i), false, false))
+	}
+	listing, _ = listOwner(t, five, 2)
+	if len(listing.Repositories) != 2 || !listing.Truncated || !strings.Contains(strings.Join(listing.Warnings, " "), "capped") {
+		t.Errorf("capped listing = %+v", listing)
+	}
+}
+
+func TestListingMapsRateLimitAndNotFound(t *testing.T) {
+	for _, c := range []struct {
+		status  int
+		headers map[string]string
+		want    int
+	}{{404, nil, 404}, {403, map[string]string{"x-ratelimit-remaining": "0", "x-ratelimit-reset": "9"}, 429}, {403, nil, 403}} {
+		g := fakeGitHub(t, func(w http.ResponseWriter, r *http.Request) {
+			for k, v := range c.headers {
+				w.Header().Set(k, v)
+			}
+			writeJSON(w, c.status, []any{})
+		})
+		ref, _ := NormalizeOwner("https://github.com/acme")
+		if _, err := g.ListOwner(context.Background(), ref, "", 5, false, false); err == nil || err.(*Error).Status != c.want {
+			t.Errorf("HTTP %d: err = %v", c.status, err)
+		}
 	}
 }
