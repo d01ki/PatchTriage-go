@@ -142,6 +142,9 @@ const (
 type pep440Key struct {
 	epoch   part
 	release []part
+	// full keeps trailing zeros (packaging's Version.release); release drops
+	// them for ordering.
+	full    []part
 	preInf  int
 	pre     []part
 	postInf int
@@ -167,6 +170,7 @@ func parsePEP440(value string) *pep440Key {
 	for _, piece := range strings.Split(m[2], ".") {
 		key.release = append(key.release, number(piece))
 	}
+	key.full = append([]part(nil), key.release...)
 	for len(key.release) > 0 && key.release[len(key.release)-1].value == "" {
 		key.release = key.release[:len(key.release)-1]
 	}
@@ -247,6 +251,53 @@ func (k *pep440Key) compare(o *pep440Key) int {
 		return 1
 	}
 	return compareParts(k.local, o.local)
+}
+
+// PyVersion is a parsed PEP 440 version (packaging.version.Version).
+type PyVersion struct{ k *pep440Key }
+
+// ParsePyVersion parses value as PEP 440; ok is false when it is not one.
+func ParsePyVersion(value string) (v PyVersion, ok bool) {
+	k := parsePEP440(value)
+	return PyVersion{k}, k != nil
+}
+
+func (v PyVersion) Compare(o PyVersion) int { return v.k.compare(o.k) }
+func (v PyVersion) IsPrerelease() bool      { return v.k.pre != nil || v.k.devInf == finite }
+func (v PyVersion) IsPostrelease() bool     { return v.k.postInf == finite }
+func (v PyVersion) HasLocal() bool          { return v.k.local != nil }
+
+// Public drops the local segment.
+func (v PyVersion) Public() PyVersion {
+	k := *v.k
+	k.local = nil
+	return PyVersion{&k}
+}
+
+// Base keeps only the epoch and release (packaging's base_version).
+func (v PyVersion) Base() PyVersion {
+	return PyVersion{&pep440Key{epoch: v.k.epoch, release: v.k.release, full: v.k.full,
+		preInf: posInf, postInf: negInf, devInf: posInf}}
+}
+
+func canonicalNumber(p part) string {
+	if p.value == "" {
+		return "0"
+	}
+	return p.value
+}
+
+// Epoch is the canonical decimal epoch ("0" when absent).
+func (v PyVersion) Epoch() string { return canonicalNumber(v.k.epoch) }
+
+// Release is the release segment with trailing zeros kept, as canonical
+// decimal strings.
+func (v PyVersion) Release() []string {
+	out := make([]string, len(v.k.full))
+	for i, p := range v.k.full {
+		out[i] = canonicalNumber(p)
+	}
+	return out
 }
 
 // ---------------------------------------------------------------- Maven

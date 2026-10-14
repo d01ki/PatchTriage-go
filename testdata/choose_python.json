@@ -1,0 +1,1791 @@
+{
+ "releases": {
+  "semver": [
+   "0.0.3",
+   "0.0.4",
+   "0.2.3",
+   "0.2.9",
+   "0.3.0",
+   "1.2.3",
+   "1.2.9",
+   "1.3.0",
+   "1.9.0",
+   "2.0.0",
+   "2.1.0rc1",
+   "2.0.1"
+  ],
+  "pep440": [
+   "1.0",
+   "1.0.0",
+   "1.0.post1",
+   "1.0.1",
+   "1.1.dev0",
+   "1.1",
+   "1.4.5",
+   "1.4.10",
+   "1!0.5",
+   "2.0a1",
+   "2.0",
+   "2.0.0.1",
+   "01.5",
+   "3.0+local",
+   "10.0"
+  ],
+  "tags": [
+   "v5.0.0",
+   "v6",
+   "v6.0.0",
+   "v6.0.1",
+   "v6.1",
+   "v7.0.0-beta",
+   "6",
+   "v6.0"
+  ],
+  "none": [
+   "1.0a1",
+   "2.0rc1"
+  ]
+ },
+ "cases": [
+  {
+   "releases": "semver",
+   "constraint": "",
+   "preferred": "",
+   "version": "2.0.1",
+   "basis": "newest release"
+  },
+  {
+   "releases": "semver",
+   "constraint": "*",
+   "preferred": "",
+   "version": "2.0.1",
+   "basis": "newest release matching *"
+  },
+  {
+   "releases": "semver",
+   "constraint": "x",
+   "preferred": "",
+   "version": "2.0.1",
+   "basis": "newest release matching x"
+  },
+  {
+   "releases": "semver",
+   "constraint": "1",
+   "preferred": "",
+   "error": "constraint '1' is not a version range"
+  },
+  {
+   "releases": "semver",
+   "constraint": "1.*",
+   "preferred": "",
+   "version": "1.9.0",
+   "basis": "newest release matching 1.*"
+  },
+  {
+   "releases": "semver",
+   "constraint": "1.*.*",
+   "preferred": "",
+   "version": "1.9.0",
+   "basis": "newest release matching 1.*.*"
+  },
+  {
+   "releases": "semver",
+   "constraint": "1.x",
+   "preferred": "",
+   "version": "1.9.0",
+   "basis": "newest release matching 1.x"
+  },
+  {
+   "releases": "semver",
+   "constraint": "1.x.x",
+   "preferred": "",
+   "version": "1.9.0",
+   "basis": "newest release matching 1.x.x"
+  },
+  {
+   "releases": "semver",
+   "constraint": "v1.*",
+   "preferred": "",
+   "version": "1.9.0",
+   "basis": "newest release matching v1.*"
+  },
+  {
+   "releases": "semver",
+   "constraint": "6.*.*",
+   "preferred": "",
+   "error": "no stable release satisfies '6.*.*'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "6.0.*",
+   "preferred": "",
+   "error": "no stable release satisfies '6.0.*'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "1.*.3",
+   "preferred": "",
+   "error": "unsupported wildcard '1.*.3'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "==1.2.*",
+   "preferred": "",
+   "version": "1.2.9",
+   "basis": "newest release matching ==1.2.*"
+  },
+  {
+   "releases": "semver",
+   "constraint": "==1.*",
+   "preferred": "",
+   "version": "1.9.0",
+   "basis": "newest release matching ==1.*"
+  },
+  {
+   "releases": "semver",
+   "constraint": "!=1.0.*",
+   "preferred": "",
+   "version": "2.0.1",
+   "basis": "newest release matching !=1.0.*"
+  },
+  {
+   "releases": "semver",
+   "constraint": "== 1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '== 1.0'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "==1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.0'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "==1.0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.0.0'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "= 1.3.0",
+   "preferred": "",
+   "version": "1.3.0",
+   "basis": "oldest release permitted by = 1.3.0"
+  },
+  {
+   "releases": "semver",
+   "constraint": "=1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '=1.0'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "^1.2.3",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by ^1.2.3"
+  },
+  {
+   "releases": "semver",
+   "constraint": "^0.2.3",
+   "preferred": "",
+   "version": "0.2.3",
+   "basis": "oldest release permitted by ^0.2.3"
+  },
+  {
+   "releases": "semver",
+   "constraint": "^0.0.3",
+   "preferred": "",
+   "version": "0.0.3",
+   "basis": "oldest release permitted by ^0.0.3"
+  },
+  {
+   "releases": "semver",
+   "constraint": "^0",
+   "preferred": "",
+   "version": "0.0.3",
+   "basis": "oldest release permitted by ^0"
+  },
+  {
+   "releases": "semver",
+   "constraint": "^0.0",
+   "preferred": "",
+   "version": "0.0.3",
+   "basis": "oldest release permitted by ^0.0"
+  },
+  {
+   "releases": "semver",
+   "constraint": "^1",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by ^1"
+  },
+  {
+   "releases": "semver",
+   "constraint": "~1.2.3",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by ~1.2.3"
+  },
+  {
+   "releases": "semver",
+   "constraint": "~1.2",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by ~1.2"
+  },
+  {
+   "releases": "semver",
+   "constraint": "~1",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by ~1"
+  },
+  {
+   "releases": "semver",
+   "constraint": "^ v1.2",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by ^ v1.2"
+  },
+  {
+   "releases": "semver",
+   "constraint": "~=1.0",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by ~=1.0"
+  },
+  {
+   "releases": "semver",
+   "constraint": "~=1.4.5",
+   "preferred": "",
+   "error": "no stable release satisfies '~=1.4.5'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "~=1",
+   "preferred": "",
+   "error": "constraint '~=1' is not a version range"
+  },
+  {
+   "releases": "semver",
+   "constraint": "~= 2.0",
+   "preferred": "",
+   "version": "2.0.0",
+   "basis": "oldest release permitted by ~= 2.0"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=1.2, <1.3",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by >=1.2, <1.3"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">= 1.2.3 < 2",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by >= 1.2.3 < 2"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=1.2.4",
+   "preferred": "",
+   "version": "1.2.9",
+   "basis": "oldest release permitted by >=1.2.4"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">1.0",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by >1.0"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">1.0.0",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by >1.0.0"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=v1.0",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by >=v1.0"
+  },
+  {
+   "releases": "semver",
+   "constraint": "<1.3",
+   "preferred": "",
+   "version": "1.2.9",
+   "basis": "newest release matching <1.3"
+  },
+  {
+   "releases": "semver",
+   "constraint": "<=1.4.5",
+   "preferred": "",
+   "version": "1.3.0",
+   "basis": "newest release matching <=1.4.5"
+  },
+  {
+   "releases": "semver",
+   "constraint": "<2",
+   "preferred": "",
+   "version": "1.9.0",
+   "basis": "newest release matching <2"
+  },
+  {
+   "releases": "semver",
+   "constraint": "<2.0",
+   "preferred": "",
+   "version": "1.9.0",
+   "basis": "newest release matching <2.0"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=1.0,<2.0,!=1.4.5",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by >=1.0,<2.0,!=1.4.5"
+  },
+  {
+   "releases": "semver",
+   "constraint": "> 1.0 < 2",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by > 1.0 < 2"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=1.0 <2 !=1.0.1",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by >=1.0 <2 !=1.0.1"
+  },
+  {
+   "releases": "semver",
+   "constraint": "===1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '===1.0'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "===1.0.post1",
+   "preferred": "",
+   "error": "no stable release satisfies '===1.0.post1'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "1.2.3",
+   "preferred": "",
+   "error": "constraint '1.2.3' is not a version range"
+  },
+  {
+   "releases": "semver",
+   "constraint": "latest",
+   "preferred": "",
+   "error": "constraint 'latest' is not a version range"
+  },
+  {
+   "releases": "semver",
+   "constraint": "main",
+   "preferred": "",
+   "error": "constraint 'main' is not a version range"
+  },
+  {
+   "releases": "semver",
+   "constraint": "release/v1",
+   "preferred": "",
+   "error": "constraint 'release/v1' is not a version range"
+  },
+  {
+   "releases": "semver",
+   "constraint": "1.2.3 || 2.0.0",
+   "preferred": "",
+   "error": "unsupported alternative range '1.2.3 || 2.0.0'"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=9",
+   "preferred": "",
+   "error": "no stable release satisfies '>=9'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "^9.0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '^9.0.0'"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=1.0,,<1.1",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.0,,<1.1'"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=1!0",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1!0'"
+  },
+  {
+   "releases": "semver",
+   "constraint": "!=2.0",
+   "preferred": "",
+   "version": "2.0.1",
+   "basis": "newest release matching !=2.0"
+  },
+  {
+   "releases": "semver",
+   "constraint": "<1.0.post1",
+   "preferred": "",
+   "version": "0.3.0",
+   "basis": "newest release matching <1.0.post1"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=1.0.post1",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by >=1.0.post1"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">0.9",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by >0.9"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=0.0.0",
+   "preferred": "",
+   "version": "0.0.3",
+   "basis": "oldest release permitted by >=0.0.0"
+  },
+  {
+   "releases": "semver",
+   "constraint": "v6",
+   "preferred": "",
+   "error": "constraint 'v6' is not a version range"
+  },
+  {
+   "releases": "semver",
+   "constraint": "6",
+   "preferred": "",
+   "error": "constraint '6' is not a version range"
+  },
+  {
+   "releases": "semver",
+   "constraint": ">=1.0a1",
+   "preferred": "",
+   "version": "1.2.3",
+   "basis": "oldest release permitted by >=1.0a1"
+  },
+  {
+   "releases": "semver",
+   "constraint": "",
+   "preferred": "1.3.0",
+   "version": "1.3.0",
+   "basis": "newest release"
+  },
+  {
+   "releases": "semver",
+   "constraint": "",
+   "preferred": "6.0.0",
+   "version": "2.0.1",
+   "basis": "newest release"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "",
+   "preferred": "",
+   "version": "1!0.5",
+   "basis": "newest release"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "*",
+   "preferred": "",
+   "version": "1!0.5",
+   "basis": "newest release matching *"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "x",
+   "preferred": "",
+   "version": "1!0.5",
+   "basis": "newest release matching x"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "1",
+   "preferred": "",
+   "error": "constraint '1' is not a version range"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "1.*",
+   "preferred": "",
+   "version": "01.5",
+   "basis": "newest release matching 1.*"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "1.*.*",
+   "preferred": "",
+   "version": "01.5",
+   "basis": "newest release matching 1.*.*"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "1.x",
+   "preferred": "",
+   "version": "01.5",
+   "basis": "newest release matching 1.x"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "1.x.x",
+   "preferred": "",
+   "version": "01.5",
+   "basis": "newest release matching 1.x.x"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "v1.*",
+   "preferred": "",
+   "version": "01.5",
+   "basis": "newest release matching v1.*"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "6.*.*",
+   "preferred": "",
+   "error": "no stable release satisfies '6.*.*'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "6.0.*",
+   "preferred": "",
+   "error": "no stable release satisfies '6.0.*'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "1.*.3",
+   "preferred": "",
+   "error": "unsupported wildcard '1.*.3'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "==1.2.*",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.2.*'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "==1.*",
+   "preferred": "",
+   "version": "01.5",
+   "basis": "newest release matching ==1.*"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "!=1.0.*",
+   "preferred": "",
+   "version": "1!0.5",
+   "basis": "newest release matching !=1.0.*"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "== 1.0",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by == 1.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "==1.0",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by ==1.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "==1.0.0",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by ==1.0.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "= 1.3.0",
+   "preferred": "",
+   "error": "no stable release satisfies '= 1.3.0'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "=1.0",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by =1.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "^1.2.3",
+   "preferred": "",
+   "version": "1.4.5",
+   "basis": "oldest release permitted by ^1.2.3"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "^0.2.3",
+   "preferred": "",
+   "error": "no stable release satisfies '^0.2.3'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "^0.0.3",
+   "preferred": "",
+   "error": "no stable release satisfies '^0.0.3'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "^0",
+   "preferred": "",
+   "error": "no stable release satisfies '^0'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "^0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '^0.0'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "^1",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by ^1"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "~1.2.3",
+   "preferred": "",
+   "error": "no stable release satisfies '~1.2.3'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "~1.2",
+   "preferred": "",
+   "error": "no stable release satisfies '~1.2'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "~1",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by ~1"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "^ v1.2",
+   "preferred": "",
+   "version": "1.4.5",
+   "basis": "oldest release permitted by ^ v1.2"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "~=1.0",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by ~=1.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "~=1.4.5",
+   "preferred": "",
+   "version": "1.4.5",
+   "basis": "oldest release permitted by ~=1.4.5"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "~=1",
+   "preferred": "",
+   "error": "constraint '~=1' is not a version range"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "~= 2.0",
+   "preferred": "",
+   "version": "2.0",
+   "basis": "oldest release permitted by ~= 2.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=1.2, <1.3",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.2, <1.3'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">= 1.2.3 < 2",
+   "preferred": "",
+   "version": "1.4.5",
+   "basis": "oldest release permitted by >= 1.2.3 < 2"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=1.2.4",
+   "preferred": "",
+   "version": "1.4.5",
+   "basis": "oldest release permitted by >=1.2.4"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">1.0",
+   "preferred": "",
+   "version": "1.0.1",
+   "basis": "oldest release permitted by >1.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">1.0.0",
+   "preferred": "",
+   "version": "1.0.1",
+   "basis": "oldest release permitted by >1.0.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=v1.0",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by >=v1.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "<1.3",
+   "preferred": "",
+   "version": "1.1",
+   "basis": "newest release matching <1.3"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "<=1.4.5",
+   "preferred": "",
+   "version": "1.4.5",
+   "basis": "newest release matching <=1.4.5"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "<2",
+   "preferred": "",
+   "version": "01.5",
+   "basis": "newest release matching <2"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "<2.0",
+   "preferred": "",
+   "version": "01.5",
+   "basis": "newest release matching <2.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=1.0,<2.0,!=1.4.5",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by >=1.0,<2.0,!=1.4.5"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "> 1.0 < 2",
+   "preferred": "",
+   "version": "1.0.1",
+   "basis": "oldest release permitted by > 1.0 < 2"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=1.0 <2 !=1.0.1",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by >=1.0 <2 !=1.0.1"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "===1.0",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by ===1.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "===1.0.post1",
+   "preferred": "",
+   "version": "1.0.post1",
+   "basis": "oldest release permitted by ===1.0.post1"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "1.2.3",
+   "preferred": "",
+   "error": "constraint '1.2.3' is not a version range"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "latest",
+   "preferred": "",
+   "error": "constraint 'latest' is not a version range"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "main",
+   "preferred": "",
+   "error": "constraint 'main' is not a version range"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "release/v1",
+   "preferred": "",
+   "error": "constraint 'release/v1' is not a version range"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "1.2.3 || 2.0.0",
+   "preferred": "",
+   "error": "unsupported alternative range '1.2.3 || 2.0.0'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=9",
+   "preferred": "",
+   "version": "10.0",
+   "basis": "oldest release permitted by >=9"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "^9.0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '^9.0.0'"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=1.0,,<1.1",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by >=1.0,,<1.1"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=1!0",
+   "preferred": "",
+   "version": "1!0.5",
+   "basis": "oldest release permitted by >=1!0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "!=2.0",
+   "preferred": "",
+   "version": "1!0.5",
+   "basis": "newest release matching !=2.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "<1.0.post1",
+   "preferred": "",
+   "version": "1.0.0",
+   "basis": "newest release matching <1.0.post1"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=1.0.post1",
+   "preferred": "",
+   "version": "1.0.post1",
+   "basis": "oldest release permitted by >=1.0.post1"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">0.9",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by >0.9"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=0.0.0",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by >=0.0.0"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "v6",
+   "preferred": "",
+   "error": "constraint 'v6' is not a version range"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "6",
+   "preferred": "",
+   "error": "constraint '6' is not a version range"
+  },
+  {
+   "releases": "pep440",
+   "constraint": ">=1.0a1",
+   "preferred": "",
+   "version": "1.0",
+   "basis": "oldest release permitted by >=1.0a1"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "",
+   "preferred": "1.3.0",
+   "version": "1!0.5",
+   "basis": "newest release"
+  },
+  {
+   "releases": "pep440",
+   "constraint": "",
+   "preferred": "6.0.0",
+   "version": "1!0.5",
+   "basis": "newest release"
+  },
+  {
+   "releases": "tags",
+   "constraint": "",
+   "preferred": "",
+   "version": "6.1",
+   "basis": "newest release"
+  },
+  {
+   "releases": "tags",
+   "constraint": "*",
+   "preferred": "",
+   "version": "6.1",
+   "basis": "newest release matching *"
+  },
+  {
+   "releases": "tags",
+   "constraint": "x",
+   "preferred": "",
+   "version": "6.1",
+   "basis": "newest release matching x"
+  },
+  {
+   "releases": "tags",
+   "constraint": "1",
+   "preferred": "",
+   "error": "constraint '1' is not a version range"
+  },
+  {
+   "releases": "tags",
+   "constraint": "1.*",
+   "preferred": "",
+   "error": "no stable release satisfies '1.*'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "1.*.*",
+   "preferred": "",
+   "error": "no stable release satisfies '1.*.*'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "1.x",
+   "preferred": "",
+   "error": "no stable release satisfies '1.x'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "1.x.x",
+   "preferred": "",
+   "error": "no stable release satisfies '1.x.x'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "v1.*",
+   "preferred": "",
+   "error": "no stable release satisfies 'v1.*'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "6.*.*",
+   "preferred": "",
+   "version": "6.1",
+   "basis": "newest release matching 6.*.*"
+  },
+  {
+   "releases": "tags",
+   "constraint": "6.0.*",
+   "preferred": "",
+   "version": "6.0.1",
+   "basis": "newest release matching 6.0.*"
+  },
+  {
+   "releases": "tags",
+   "constraint": "1.*.3",
+   "preferred": "",
+   "error": "unsupported wildcard '1.*.3'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "==1.2.*",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.2.*'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "==1.*",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.*'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "!=1.0.*",
+   "preferred": "",
+   "version": "6.1",
+   "basis": "newest release matching !=1.0.*"
+  },
+  {
+   "releases": "tags",
+   "constraint": "== 1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '== 1.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "==1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "==1.0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.0.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "= 1.3.0",
+   "preferred": "",
+   "error": "no stable release satisfies '= 1.3.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "=1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '=1.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "^1.2.3",
+   "preferred": "",
+   "error": "no stable release satisfies '^1.2.3'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "^0.2.3",
+   "preferred": "",
+   "error": "no stable release satisfies '^0.2.3'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "^0.0.3",
+   "preferred": "",
+   "error": "no stable release satisfies '^0.0.3'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "^0",
+   "preferred": "",
+   "error": "no stable release satisfies '^0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "^0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '^0.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "^1",
+   "preferred": "",
+   "error": "no stable release satisfies '^1'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "~1.2.3",
+   "preferred": "",
+   "error": "no stable release satisfies '~1.2.3'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "~1.2",
+   "preferred": "",
+   "error": "no stable release satisfies '~1.2'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "~1",
+   "preferred": "",
+   "error": "no stable release satisfies '~1'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "^ v1.2",
+   "preferred": "",
+   "error": "no stable release satisfies '^ v1.2'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "~=1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '~=1.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "~=1.4.5",
+   "preferred": "",
+   "error": "no stable release satisfies '~=1.4.5'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "~=1",
+   "preferred": "",
+   "error": "constraint '~=1' is not a version range"
+  },
+  {
+   "releases": "tags",
+   "constraint": "~= 2.0",
+   "preferred": "",
+   "error": "no stable release satisfies '~= 2.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=1.2, <1.3",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.2, <1.3'"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">= 1.2.3 < 2",
+   "preferred": "",
+   "error": "no stable release satisfies '>= 1.2.3 < 2'"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=1.2.4",
+   "preferred": "",
+   "version": "5.0.0",
+   "basis": "oldest release permitted by >=1.2.4"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">1.0",
+   "preferred": "",
+   "version": "5.0.0",
+   "basis": "oldest release permitted by >1.0"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">1.0.0",
+   "preferred": "",
+   "version": "5.0.0",
+   "basis": "oldest release permitted by >1.0.0"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=v1.0",
+   "preferred": "",
+   "version": "5.0.0",
+   "basis": "oldest release permitted by >=v1.0"
+  },
+  {
+   "releases": "tags",
+   "constraint": "<1.3",
+   "preferred": "",
+   "error": "no stable release satisfies '<1.3'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "<=1.4.5",
+   "preferred": "",
+   "error": "no stable release satisfies '<=1.4.5'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "<2",
+   "preferred": "",
+   "error": "no stable release satisfies '<2'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "<2.0",
+   "preferred": "",
+   "error": "no stable release satisfies '<2.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=1.0,<2.0,!=1.4.5",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.0,<2.0,!=1.4.5'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "> 1.0 < 2",
+   "preferred": "",
+   "error": "no stable release satisfies '> 1.0 < 2'"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=1.0 <2 !=1.0.1",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.0 <2 !=1.0.1'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "===1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '===1.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "===1.0.post1",
+   "preferred": "",
+   "error": "no stable release satisfies '===1.0.post1'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "1.2.3",
+   "preferred": "",
+   "error": "constraint '1.2.3' is not a version range"
+  },
+  {
+   "releases": "tags",
+   "constraint": "latest",
+   "preferred": "",
+   "error": "constraint 'latest' is not a version range"
+  },
+  {
+   "releases": "tags",
+   "constraint": "main",
+   "preferred": "",
+   "error": "constraint 'main' is not a version range"
+  },
+  {
+   "releases": "tags",
+   "constraint": "release/v1",
+   "preferred": "",
+   "error": "constraint 'release/v1' is not a version range"
+  },
+  {
+   "releases": "tags",
+   "constraint": "1.2.3 || 2.0.0",
+   "preferred": "",
+   "error": "unsupported alternative range '1.2.3 || 2.0.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=9",
+   "preferred": "",
+   "error": "no stable release satisfies '>=9'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "^9.0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '^9.0.0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=1.0,,<1.1",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.0,,<1.1'"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=1!0",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1!0'"
+  },
+  {
+   "releases": "tags",
+   "constraint": "!=2.0",
+   "preferred": "",
+   "version": "6.1",
+   "basis": "newest release matching !=2.0"
+  },
+  {
+   "releases": "tags",
+   "constraint": "<1.0.post1",
+   "preferred": "",
+   "error": "no stable release satisfies '<1.0.post1'"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=1.0.post1",
+   "preferred": "",
+   "version": "5.0.0",
+   "basis": "oldest release permitted by >=1.0.post1"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">0.9",
+   "preferred": "",
+   "version": "5.0.0",
+   "basis": "oldest release permitted by >0.9"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=0.0.0",
+   "preferred": "",
+   "version": "5.0.0",
+   "basis": "oldest release permitted by >=0.0.0"
+  },
+  {
+   "releases": "tags",
+   "constraint": "v6",
+   "preferred": "",
+   "error": "constraint 'v6' is not a version range"
+  },
+  {
+   "releases": "tags",
+   "constraint": "6",
+   "preferred": "",
+   "error": "constraint '6' is not a version range"
+  },
+  {
+   "releases": "tags",
+   "constraint": ">=1.0a1",
+   "preferred": "",
+   "version": "5.0.0",
+   "basis": "oldest release permitted by >=1.0a1"
+  },
+  {
+   "releases": "tags",
+   "constraint": "",
+   "preferred": "1.3.0",
+   "version": "6.1",
+   "basis": "newest release"
+  },
+  {
+   "releases": "tags",
+   "constraint": "",
+   "preferred": "6.0.0",
+   "version": "6.0.0",
+   "basis": "newest release"
+  },
+  {
+   "releases": "none",
+   "constraint": "",
+   "preferred": "",
+   "error": "the registry lists no stable release"
+  },
+  {
+   "releases": "none",
+   "constraint": "*",
+   "preferred": "",
+   "error": "no stable release satisfies '*'"
+  },
+  {
+   "releases": "none",
+   "constraint": "x",
+   "preferred": "",
+   "error": "no stable release satisfies 'x'"
+  },
+  {
+   "releases": "none",
+   "constraint": "1",
+   "preferred": "",
+   "error": "constraint '1' is not a version range"
+  },
+  {
+   "releases": "none",
+   "constraint": "1.*",
+   "preferred": "",
+   "error": "no stable release satisfies '1.*'"
+  },
+  {
+   "releases": "none",
+   "constraint": "1.*.*",
+   "preferred": "",
+   "error": "no stable release satisfies '1.*.*'"
+  },
+  {
+   "releases": "none",
+   "constraint": "1.x",
+   "preferred": "",
+   "error": "no stable release satisfies '1.x'"
+  },
+  {
+   "releases": "none",
+   "constraint": "1.x.x",
+   "preferred": "",
+   "error": "no stable release satisfies '1.x.x'"
+  },
+  {
+   "releases": "none",
+   "constraint": "v1.*",
+   "preferred": "",
+   "error": "no stable release satisfies 'v1.*'"
+  },
+  {
+   "releases": "none",
+   "constraint": "6.*.*",
+   "preferred": "",
+   "error": "no stable release satisfies '6.*.*'"
+  },
+  {
+   "releases": "none",
+   "constraint": "6.0.*",
+   "preferred": "",
+   "error": "no stable release satisfies '6.0.*'"
+  },
+  {
+   "releases": "none",
+   "constraint": "1.*.3",
+   "preferred": "",
+   "error": "unsupported wildcard '1.*.3'"
+  },
+  {
+   "releases": "none",
+   "constraint": "==1.2.*",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.2.*'"
+  },
+  {
+   "releases": "none",
+   "constraint": "==1.*",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.*'"
+  },
+  {
+   "releases": "none",
+   "constraint": "!=1.0.*",
+   "preferred": "",
+   "error": "no stable release satisfies '!=1.0.*'"
+  },
+  {
+   "releases": "none",
+   "constraint": "== 1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '== 1.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "==1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "==1.0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '==1.0.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "= 1.3.0",
+   "preferred": "",
+   "error": "no stable release satisfies '= 1.3.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "=1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '=1.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "^1.2.3",
+   "preferred": "",
+   "error": "no stable release satisfies '^1.2.3'"
+  },
+  {
+   "releases": "none",
+   "constraint": "^0.2.3",
+   "preferred": "",
+   "error": "no stable release satisfies '^0.2.3'"
+  },
+  {
+   "releases": "none",
+   "constraint": "^0.0.3",
+   "preferred": "",
+   "error": "no stable release satisfies '^0.0.3'"
+  },
+  {
+   "releases": "none",
+   "constraint": "^0",
+   "preferred": "",
+   "error": "no stable release satisfies '^0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "^0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '^0.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "^1",
+   "preferred": "",
+   "error": "no stable release satisfies '^1'"
+  },
+  {
+   "releases": "none",
+   "constraint": "~1.2.3",
+   "preferred": "",
+   "error": "no stable release satisfies '~1.2.3'"
+  },
+  {
+   "releases": "none",
+   "constraint": "~1.2",
+   "preferred": "",
+   "error": "no stable release satisfies '~1.2'"
+  },
+  {
+   "releases": "none",
+   "constraint": "~1",
+   "preferred": "",
+   "error": "no stable release satisfies '~1'"
+  },
+  {
+   "releases": "none",
+   "constraint": "^ v1.2",
+   "preferred": "",
+   "error": "no stable release satisfies '^ v1.2'"
+  },
+  {
+   "releases": "none",
+   "constraint": "~=1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '~=1.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "~=1.4.5",
+   "preferred": "",
+   "error": "no stable release satisfies '~=1.4.5'"
+  },
+  {
+   "releases": "none",
+   "constraint": "~=1",
+   "preferred": "",
+   "error": "constraint '~=1' is not a version range"
+  },
+  {
+   "releases": "none",
+   "constraint": "~= 2.0",
+   "preferred": "",
+   "error": "no stable release satisfies '~= 2.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=1.2, <1.3",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.2, <1.3'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">= 1.2.3 < 2",
+   "preferred": "",
+   "error": "no stable release satisfies '>= 1.2.3 < 2'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=1.2.4",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.2.4'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '>1.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">1.0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '>1.0.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=v1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '>=v1.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "<1.3",
+   "preferred": "",
+   "error": "no stable release satisfies '<1.3'"
+  },
+  {
+   "releases": "none",
+   "constraint": "<=1.4.5",
+   "preferred": "",
+   "error": "no stable release satisfies '<=1.4.5'"
+  },
+  {
+   "releases": "none",
+   "constraint": "<2",
+   "preferred": "",
+   "error": "no stable release satisfies '<2'"
+  },
+  {
+   "releases": "none",
+   "constraint": "<2.0",
+   "preferred": "",
+   "error": "no stable release satisfies '<2.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=1.0,<2.0,!=1.4.5",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.0,<2.0,!=1.4.5'"
+  },
+  {
+   "releases": "none",
+   "constraint": "> 1.0 < 2",
+   "preferred": "",
+   "error": "no stable release satisfies '> 1.0 < 2'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=1.0 <2 !=1.0.1",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.0 <2 !=1.0.1'"
+  },
+  {
+   "releases": "none",
+   "constraint": "===1.0",
+   "preferred": "",
+   "error": "no stable release satisfies '===1.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "===1.0.post1",
+   "preferred": "",
+   "error": "no stable release satisfies '===1.0.post1'"
+  },
+  {
+   "releases": "none",
+   "constraint": "1.2.3",
+   "preferred": "",
+   "error": "constraint '1.2.3' is not a version range"
+  },
+  {
+   "releases": "none",
+   "constraint": "latest",
+   "preferred": "",
+   "error": "constraint 'latest' is not a version range"
+  },
+  {
+   "releases": "none",
+   "constraint": "main",
+   "preferred": "",
+   "error": "constraint 'main' is not a version range"
+  },
+  {
+   "releases": "none",
+   "constraint": "release/v1",
+   "preferred": "",
+   "error": "constraint 'release/v1' is not a version range"
+  },
+  {
+   "releases": "none",
+   "constraint": "1.2.3 || 2.0.0",
+   "preferred": "",
+   "error": "unsupported alternative range '1.2.3 || 2.0.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=9",
+   "preferred": "",
+   "error": "no stable release satisfies '>=9'"
+  },
+  {
+   "releases": "none",
+   "constraint": "^9.0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '^9.0.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=1.0,,<1.1",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.0,,<1.1'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=1!0",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1!0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "!=2.0",
+   "preferred": "",
+   "error": "no stable release satisfies '!=2.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "<1.0.post1",
+   "preferred": "",
+   "error": "no stable release satisfies '<1.0.post1'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=1.0.post1",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.0.post1'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">0.9",
+   "preferred": "",
+   "error": "no stable release satisfies '>0.9'"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=0.0.0",
+   "preferred": "",
+   "error": "no stable release satisfies '>=0.0.0'"
+  },
+  {
+   "releases": "none",
+   "constraint": "v6",
+   "preferred": "",
+   "error": "constraint 'v6' is not a version range"
+  },
+  {
+   "releases": "none",
+   "constraint": "6",
+   "preferred": "",
+   "error": "constraint '6' is not a version range"
+  },
+  {
+   "releases": "none",
+   "constraint": ">=1.0a1",
+   "preferred": "",
+   "error": "no stable release satisfies '>=1.0a1'"
+  },
+  {
+   "releases": "none",
+   "constraint": "",
+   "preferred": "1.3.0",
+   "error": "the registry lists no stable release"
+  },
+  {
+   "releases": "none",
+   "constraint": "",
+   "preferred": "6.0.0",
+   "error": "the registry lists no stable release"
+  }
+ ]
+}

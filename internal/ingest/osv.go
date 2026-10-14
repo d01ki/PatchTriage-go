@@ -171,6 +171,8 @@ type OSVClient struct {
 	HTTP     *http.Client
 	BaseURL  string
 	CacheDir string
+	// RegistryURLs overrides DefaultRegistryURLs per OSV ecosystem.
+	RegistryURLs map[string]string
 }
 
 // purlIdentity is the version-independent, casefolded purl used for
