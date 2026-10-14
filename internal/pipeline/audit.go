@@ -13,13 +13,14 @@ package pipeline
 //	ssvc_consistency      priority and outcome must match the Deployer table
 //	fix_consistency       patch_* needs a fixed version; mitigate is for none
 //	evidence_completeness the SSVC path and point provenance must be present
-//
-// AI recommendation checks are added with the AI backends (phase 2).
+//	ai_recommendation_consistency nested AI actions cannot downgrade SSVC,
+//	                      claim KEV is inactive, or prescribe a nonexistent patch
 
 import (
 	"fmt"
 	"math"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -35,7 +36,40 @@ var (
 	durationPattern = regexp.MustCompile(`\b(?:day|days|hour|hours|week|weeks|month|months|deadline|sla|target)\b`)
 	percentPattern  = regexp.MustCompile(`\b(?:percent|percentage|percentile)\b`)
 	signalPattern   = regexp.MustCompile(`\b(?:epss|cvss|score|percentile|probability|risk\s+rating)\b`)
+	kevDowngrade    = regexp.MustCompile(`(?i)(?:\b(?:no|not|without)\b.{0,28}\bexploit(?:ation|ed)?\b|` +
+		`\bexploit(?:ation|ed)?\b.{0,28}\b(?:absent|none|unlikely)\b)`)
+	patchInstruction = regexp.MustCompile(`(?i)\b(?:upgrade|update|install|apply\s+(?:the\s+)?patch|` +
+		`patch\s+(?:the|this|package|system))\b`)
 )
+
+var actionRank = map[string]int{"monitor": 0, "investigate": 1, "mitigate": 2, "patch_scheduled": 2,
+	"patch_out_of_cycle": 3, "patch_immediately": 4}
+
+func rankOf(action string) int {
+	if r, ok := actionRank[action]; ok {
+		return r
+	}
+	return -1
+}
+
+type textField struct{ name, text string }
+
+// triageTextFields is the prose the audit checks for numeric claims.
+func triageTextFields(t *model.Triage) []textField {
+	var fields []textField
+	if t.Rationale != "" {
+		fields = append(fields, textField{"rationale", t.Rationale})
+	}
+	if r := t.AIRecommendation; r != nil {
+		for i, v := range r.RemediationSteps {
+			fields = append(fields, textField{fmt.Sprintf("ai_remediation_steps[%d]", i), v})
+		}
+		for i, v := range r.Uncertainties {
+			fields = append(fields, textField{fmt.Sprintf("ai_uncertainties[%d]", i), v})
+		}
+	}
+	return fields
+}
 
 var auditChecks = []string{"fabricated_numbers", "ssvc_consistency", "fix_consistency",
 	"evidence_completeness", "ai_recommendation_consistency"}
@@ -165,8 +199,9 @@ func AuditFinding(f *model.Finding) map[string]any {
 	}
 	baseline := decision.Triage(f)
 	flags := []string{}
-	if t.Rationale != "" {
-		flags = append(flags, numericClaimFlags(f, "rationale", t.Rationale, baseline.SuggestedDeadlineDays)...)
+	fields := triageTextFields(t)
+	for _, field := range fields {
+		flags = append(flags, numericClaimFlags(f, field.name, field.text, baseline.SuggestedDeadlineDays)...)
 	}
 	if t.Priority != baseline.Priority {
 		flags = append(flags, fmt.Sprintf("ssvc_priority_mismatch:%s->%s", baseline.Priority, t.Priority))
@@ -215,6 +250,29 @@ func AuditFinding(f *model.Finding) map[string]any {
 	}
 	if t.Action == "mitigate" && hasFix && (t.Priority == "P1" || t.Priority == "P2") {
 		flags = append(flags, "mitigate_despite_available_fix")
+	}
+	// The nested AI recommendation is advisory, but must not contradict or
+	// quietly downgrade the authoritative SSVC action.
+	if r := t.AIRecommendation; r != nil {
+		if expected := baseline.Action; r.Action != "" && r.Action != expected {
+			kind := "ai_action_mismatch"
+			if rankOf(r.Action) < rankOf(expected) {
+				kind = "ai_action_downgrade"
+			}
+			flags = append(flags, fmt.Sprintf("%s:%s->%s", kind, expected, r.Action))
+		}
+		if !hasFix && slices.ContainsFunc(r.RemediationSteps, patchInstruction.MatchString) {
+			flags = append(flags, "ai_patch_instruction_without_fix")
+		}
+		if f.Enrichment.InCISAKEV {
+			var texts []string
+			for _, field := range fields {
+				texts = append(texts, field.text)
+			}
+			if kevDowngrade.MatchString(strings.Join(texts, " ")) {
+				flags = append(flags, "ai_kev_exploitation_downgrade_claim")
+			}
+		}
 	}
 	return map[string]any{
 		"verified": len(flags) == 0, "flags": flags, "baseline_priority": baseline.Priority,

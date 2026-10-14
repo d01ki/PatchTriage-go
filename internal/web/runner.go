@@ -276,7 +276,9 @@ func copyMap(m map[string]any) map[string]any {
 
 // Run assesses one target: ingest -> enrich -> triage -> plan -> report,
 // publishing the summary and report only if the target did not change.
-func (r *Runner) Run(ctx context.Context, ws string, target Target) (map[string]any, error) {
+// Run assesses one target with backend ("rules", "ai", "claude" or
+// "cascade"; "" is rules).
+func (r *Runner) Run(ctx context.Context, ws string, target Target, backend string) (map[string]any, error) {
 	started := time.Now()
 	id := strOf(target["id"])
 	revision, sha := intOf(target["input_revision"]), strOf(target["source_sha256"])
@@ -306,7 +308,8 @@ func (r *Runner) Run(ctx context.Context, ws string, target Target) (map[string]
 		}
 	}
 	options := pipeline.Options{Asset: &override, SSVCOverrides: overrides, DeclaredCoverage: copyMap(declared),
-		ProviderStatus: providerStatus, Enrich: r.Enrich, OSV: r.OSV}
+		ProviderStatus: providerStatus, Enrich: r.Enrich, OSV: r.OSV,
+		Triage: pipeline.TriageOptions{Backend: backend, Jobs: 4}}
 	if options.Enrich.GitHubToken == "" {
 		options.Enrich.GitHubToken = os.Getenv("GITHUB_TOKEN")
 		if options.Enrich.GitHubToken == "" {

@@ -71,7 +71,7 @@ func diff(path string, got, want any) string {
 func TestRunTargetDemoSummaryMatchesPython(t *testing.T) {
 	s := newStore(t)
 	target := demoTarget(t, s, "")
-	summary, err := (&Runner{Store: s}).Run(t.Context(), "", target)
+	summary, err := (&Runner{Store: s}).Run(t.Context(), "", target, "rules")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -100,7 +100,7 @@ func TestRunTargetStaleRevisionNotSaved(t *testing.T) {
 		t.Fatal(err)
 	}
 	// target still carries the old revision: the run must not publish.
-	if _, err := (&Runner{Store: s}).Run(t.Context(), wsA, target); !errors.Is(err, ErrStaleInput) {
+	if _, err := (&Runner{Store: s}).Run(t.Context(), wsA, target, "rules"); !errors.Is(err, ErrStaleInput) {
 		t.Errorf("err = %v, want ErrStaleInput", err)
 	}
 	if s.LoadSummary(wsA, id) != nil {
@@ -111,7 +111,7 @@ func TestRunTargetStaleRevisionNotSaved(t *testing.T) {
 func TestRunTargetWithoutEvidenceFails(t *testing.T) {
 	s := newStore(t)
 	target := mustAdd(t, s, wsA, map[string]any{"name": "empty"})
-	if _, err := (&Runner{Store: s}).Run(t.Context(), wsA, target); err == nil {
+	if _, err := (&Runner{Store: s}).Run(t.Context(), wsA, target, "rules"); err == nil {
 		t.Error("a target without evidence cannot run")
 	}
 }
@@ -120,7 +120,7 @@ func TestAggregateFleetExcludesUnassessed(t *testing.T) {
 	s := newStore(t)
 	demo := demoTarget(t, s, wsA)
 	mustAdd(t, s, wsA, map[string]any{"name": "idle"})
-	if _, err := (&Runner{Store: s}).Run(t.Context(), wsA, demo); err != nil {
+	if _, err := (&Runner{Store: s}).Run(t.Context(), wsA, demo, "rules"); err != nil {
 		t.Fatal(err)
 	}
 	fleet, err := AggregateFleet(s, wsA)

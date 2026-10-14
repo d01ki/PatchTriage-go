@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/d01ki/PatchTriage-go/data"
+	"github.com/d01ki/PatchTriage-go/internal/ai"
 	"github.com/d01ki/PatchTriage-go/internal/enrich"
 	"github.com/d01ki/PatchTriage-go/internal/model"
 	"github.com/d01ki/PatchTriage-go/internal/pipeline"
@@ -41,6 +42,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprint(stderr, usage)
 		return 2
 	}
+	// Saved keys fill in whatever the environment does not already set.
+	ai.ApplyToEnv(ai.LoadConfig())
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 	var err error
@@ -126,7 +129,13 @@ func parseRun(args []string) (runConfig, error) {
 	vendorSources := fs.String("vendor-sources", "auto", "vendor/exploit sources: auto|all|msrc,rhsa,usn,debian,ghsa,exploitdb")
 	noVendor := fs.Bool("no-vendor-advisories", false, "skip vendor advisory lookups")
 	githubToken := fs.String("github-token", firstEnv("GITHUB_TOKEN", "GH_TOKEN"), "GitHub token (raises GHSA rate limits)")
-	triage := fs.String("triage", "rules", "triage backend (this Go port supports rules)")
+	triage := fs.String("triage", "", "triage backend: rules|ai|cascade (default: your setup choice, else rules)")
+	provider := fs.String("provider", "", "AI provider: anthropic|openai|openai-compatible|ollama")
+	aiBaseURL := fs.String("ai-base-url", "", "OpenAI-compatible API base URL (for gateways/local models)")
+	modelName := fs.String("model", "", "model id (ai: model; cascade: screening model)")
+	escalationModel := fs.String("escalation-model", "", "cascade only: frontier model for escalated findings")
+	jobs := fs.Int("jobs", 4, "parallel API calls for ai/cascade")
+	batch := fs.Bool("batch", false, "Anthropic AI only: use the Message Batches API")
 	output := fs.String("o", "", "write the full JSON report")
 	fs.StringVar(output, "output", "", "write the full JSON report")
 	html := fs.String("html", "", "write the self-contained HTML report")
@@ -135,8 +144,15 @@ func parseRun(args []string) (runConfig, error) {
 	if err != nil {
 		return runConfig{}, err
 	}
-	if *triage != "rules" {
-		return runConfig{}, fmt.Errorf("triage backend %q is not available: this Go port supports only the deterministic 'rules' backend", *triage)
+	if *triage == "" {
+		*triage, _ = ai.LoadConfig()["default_backend"].(string)
+	}
+	switch *triage {
+	case "":
+		*triage = "rules"
+	case "rules", "ai", "claude", "cascade":
+	default:
+		return runConfig{}, fmt.Errorf("Unknown triage backend: %s", *triage)
 	}
 	if len(files) == 0 {
 		return runConfig{}, errors.New("run needs at least one scanner JSON or SBOM file")
@@ -153,6 +169,8 @@ func parseRun(args []string) (runConfig, error) {
 	}
 	cfg := runConfig{files: files, output: *output, html: *html, options: pipeline.Options{
 		Format: *format, Inventory: *assets, ProviderStatus: "provider_reported", Limit: *limit,
+		Triage: pipeline.TriageOptions{Backend: *triage, Model: *modelName, EscalationModel: *escalationModel,
+			Provider: *provider, BaseURL: *aiBaseURL, Jobs: *jobs, Batch: *batch},
 		Enrich: enrich.Options{UseNVD: !*noNVD, NVDAPIKey: *nvdKey, VendorSources: *vendorSources,
 			GitHubToken: *githubToken, UseVulnrichment: !*noVulnrichment},
 	}}
@@ -185,6 +203,21 @@ func execute(ctx context.Context, cfg runConfig, stdout io.Writer) error {
 	result, err := pipeline.Assess(ctx, cfg.files, cfg.options)
 	if err != nil {
 		return err
+	}
+	escalated, fellBack := 0, 0
+	for _, f := range result.Subset {
+		if f.Triage != nil && f.Triage.Escalated != nil && *f.Triage.Escalated {
+			escalated++
+		}
+		if f.Triage != nil && f.Triage.Backend == "rules_fallback" {
+			fellBack++
+		}
+	}
+	if cfg.options.Triage.Backend == "cascade" {
+		fmt.Fprintf(stdout, "cascade: %d/%d findings escalated to the frontier model\n", escalated, len(result.Subset))
+	}
+	if fellBack > 0 {
+		fmt.Fprintf(stdout, "%d findings fell back to the rules baseline after API errors (tagged in the report)\n", fellBack)
 	}
 	return emit(result, cfg.output, cfg.html, stdout)
 }

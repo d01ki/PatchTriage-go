@@ -3,11 +3,13 @@ package web
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/cookiejar"
 	"net/http/httptest"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -306,5 +308,40 @@ func TestUploadAndInvalidation(t *testing.T) {
 	}
 	if status, _, _ := c.do("DELETE", "/api/targets/"+id, nil); status != 404 {
 		t.Errorf("second delete = %d", status)
+	}
+}
+
+func TestAIBackendIsOfferedAndRunsWhenConfigured(t *testing.T) {
+	var calls int32
+	anthropic := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&calls, 1)
+		_, _ = w.Write([]byte(`{"content": [{"type": "tool_use", "name": "triage", "input": {"action": "patch_out_of_cycle",
+			"rationale": "Explain the supplied SSVC path.", "remediation_steps": ["Review the vendor advisory."], "uncertainties": []}}]}`))
+	}))
+	defer anthropic.Close()
+	for _, key := range []string{"PATCHTRIAGE_AI_PROVIDER", "PATCHTRIAGE_AI_API_KEY", "PATCHTRIAGE_AI_BASE_URL", "OPENAI_API_KEY",
+		"PATCHTRIAGE_AI_MODEL", "PATCHTRIAGE_AI_DEEP_MODEL"} {
+		t.Setenv(key, "")
+	}
+	c, _ := newServerClient(t)
+	if status, _, _ := c.do("POST", "/api/targets/000000000000/runs", map[string]any{"backend": "ai"}); status != 404 {
+		t.Errorf("unknown target = %d", status)
+	}
+	demo := c.json("POST", "/api/demo", map[string]any{}, 201)
+	path := "/api/targets/" + demo["id"].(string) + "/runs"
+	t.Setenv("ANTHROPIC_API_KEY", "")
+	if status, _, _ := c.do("POST", path, map[string]any{"backend": "ai"}); status != 400 {
+		t.Errorf("ai without configuration = %d", status)
+	}
+	t.Setenv("ANTHROPIC_API_KEY", "test-key")
+	t.Setenv("ANTHROPIC_BASE_URL", anthropic.URL)
+	cfg := c.json("GET", "/api/config", nil, 200)
+	if fmt.Sprint(cfg["backends"]) != "[rules ai cascade]" || cfg["has_ai"] != true || cfg["ai_provider"] != "anthropic" {
+		t.Errorf("config = %v", cfg)
+	}
+	job := waitJob(t, c, c.json("POST", path, map[string]any{"backend": "ai"}, 202)["job_id"].(string))
+	summary, _ := job["summary"].(map[string]any)
+	if job["state"] != "succeeded" || job["backend"] != "ai" || atomic.LoadInt32(&calls) == 0 || summary == nil {
+		t.Errorf("job = %v (calls %d)", job, calls)
 	}
 }
