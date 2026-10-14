@@ -1,0 +1,233 @@
+{
+ "manifests": {
+  "requirements.txt": "# core\nfastapi>=0.104.0\nuvicorn[standard]>=0.24.0  # server\n-r dev.txt\ngit+https://example.com/x.git\nflask \\\n  >=2.0\nPillow>=10.1.0\nDjango (>=3.2, <4)\nrequests>=2.0 ; python_version > '3.8'\nattrs==23.*\nbad name>=1\nnumpy>=1.0,\nzope.interface~=5.4\nmy_pkg @ file.whl\nsix\r\nclick!=8.0.0,>=7\n",
+  "pyproject.toml": "[project]\ndependencies = [\"pillow<12\", \"httpx\", \"Django>=4.0\"]\n[project.optional-dependencies]\ndev = [\"pytest>=7\", \"fastapi<1\"]\ndocs = [\"sphinx\"]\n[build-system]\nrequires = [\"setuptools>=68\"]\n[dependency-groups]\ntest = [\"coverage>=7\", {include-group = \"dev\"}]\n[tool.poetry.dependencies]\npython = \"^3.10\"\nrequests = {version = \"^2.31\", extras = [\"socks\"]}\nrich = \"*\"\n[tool.poetry.group.lint.dependencies]\nruff = \"^0.4\"\n",
+  "app/package.json": "{\"dependencies\": {\"react\": \"^18.2.0\", \"local\": \"file:../x\", \"num\": 5}, \"devDependencies\": {\"lodash\": \"*\", \"react\": \"^17\"}, \"optionalDependencies\": {\"fsevents\": \"latest\"}}",
+  "app/web/package.json": "{\"dependencies\": {\"react\": \"^16\", \"vue\": \"3.x\"}}",
+  "svc/requirements/prod.txt": "fastapi<0.200\nPILLOW>=9\n",
+  "broken/package.json": "{not json",
+  "broken/pyproject.toml": "[project\n",
+  "odd/pyproject.toml": "project = \"x\"\n"
+ },
+ "constraints": [
+  [
+   "PyPI",
+   "attrs",
+   "==23.*",
+   [
+    "requirements.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "click",
+   "!=8.0.0,>=7",
+   [
+    "requirements.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "coverage",
+   ">=7",
+   [
+    "pyproject.toml"
+   ]
+  ],
+  [
+   "PyPI",
+   "django",
+   ">=4.0,<4,>=3.2",
+   [
+    "pyproject.toml",
+    "requirements.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "fastapi",
+   "<1,>=0.104.0,<0.200",
+   [
+    "pyproject.toml",
+    "requirements.txt",
+    "svc/requirements/prod.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "flask",
+   ">=2.0",
+   [
+    "requirements.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "httpx",
+   "",
+   [
+    "pyproject.toml"
+   ]
+  ],
+  [
+   "PyPI",
+   "my-pkg",
+   "",
+   [
+    "requirements.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "numpy",
+   ">=1.0",
+   [
+    "requirements.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "pillow",
+   "<12,>=10.1.0,>=9",
+   [
+    "pyproject.toml",
+    "requirements.txt",
+    "svc/requirements/prod.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "pytest",
+   ">=7",
+   [
+    "pyproject.toml"
+   ]
+  ],
+  [
+   "PyPI",
+   "requests",
+   "^2.31,>=2.0",
+   [
+    "pyproject.toml",
+    "requirements.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "rich",
+   "",
+   [
+    "pyproject.toml"
+   ]
+  ],
+  [
+   "PyPI",
+   "ruff",
+   "^0.4",
+   [
+    "pyproject.toml"
+   ]
+  ],
+  [
+   "PyPI",
+   "setuptools",
+   ">=68",
+   [
+    "pyproject.toml"
+   ]
+  ],
+  [
+   "PyPI",
+   "six",
+   "",
+   [
+    "requirements.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "sphinx",
+   "",
+   [
+    "pyproject.toml"
+   ]
+  ],
+  [
+   "PyPI",
+   "uvicorn",
+   ">=0.24.0",
+   [
+    "requirements.txt"
+   ]
+  ],
+  [
+   "PyPI",
+   "zope-interface",
+   "~=5.4",
+   [
+    "requirements.txt"
+   ]
+  ],
+  [
+   "npm",
+   "fsevents",
+   "",
+   [
+    "app/package.json"
+   ]
+  ],
+  [
+   "npm",
+   "lodash",
+   "",
+   [
+    "app/package.json"
+   ]
+  ],
+  [
+   "npm",
+   "num",
+   "5",
+   [
+    "app/package.json"
+   ]
+  ],
+  [
+   "npm",
+   "react",
+   "^18.2.0",
+   [
+    "app/package.json",
+    "app/web/package.json"
+   ]
+  ],
+  [
+   "npm",
+   "vue",
+   "3.x",
+   [
+    "app/web/package.json"
+   ]
+  ]
+ ],
+ "warning_paths": [
+  "broken/package.json",
+  "broken/pyproject.toml",
+  "odd/pyproject.toml"
+ ],
+ "is_manifest": {
+  "requirements.txt": true,
+  "requirements-dev.in": true,
+  "dev-requirements.txt": true,
+  "requirements/prod.txt": true,
+  "svc/pyproject.toml": true,
+  "web/package.json": true,
+  "web/node_modules/x/package.json": false,
+  "setup.py": false,
+  "notes.txt": false,
+  "package-lock.json": false,
+  "vendor/requirements.txt": false,
+  "REQUIREMENTS.TXT": true,
+  "a/b/Requirements-x.in": true
+ }
+}

@@ -27,6 +27,7 @@ import (
 
 	"github.com/d01ki/PatchTriage-go/internal/decision"
 	"github.com/d01ki/PatchTriage-go/internal/ingest"
+	"github.com/d01ki/PatchTriage-go/internal/repository"
 )
 
 //go:embed page.html
@@ -82,6 +83,10 @@ type Server struct {
 	jobs     map[string]job
 	runSlots chan struct{}
 	runLocks sync.Map // workspace|target -> *sync.Mutex
+	// Repository acquires evidence for repository URLs; tests point it at
+	// local servers.
+	Repository  repository.Acquirer
+	importSlots chan struct{}
 }
 
 // NewServer builds the handler; limits come from the environment.
@@ -103,7 +108,8 @@ func NewServer(store *Store, runner *Runner) *Server {
 	matrixJSON, _ := json.Marshal(matrix)
 	page := strings.NewReplacer("__SSVC_LABELS__", string(labelJSON), "__HUMAN_IMPACT__", string(matrixJSON)).Replace(pageTemplate)
 	return &Server{store: store, runner: runner, limits: limitsFromEnv(), page: []byte(page), jobs: map[string]job{},
-		runSlots: make(chan struct{}, max(1, envInt("PATCHTRIAGE_MAX_CONCURRENT_RUNS", 2)))}
+		runSlots:    make(chan struct{}, max(1, envInt("PATCHTRIAGE_MAX_CONCURRENT_RUNS", 2))),
+		importSlots: make(chan struct{}, max(1, envInt("PATCHTRIAGE_MAX_CONCURRENT_IMPORTS", 2)))}
 }
 
 func toStrings[T ~string](values []T) []string {
@@ -410,7 +416,21 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// githubImportToken keeps the anonymous hosted importer strictly
+// public-only: a token configured for enrichment can also read private
+// repositories, so public mode never passes it to the importer.
+func githubImportToken() string {
+	if publicMode() {
+		return ""
+	}
+	return envOr("GITHUB_TOKEN", os.Getenv("GH_TOKEN"))
+}
+
 func (s *Server) config() map[string]any {
+	generic := "unavailable"
+	if repository.GenericEnabled() {
+		generic = "local-osv-scanner"
+	}
 	token := "public-rate-limit"
 	if envOr("GITHUB_TOKEN", os.Getenv("GH_TOKEN")) != "" {
 		token = "token"
@@ -418,11 +438,12 @@ func (s *Server) config() map[string]any {
 	return map[string]any{
 		"backends": []string{"rules"}, "has_key": false, "has_ai": false, "ai_provider": nil,
 		"capabilities": []string{"offline-demo", "ssvc-deployer", "epss-baseline", "kev-baseline", "reachability",
-			"runtime-context", "vendor-advisories", "async-runs"},
+			"runtime-context", "vendor-advisories", "async-runs", "github-repository-sbom"},
 		"version": appVersion, "build_sha": envOr("PATCHTRIAGE_BUILD_SHA", "development"), "ui_schema_version": 2,
 		"deployment_mode": envOr("PATCHTRIAGE_DEPLOYMENT_MODE", "local"),
-		"repository_import": map[string]any{"github": "unavailable", "github_private_with_token": false,
-			"generic_https_git": "unavailable", "executes_repository_code": false},
+		"repository_import": map[string]any{"github": "dependency-graph-sbom",
+			"github_private_with_token": githubImportToken() != "", "generic_https_git": generic,
+			"executes_repository_code": false},
 		"data_isolation": "anonymous-session", "retention_hours": int(sessionTTL.Hours()),
 		"limits": map[string]any{"targets": s.limits.targets, "source_bytes": s.limits.sourceBytes,
 			"session_source_bytes": s.limits.sessionSourceBytes, "active_jobs_per_session": s.limits.jobsPerSession,
@@ -629,7 +650,7 @@ func (s *Server) post(w http.ResponseWriter, r *http.Request, ws string) error {
 	case "source":
 		return s.source(w, r, ws, m[1])
 	case "repository":
-		return badRequest(501, "repository import is not available in this Go version yet; upload scanner output or an SBOM instead")
+		return s.repositoryImport(w, r, ws, m[1])
 	case "runs":
 		if strOf(target["source_file"]) == "" {
 			return badRequest(400, "no scan, SBOM, or repository evidence attached")
@@ -774,6 +795,50 @@ func (s *Server) source(w http.ResponseWriter, r *http.Request, ws, id string) e
 	target, _ := s.store.Get(ws, id)
 	sendJSON(w, 200, map[string]any{"ok": true, "format": format, "filename": filename,
 		"sha256": strOf(target["source_sha256"]), "size": size})
+	return nil
+}
+
+func (s *Server) repositoryImport(w http.ResponseWriter, r *http.Request, ws, id string) error {
+	body, err := s.readJSON(r)
+	if err != nil {
+		return err
+	}
+	repositoryURL, _ := body["repository_url"].(string)
+	if strings.TrimSpace(repositoryURL) == "" {
+		return badRequest(400, "repository_url is required")
+	}
+	select {
+	case s.importSlots <- struct{}{}:
+	default:
+		return badRequest(429, "repository import capacity is busy; retry later")
+	}
+	evidence, err := s.Repository.Acquire(r.Context(), repositoryURL, githubImportToken(), s.limits.sourceBytes,
+		repository.GenericEnabled())
+	<-s.importSlots
+	var repoErr *repository.Error
+	if errors.As(err, &repoErr) {
+		return badRequest(repoErr.Status, repoErr.Message)
+	} else if err != nil {
+		return err
+	}
+	size := int64(len(evidence.Content))
+	if size > s.limits.sourceBytes {
+		return badRequest(413, fmt.Sprintf("repository evidence exceeds the %d byte limit", s.limits.sourceBytes))
+	}
+	filename := strings.ReplaceAll(strOf(evidence.Provenance["repository"]), "/", "_") + "." + evidence.Format + ".json"
+	err = s.store.SaveSource(ws, id, evidence.Content, Source{Format: evidence.Format, Filename: filename,
+		Kind: "repository", Provenance: evidence.Provenance}, s.limits.sessionSourceBytes)
+	switch {
+	case errors.Is(err, ErrSourceQuota):
+		return badRequest(413, err.Error())
+	case errors.Is(err, ErrNoTarget):
+		return badRequest(404, "no such target")
+	case err != nil:
+		return err
+	}
+	target, _ := s.store.Get(ws, id)
+	sendJSON(w, 200, map[string]any{"ok": true, "format": evidence.Format, "filename": filename,
+		"sha256": strOf(target["source_sha256"]), "size": size, "provenance": evidence.Provenance})
 	return nil
 }
 

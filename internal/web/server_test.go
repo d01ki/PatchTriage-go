@@ -10,6 +10,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/d01ki/PatchTriage-go/internal/repository"
 )
 
 type client struct {
@@ -20,8 +22,19 @@ type client struct {
 
 func newServerClient(t *testing.T) (*client, *httptest.Server) {
 	t.Helper()
+	return newServerWithGitHub(t, http.NotFound)
+}
+
+// newServerWithGitHub serves github on a local stand-in for the GitHub API
+// and raw file host, so no test reaches the real GitHub.
+func newServerWithGitHub(t *testing.T, github http.HandlerFunc) (*client, *httptest.Server) {
+	t.Helper()
+	fake := httptest.NewServer(github)
+	t.Cleanup(fake.Close)
 	store := &Store{Root: t.TempDir()}
-	ts := httptest.NewServer(NewServer(store, &Runner{Store: store}))
+	srv := NewServer(store, &Runner{Store: store})
+	srv.Repository.GitHub = repository.GitHub{HTTP: fake.Client(), APIRoot: fake.URL, RawRoot: fake.URL}
+	ts := httptest.NewServer(srv)
 	t.Cleanup(ts.Close)
 	return newClientFor(t, ts), ts
 }
@@ -80,14 +93,16 @@ func TestIndexServesPageWithMatrix(t *testing.T) {
 	}
 }
 
-func TestConfigAdvertisesPhase1(t *testing.T) {
+func TestConfigAdvertisesAvailableFeatures(t *testing.T) {
 	c, _ := newServerClient(t)
 	cfg := c.json("GET", "/api/config", nil, 200)
 	backends, _ := json.Marshal(cfg["backends"])
 	caps, _ := json.Marshal(cfg["capabilities"])
 	limits := cfg["limits"].(map[string]any)
+	imports := cfg["repository_import"].(map[string]any)
 	if string(backends) != `["rules"]` || strings.Contains(string(caps), "fleet-import") ||
-		strings.Contains(string(caps), "github-repository-sbom") || cfg["ui_schema_version"] != 2.0 ||
+		!strings.Contains(string(caps), "github-repository-sbom") || imports["github"] != "dependency-graph-sbom" ||
+		imports["generic_https_git"] != "unavailable" || cfg["ui_schema_version"] != 2.0 ||
 		limits["targets"] != 25.0 || limits["ssvc_review_rows"] != 250.0 || cfg["has_ai"] != false {
 		t.Errorf("config = %v", cfg)
 	}
@@ -182,14 +197,55 @@ func TestServerRejectsOversizeAndForeignSession(t *testing.T) {
 
 func TestUnportedEndpointsReturn501(t *testing.T) {
 	c, _ := newServerClient(t)
-	target := c.json("POST", "/api/targets", map[string]any{"name": "repo"}, 201)
-	for _, path := range []string{"/api/targets/" + target["id"].(string) + "/repository", "/api/fleet/import"} {
-		status, raw, _ := c.do("POST", path, map[string]any{"repository_url": "https://github.com/x/y", "owner_url": "https://github.com/x"})
-		var body map[string]any
-		_ = json.Unmarshal(raw, &body)
-		if status != 501 || !strings.Contains(strings.ToLower(body["error"].(string)), "not available") {
-			t.Errorf("%s = %d %s", path, status, raw)
+	status, raw, _ := c.do("POST", "/api/fleet/import", map[string]any{"owner_url": "https://github.com/x"})
+	if status != 501 || !strings.Contains(strings.ToLower(string(raw)), "not available") {
+		t.Errorf("/api/fleet/import = %d %s", status, raw)
+	}
+}
+
+func TestRepositoryImportStoresGitHubSBOMWithProvenance(t *testing.T) {
+	c, _ := newServerWithGitHub(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/repos/acme/widget/dependency-graph/sbom" {
+			http.NotFound(w, r)
+			return
 		}
+		_, _ = w.Write([]byte(`{"sbom": {"spdxVersion": "SPDX-2.3", "SPDXID": "SPDXRef-DOCUMENT", "packages": [
+			{"SPDXID": "SPDXRef-lodash", "name": "lodash", "versionInfo": "4.17.20", "externalRefs": [
+			 {"referenceCategory": "PACKAGE-MANAGER", "referenceType": "purl", "referenceLocator": "pkg:npm/lodash@4.17.20"}]}]}}`))
+	})
+	id := c.json("POST", "/api/targets", map[string]any{"name": "repo"}, 201)["id"].(string)
+	path := "/api/targets/" + id + "/repository"
+	if status, _, _ := c.do("POST", path, map[string]any{}); status != 400 {
+		t.Errorf("missing repository_url = %d", status)
+	}
+	if status, raw, _ := c.do("POST", path, map[string]any{"repository_url": "https://github.com/acme/missing"}); status != 404 ||
+		!strings.Contains(string(raw), "Dependency Graph SBOM was not found") {
+		t.Errorf("missing repository = %d %s", status, raw)
+	}
+	if status, _, _ := c.do("POST", path, map[string]any{"repository_url": "http://github.com/acme/widget"}); status != 400 {
+		t.Errorf("non-HTTPS URL = %d", status)
+	}
+	if status, raw, _ := c.do("POST", path, map[string]any{"repository_url": "https://gitlab.example/group/project"}); status != 400 ||
+		!strings.Contains(string(raw), "generic HTTPS Git scanning") {
+		t.Errorf("generic URL = %d %s", status, raw)
+	}
+	result := c.json("POST", path, map[string]any{"repository_url": "https://github.com/acme/widget"}, 200)
+	provenance := result["provenance"].(map[string]any)
+	if result["format"] != "spdx" || result["filename"] != "acme_widget.spdx.json" || result["sha256"] == "" ||
+		provenance["provider"] != "github_dependency_graph" || provenance["component_count"] != 1.0 {
+		t.Errorf("import = %v", result)
+	}
+	_, raw, _ := c.do("GET", "/api/targets", nil)
+	var targets []map[string]any
+	_ = json.Unmarshal(raw, &targets)
+	var target map[string]any
+	for _, candidate := range targets {
+		if candidate["id"] == id {
+			target = candidate
+		}
+	}
+	if target["source_kind"] != "repository" || target["source_format"] != "spdx" {
+		t.Errorf("target = %v", target)
 	}
 }
 
