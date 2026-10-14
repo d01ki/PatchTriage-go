@@ -20,6 +20,10 @@ import (
 	"github.com/d01ki/PatchTriage-go/internal/model"
 	"github.com/d01ki/PatchTriage-go/internal/pipeline"
 	"github.com/d01ki/PatchTriage-go/internal/report"
+
+	"github.com/d01ki/PatchTriage-go/internal/repository"
+
+	"slices"
 )
 
 func envLimit(name string, fallback int) int {
@@ -574,5 +578,123 @@ func AggregateFleet(s *Store, ws string) (map[string]any, error) {
 		"kev_total": kev, "outcomes": outcomes, "queue": queue[:min(maxQueue, len(queue))], "queue_total": len(queue),
 		"queue_truncated": len(queue) > maxQueue || truncatedTargets > 0, "targets": rows,
 		"coverage_incomplete_targets": incomplete,
+	}, nil
+}
+
+// FleetContextFields are the SSVC context fields a fleet import applies to
+// every created target; identity fields stay per repository.
+var FleetContextFields = []string{"criticality", "system_exposure", "automatable", "mission_impact", "safety_impact"}
+
+// FleetImport turns a GitHub account URL into evidence-attached targets
+// through the single-repository import path, so provenance, coverage
+// warnings and quotas are identical.
+type FleetImport struct {
+	Store                   *Store
+	GitHub                  repository.GitHub
+	Token                   string
+	MaxTargets              int
+	MaxWorkspaceSourceBytes int64
+}
+
+// Import imports up to limit repositories. One repository's failure never
+// aborts the rest; a rate limit or a target/quota ceiling stops the
+// remainder visibly (stopped_reason). Reruns are idempotent: a repository
+// already imported into the workspace is reported, not duplicated.
+func (f FleetImport) Import(ctx context.Context, ws, ownerURL string, limit int, includeForks, includeArchived bool,
+	shared map[string]string) (map[string]any, error) {
+	ref, err := repository.NormalizeOwner(ownerURL)
+	if err != nil {
+		return nil, err
+	}
+	var unknown []string
+	for key := range shared {
+		if !slices.Contains(FleetContextFields, key) {
+			unknown = append(unknown, key)
+		}
+	}
+	if len(unknown) > 0 {
+		sort.Strings(unknown)
+		return nil, &repository.Error{Status: 400, Message: "unsupported fleet context fields: " + strings.Join(unknown, ", ")}
+	}
+	listing, err := f.GitHub.ListOwner(ctx, ref, f.Token, limit, includeForks, includeArchived)
+	if err != nil {
+		return nil, err
+	}
+	targets, err := f.Store.Load(ws)
+	if err != nil {
+		return nil, err
+	}
+	existing := map[string]Target{}
+	for _, t := range targets {
+		if url := strings.TrimRight(strOf(t["url"]), "/"); strOf(t["source_kind"]) == "repository" && url != "" {
+			existing[strings.ToLower(url)] = t
+		}
+	}
+	results := []map[string]any{}
+	imported, stopped := 0, ""
+	for _, repo := range listing.Repositories {
+		row := map[string]any{"repository": repo.FullName}
+		results = append(results, row)
+		if stopped != "" {
+			row["status"], row["error"] = "not_attempted", stopped
+			continue
+		}
+		if already, ok := existing[strings.ToLower(strings.TrimRight(repo.HTMLURL, "/"))]; ok {
+			row["status"], row["target_id"] = "already_imported", already["id"]
+			continue
+		}
+		fields := map[string]any{"name": repo.FullName, "url": repo.HTMLURL}
+		for k, v := range shared {
+			fields[k] = v
+		}
+		target, err := f.Store.Add(ws, fields, f.MaxTargets)
+		if errors.Is(err, ErrTargetLimit) {
+			stopped = err.Error()
+			row["status"], row["error"] = "not_attempted", stopped
+			continue
+		} else if err != nil {
+			return nil, &repository.Error{Status: 400, Message: err.Error()}
+		}
+		id := strOf(target["id"])
+		repoRef, err := repository.Normalize(repo.HTMLURL)
+		var sbom repository.SBOM
+		if err == nil {
+			sbom, err = f.GitHub.FetchSBOM(ctx, repoRef, f.Token)
+		}
+		if err == nil {
+			err = f.Store.SaveSource(ws, id, sbom.Content, Source{Format: "spdx",
+				Filename: strings.ReplaceAll(repo.FullName, "/", "_") + ".spdx.json", Kind: "repository",
+				Provenance: sbom.Provenance}, f.MaxWorkspaceSourceBytes)
+		}
+		if err != nil {
+			_, _ = f.Store.Delete(ws, id) // never leave an evidence-less target behind
+			var repoErr *repository.Error
+			if errors.As(err, &repoErr) && repoErr.Status == 429 || errors.Is(err, ErrSourceQuota) {
+				stopped = err.Error()
+			} else if !errors.As(err, &repoErr) {
+				return nil, err
+			}
+			row["status"], row["error"] = "failed", err.Error()
+			continue
+		}
+		imported++
+		row["status"], row["target_id"] = "imported", id
+		row["component_count"], row["coverage_status"] = sbom.Provenance["component_count"], sbom.Provenance["coverage_status"]
+	}
+	counts := map[string]int{}
+	ids := []any{}
+	for _, row := range results {
+		counts[row["status"].(string)]++
+		if row["status"] == "imported" {
+			ids = append(ids, row["target_id"])
+		}
+	}
+	return map[string]any{
+		"owner": ref.Owner, "owner_url": ref.NormalizedURL,
+		"listing": map[string]any{"total_listed": listing.TotalListed, "skipped_forks": listing.SkippedForks,
+			"skipped_archived": listing.SkippedArchived, "truncated": listing.Truncated, "warnings": listing.Warnings},
+		"imported": imported, "already_imported": counts["already_imported"], "failed": counts["failed"],
+		"not_attempted": counts["not_attempted"], "stopped_reason": stopped, "results": results,
+		"imported_target_ids": ids,
 	}, nil
 }
