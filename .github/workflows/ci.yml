@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: gofmt
+        if: runner.os == 'Linux'
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+      - run: go vet ./...
+      - run: go test ./...
+
+  demo-and-verify:
+    name: offline demo and reviewer verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go build -o patchtriage ./cmd/patchtriage
+      - name: Offline demo
+        run: |
+          ./patchtriage demo --html demo_report.html --output demo_report.json
+          test -s demo_report.html
+          jq -e '(.findings | length) > 0 and (.actions | length) > 0 and (.evaluation | length) > 0' demo_report.json
+      - name: Verify SSVC and reproducibility
+        run: ./patchtriage verify --repeats 100 --output verification_report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            demo_report.html
+            demo_report.json
+            verification_report.json
+
+  docker:
+    name: docker build and demo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t patchtriage .
+      - name: Containerized demo
+        run: |
+          mkdir -p out && chmod 777 out
+          docker run --rm -v "$PWD/out:/out" patchtriage
+          test -s out/demo_report.html
