@@ -123,7 +123,7 @@ func TestAggregateFleetExcludesUnassessed(t *testing.T) {
 	if _, err := (&Runner{Store: s}).Run(t.Context(), wsA, demo, "rules"); err != nil {
 		t.Fatal(err)
 	}
-	fleet, err := AggregateFleet(s, wsA)
+	fleet, err := AggregateFleet(s, wsA, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

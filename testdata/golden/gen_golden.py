@@ -357,9 +357,74 @@ def remediation_cases() -> None:
     print("wrote remediation_python.json")
 
 
+# Fleet HTML (patchtriage.report.fleet.render_fleet_html); escaping-sensitive
+# values cover every cell the template interpolates.
+FLEET_ROLLUP = {'generated_at': '2026-10-15T00:00:00Z',
+     'targets_total': 3,
+     'targets_assessed': 2,
+     'targets_unassessed': 1,
+     'findings_total': 7,
+     'kev_total': 2,
+     'outcomes': {'immediate': 1, 'out_of_cycle': 2, 'scheduled': 3, 'defer': 1},
+     'queue': [{'top_priority': 'P1',
+                'outcome_label': 'Immediate',
+                'deadline_days': 3,
+                'target_name': 'acme/<web>',
+                'package': 'lodash',
+                'installed_version': '4.17.20',
+                'target_version': '4.17.21',
+                'summary': 'Upgrade lodash & "friends" \'now\'',
+                'kev_count': 2,
+                'finding_count': 3},
+               {'top_priority': 'P3',
+                'deadline_days': 30,
+                'target_name': 'acme/api',
+                'package': 'xz',
+                'summary': 'Upgrade xz',
+                'kev_count': 0,
+                'finding_count': 1},
+               {'top_priority': 'PX',
+                'outcome_label': '',
+                'deadline_days': 90,
+                'target_name': 'acme/api',
+                'package': 'zlib',
+                'target_version': '1.3',
+                'summary': 's',
+                'finding_count': 1}],
+     'queue_truncated': True,
+     'coverage_incomplete_targets': 1,
+     'targets': [{'name': 'acme/<web>',
+                  'assessed': True,
+                  'result_state': 'findings_present',
+                  'coverage_status': 'provider_reported',
+                  'total': 4,
+                  'outcomes': {'immediate': 1, 'out_of_cycle': 1, 'scheduled': 2, 'defer': 0},
+                  'kev': 2,
+                  'report_url': '/report/abc'},
+                 {'name': 'acme/api',
+                  'assessed': True,
+                  'result_state': '',
+                  'coverage_status': 'complete',
+                  'total': 3,
+                  'outcomes': {'immediate': 0, 'out_of_cycle': 1, 'scheduled': 1, 'defer': 1},
+                  'kev': 0,
+                  'report_url': ''},
+                 {'name': 'acme/new', 'assessed': False, 'result_state': 'not_assessed'}]}
+
+
+def fleet_case() -> None:
+    from patchtriage.report.fleet import render_fleet_html
+    out = ROOT / "testdata" / "fleet_python.json"
+    html = render_fleet_html(FLEET_ROLLUP, title="PatchTriage - Fleet Report - acme")
+    out.write_text(json.dumps({"rollup": FLEET_ROLLUP, "html": html}, indent=1, ensure_ascii=False) + "\n",
+                   encoding="utf-8", newline="\n")
+    print("wrote fleet_python.json")
+
+
 if __name__ == "__main__":
     main()
     choose_cases()
     manifest_cases()
     ai_audit_cases()
     remediation_cases()
+    fleet_case()

@@ -1,6 +1,7 @@
 package report
 
 import (
+	"encoding/json"
 	"html"
 	"os"
 	"path/filepath"
@@ -153,5 +154,35 @@ func TestRenderHTMLStates(t *testing.T) {
 		if !strings.Contains(vendor, want) {
 			t.Errorf("vendor evidence report lacks %q", want)
 		}
+	}
+}
+
+func TestFleetHTMLMatchesPython(t *testing.T) {
+	raw, err := os.ReadFile("../../testdata/fleet_python.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var golden struct {
+		Rollup map[string]any `json:"rollup"`
+		HTML   string         `json:"html"`
+	}
+	if err := json.Unmarshal(raw, &golden); err != nil {
+		t.Fatal(err)
+	}
+	got, err := RenderFleetHTML(golden.Rollup, "PatchTriage - Fleet Report - acme")
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Layout whitespace and equivalent entity spellings may differ.
+	space := regexp.MustCompile(`\s+`)
+	canonical := func(s string) string {
+		s = strings.NewReplacer("&#34;", "&quot;", "&#39;", "&#x27;").Replace(s)
+		return space.ReplaceAllString(s, " ")
+	}
+	if canonical(got) != canonical(golden.HTML) {
+		t.Errorf("fleet HTML differs from Python:\n%s", got)
+	}
+	if strings.Contains(got, "<web>") {
+		t.Error("target names are not escaped")
 	}
 }

@@ -495,11 +495,15 @@ func pipelineRound(x float64) float64 {
 var priorityOrder = map[string]int{"P1": 0, "P2": 1, "P3": 2, "P4": 3}
 
 // AggregateFleet merges stored per-target summaries into one rollup. It
-// never re-decides anything, and unassessed targets stay visible.
-func AggregateFleet(s *Store, ws string) (map[string]any, error) {
+// never re-decides anything, and unassessed targets stay visible. A non-nil
+// ids limits the rollup to those targets.
+func AggregateFleet(s *Store, ws string, ids []string) (map[string]any, error) {
 	targets, err := s.Load(ws)
 	if err != nil {
 		return nil, err
+	}
+	if ids != nil {
+		targets = slices.DeleteFunc(targets, func(t Target) bool { return !slices.Contains(ids, strOf(t["id"])) })
 	}
 	outcomes := map[string]int{"immediate": 0, "out_of_cycle": 0, "scheduled": 0, "defer": 0}
 	queue := []map[string]any{}

@@ -6,6 +6,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -13,6 +14,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/d01ki/PatchTriage-go/data"
@@ -21,6 +23,7 @@ import (
 	"github.com/d01ki/PatchTriage-go/internal/model"
 	"github.com/d01ki/PatchTriage-go/internal/pipeline"
 	"github.com/d01ki/PatchTriage-go/internal/report"
+	"github.com/d01ki/PatchTriage-go/internal/repository"
 	"github.com/d01ki/PatchTriage-go/internal/validation"
 	"github.com/d01ki/PatchTriage-go/internal/web"
 )
@@ -32,6 +35,7 @@ commands:
   demo           fully offline demo with bundled evidence
   verify         offline SSVC conformance and reproducibility proof
   serve          GUI console (default http://127.0.0.1:8765)
+  fleet URL      import a GitHub account's repositories and build one fleet queue
   remediate      prepare one dependency patch in an isolated local clone (guided without arguments)
   setup          first-run wizard: AI provider, API keys and default backend
   start          guided run: answer a few questions, get a prioritized patch plan
@@ -63,6 +67,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		err = verify(args[1:], stdout)
 	case "serve":
 		err = serve(ctx, args[1:])
+	case "fleet":
+		err = fleet(ctx, args[1:], stdout)
 	case "remediate":
 		err = remediate(args[1:], stdout)
 	case "setup":
@@ -265,11 +271,8 @@ func emit(result *pipeline.Assessment, output, html string, warnings []string, s
 	} else {
 		fmt.Fprintf(stdout, "audit: %d/%d decisions verified against deterministic signals\n", audit.Verified, audit.Total)
 	}
-	q := pipeline.DecisionQuality(result.Subset)
-	if q["points_total"] != 0 {
-		fmt.Fprintf(stdout, "decision quality: %v of %v vulnerability-specific inputs authoritative (%.1f%%); %v finding(s) need confirmation\n",
-			q["authoritative"], q["points_total"], q["authoritative_pct"], q["needs_confirmation"])
-	}
+	printEval(stdout, result.EvalRows)
+	printDecisionQuality(stdout, pipeline.DecisionQuality(result.Subset))
 	status, _ := result.Coverage["status"].(string)
 	if msg := pipeline.ResultMessage(len(result.Findings), len(result.Actions), result.Coverage["complete"] != true, status, result.Coverage); msg != "" {
 		fmt.Fprintln(stdout, msg)
@@ -278,15 +281,61 @@ func emit(result *pipeline.Assessment, output, html string, warnings []string, s
 		if err := report.WriteHTML(html, result.Subset, result.Actions, result.EvalRows, report.HTMLOptions{Coverage: result.Coverage, CoverageWarnings: warnings}); err != nil {
 			return err
 		}
-		fmt.Fprintln(stdout, "HTML report:", html)
+		fmt.Fprintln(stdout, "HTML report:", outputLocation(html))
 	}
 	if output != "" {
 		if err := report.WriteJSON(output, result); err != nil {
 			return err
 		}
-		fmt.Fprintln(stdout, "JSON report:", output)
+		fmt.Fprintln(stdout, "JSON report:", outputLocation(output))
 	}
 	return nil
+}
+
+// printEval compares the queue each ranking would build: how many target
+// findings land within the top k.
+func printEval(stdout io.Writer, rows []pipeline.EvalRow) {
+	const row = "  %-8s %-9s %-9s %-9s %-9s   %-11s %-11s %-11s %-11s\n"
+	fmt.Fprintln(stdout, "\nOutcome check: CVSS vs EPSS vs KEV-first vs SSVC (* = best)")
+	fmt.Fprintf(stdout, row, "Budget", "KEV CVSS", "KEV EPSS", "KEV first", "KEV SSVC",
+		"Urgent CVSS", "Urgent EPSS", "Urgent KEV", "Urgent SSVC")
+	cells := func(total int, values ...int) []any {
+		best := slices.Max(values)
+		var out []any
+		for _, v := range values {
+			cell := fmt.Sprintf("%d/%d", v, total)
+			if v == best {
+				cell += "*"
+			}
+			out = append(out, cell)
+		}
+		return out
+	}
+	for _, r := range rows {
+		args := append([]any{fmt.Sprintf("top %d", r.K)}, cells(r.KEVTotal, r.KEVBaseline, r.KEVEPSS, r.KEVKEV, r.KEVSSVC)...)
+		fmt.Fprintf(stdout, row, append(args, cells(r.UrgentTotal, r.UrgentCVSS, r.UrgentEPSS, r.UrgentKEV, r.UrgentSSVC)...)...)
+	}
+	fmt.Fprintln(stdout, "How to read x/y: x target findings appear within that top-k queue, out of y target findings "+
+		"in the full result. KEV = CISA Known Exploited Vulnerabilities; Urgent = SSVC Immediate or Out-of-Cycle "+
+		"(P1/P2). Example: 1/2 at top 1 means the first-ranked item captures one of the two target findings.")
+}
+
+// printDecisionQuality says plainly how much of a run rests on authority
+// versus assumption.
+func printDecisionQuality(stdout io.Writer, q map[string]any) {
+	if q["points_total"] == 0 {
+		return
+	}
+	fmt.Fprintf(stdout, "\nDecision quality: %v/%v vulnerability-specific inputs (%.1f%%) came from a published or "+
+		"analyst-confirmed source; %v used SSVC's conservative default.\n",
+		q["authoritative"], q["points_total"], q["authoritative_pct"].(float64), q["assumed"])
+	if n, _ := q["de_escalated"].(int); n > 0 {
+		fmt.Fprintf(stdout, "  %d finding(s) were de-escalated by a published CISA assessment (they would otherwise "+
+			"have been over-prioritized).\n", n)
+	}
+	if n, _ := q["needs_confirmation"].(int); n > 0 {
+		fmt.Fprintf(stdout, "  %d finding(s) need analyst confirmation.\n", n)
+	}
 }
 
 // demo runs the bundled scanner outputs against an isolated cache seeded
@@ -384,4 +433,169 @@ func serve(ctx context.Context, args []string) error {
 	runner := &web.Runner{Store: store, Enrich: enrich.Options{UseNVD: true, NVDAPIKey: os.Getenv("NVD_API_KEY"),
 		VendorSources: "auto", UseVulnrichment: true}}
 	return web.Serve(ctx, *host, *port, !*noBrowser, runner)
+}
+
+// fleetGitHub is the GitHub client fleet uses; tests point it at a fake.
+var fleetGitHub repository.GitHub
+
+// fleet imports a GitHub account's repositories as targets of the local
+// store, assesses each with the deterministic engine and writes one
+// cross-target rollup.
+func fleet(ctx context.Context, args []string, stdout io.Writer) error {
+	fs := flag.NewFlagSet("fleet", flag.ContinueOnError)
+	limit := fs.Int("limit", 10, "repositories to import, most recently pushed first (1-100)")
+	includeForks := fs.Bool("include-forks", false, "also import forked repositories")
+	includeArchived := fs.Bool("include-archived", false, "also import archived repositories")
+	noAssess := fs.Bool("no-assess", false, "import targets only; run assessments later (GUI or rerun)")
+	triage := fs.String("triage", "rules", "triage backend for the per-target assessments: rules|ai|cascade")
+	shared := map[string]*string{
+		"system_exposure": fs.String("ssvc-exposure", "unknown", "shared SSVC System Exposure for every imported target"),
+		"mission_impact":  fs.String("ssvc-mission-impact", "unknown", "shared SSVC Mission Impact for every imported target"),
+		"safety_impact":   fs.String("ssvc-safety-impact", "unknown", "shared SSVC Safety Impact for every imported target"),
+	}
+	token := fs.String("github-token", os.Getenv("GITHUB_TOKEN"), "optional token (rate limits)")
+	output := fs.String("o", "", "write the fleet rollup as JSON")
+	fs.StringVar(output, "output", "", "write the fleet rollup as JSON")
+	html := fs.String("html", "fleet_report.html", "write the fleet HTML report")
+	noNVD := fs.Bool("no-nvd", false, "skip NVD during assessment (faster)")
+	positional, err := parseInterleaved(fs, args)
+	if err != nil {
+		return err
+	}
+	if len(positional) != 1 {
+		return errors.New("fleet takes one GitHub account URL, e.g. https://github.com/your-org")
+	}
+	if *limit < 1 || *limit > 100 {
+		return errors.New("--limit must be between 1 and 100")
+	}
+	switch *triage {
+	case "rules", "ai", "claude", "cascade":
+	default:
+		return fmt.Errorf("Unknown triage backend: %s", *triage)
+	}
+	sharedContext := map[string]string{}
+	for field, value := range shared {
+		normalized, err := model.NormalizeChoice(field, *value)
+		if err != nil {
+			return err
+		}
+		sharedContext[field] = normalized
+	}
+	store := &web.Store{Root: web.DefaultConfigDir()}
+	fmt.Fprintf(stdout, "listing and importing repositories from %s...\n", positional[0])
+	imported, err := web.FleetImport{Store: store, GitHub: fleetGitHub, Token: *token}.Import(ctx, "", positional[0], *limit,
+		*includeForks, *includeArchived, sharedContext)
+	if err != nil {
+		return err
+	}
+	owner, _ := imported["owner"].(string)
+	fmt.Fprintf(stdout, "\nFleet import - %s\n", owner)
+	var ids []string
+	for _, row := range imported["results"].([]map[string]any) {
+		status, _ := row["status"].(string)
+		detail := fmt.Sprint(row["error"])
+		if row["error"] == nil {
+			detail = ""
+		}
+		if status == "imported" {
+			detail = fmt.Sprintf("%v components (%v)", row["component_count"], row["coverage_status"])
+		}
+		fmt.Fprintf(stdout, "  %-40s %-17s %s\n", row["repository"], status, truncate(detail, 80))
+		if id, ok := row["target_id"].(string); ok && id != "" {
+			ids = append(ids, id)
+		}
+	}
+	listing := imported["listing"].(map[string]any)
+	if forks, archived := listing["skipped_forks"].(int), listing["skipped_archived"].(int); forks+archived > 0 {
+		fmt.Fprintf(stdout, "skipped %d fork(s) and %d archived; use --include-forks / --include-archived to import them\n",
+			forks, archived)
+	}
+	if warnings, ok := listing["warnings"].([]string); ok {
+		for _, w := range warnings {
+			fmt.Fprintln(stdout, "note:", w)
+		}
+	}
+	if stopped, _ := imported["stopped_reason"].(string); stopped != "" {
+		fmt.Fprintln(stdout, "stopped:", stopped)
+	}
+	if len(ids) == 0 {
+		return errors.New("no targets were imported; nothing to assess")
+	}
+	if !*noAssess {
+		runner := &web.Runner{Store: store, Enrich: enrich.Options{UseNVD: !*noNVD, NVDAPIKey: os.Getenv("NVD_API_KEY"),
+			VendorSources: "auto", UseVulnrichment: true}}
+		failures := 0
+		for i, id := range ids {
+			target, err := store.Get("", id)
+			if err != nil {
+				continue
+			}
+			label := fmt.Sprintf("[%d/%d] %v", i+1, len(ids), target["name"])
+			fmt.Fprintf(stdout, "assessing %s...\n", label)
+			summary, err := runner.Run(ctx, "", target, *triage)
+			if err != nil {
+				failures++
+				fmt.Fprintf(stdout, "%s: assessment failed - %v\n", label, err)
+				continue
+			}
+			outcomes, _ := summary["outcomes"].(map[string]any)
+			fmt.Fprintf(stdout, "%s: %v finding(s) - immediate %v, out-of-cycle %v\n", label, summary["total"],
+				orZero(outcomes["immediate"]), orZero(outcomes["out_of_cycle"]))
+		}
+		if failures > 0 {
+			fmt.Fprintf(stdout, "%d target(s) failed assessment; they are listed as not assessed in the fleet report\n", failures)
+		}
+	}
+	rollup, err := web.AggregateFleet(store, "", ids)
+	if err != nil {
+		return err
+	}
+	outcomes := rollup["outcomes"].(map[string]int)
+	fmt.Fprintf(stdout, "\nFleet: %v/%v targets assessed - %d immediate, %d out-of-cycle, %d scheduled, %d defer - %v on CISA KEV\n",
+		rollup["targets_assessed"], rollup["targets_total"], outcomes["immediate"], outcomes["out_of_cycle"],
+		outcomes["scheduled"], outcomes["defer"], rollup["kev_total"])
+	if queue := rollup["queue"].([]map[string]any); len(queue) > 0 {
+		fmt.Fprintln(stdout, "Cross-target action queue (top 10)")
+		for _, entry := range queue[:min(10, len(queue))] {
+			kev := fmt.Sprint(orZero(entry["kev_count"]))
+			if kev == "0" {
+				kev = "-"
+			}
+			days := orZero(entry["deadline_days"])
+			if fmt.Sprint(days) == "0" {
+				days = 90
+			}
+			fmt.Fprintf(stdout, "  %-12v %-30v %-60s KEV %-3s %vd\n", entry["outcome_label"], entry["target_name"],
+				truncate(fmt.Sprint(entry["summary"]), 60), kev, days)
+		}
+	}
+	if err := report.WriteFleetHTML(*html, rollup, "PatchTriage - Fleet Report - "+owner); err != nil {
+		return err
+	}
+	fmt.Fprintln(stdout, "fleet HTML report:", outputLocation(*html))
+	if *output != "" {
+		raw, err := json.MarshalIndent(map[string]any{"import": imported, "rollup": rollup}, "", "  ")
+		if err != nil {
+			return err
+		}
+		if err := os.WriteFile(*output, raw, 0o644); err != nil {
+			return err
+		}
+		fmt.Fprintln(stdout, "fleet JSON rollup:", outputLocation(*output))
+	}
+	return nil
+}
+
+func orZero(v any) any {
+	if v == nil {
+		return 0
+	}
+	return v
+}
+
+func truncate(s string, n int) string {
+	if r := []rune(s); len(r) > n {
+		return string(r[:n])
+	}
+	return s
 }

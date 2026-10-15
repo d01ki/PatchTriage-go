@@ -511,7 +511,7 @@ func (s *Server) get(w http.ResponseWriter, r *http.Request, ws string) error {
 		sendJSON(w, 200, out)
 		return nil
 	case "/api/fleet/summary":
-		fleet, err := AggregateFleet(s.store, ws)
+		fleet, err := AggregateFleet(s.store, ws, nil)
 		if err != nil {
 			return err
 		}
