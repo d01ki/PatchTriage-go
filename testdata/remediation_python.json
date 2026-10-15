@@ -1,0 +1,105 @@
+{
+ "workspaces": {
+  "npm": {
+   "package.json": "{\n  \"name\": \"fixture\",\n  \"version\": \"1.0.0\",\n  \"private\": true,\n  \"dependencies\": {\n    \"zeta\": \"1.0.0\",\n    \"lodash\": \"^4.17.20\",\n    \"é-pkg\": \"1\"\n  },\n  \"devDependencies\": {\n    \"Lodash\": \"4.17.0\"\n  },\n  \"scripts\": {\n    \"t\": \"a<b&c\"\n  },\n  \"nested\": {\n    \"list\": [\n      1,\n      2.5,\n      null,\n      {\n        \"k\": []\n      }\n    ],\n    \"empty\": {}\n  }\n}\n",
+   "app/package.json": "{\n    \"peerDependencies\": {\n        \"lodash\": \"4.x\"\n    }\n}",
+   "app/node_modules/lodash/package.json": "{\"dependencies\": {\"lodash\": \"1\"}}\n",
+   "other/package.json": "{\"dependencies\": {\"left-pad\": \"1.0.0\"}}\n"
+  },
+  "npm_git": {
+   "package.json": "{\"dependencies\": {\"lodash\": \"git+https://example.com/lodash.git\"}}\n"
+  },
+  "npm_missing": {
+   "package.json": "{\"dependencies\": {\"left-pad\": \"1.0.0\"}}\n"
+  },
+  "pypi": {
+   "requirements.txt": "# core\nrequests[security]>=2.28; python_version >= \"3.10\"  # runtime\nRequests==2.0\nrequests_toolbelt>=1\n  requests ~= 2.1\nflask\nrequests\n",
+   "requirements-dev.txt": "requests>=2.0,<3\n",
+   "requirements.in": "requests\n",
+   "docs/requirements.txt": "sphinx\n",
+   "pyproject.toml": "[project]\nname = \"requests\"\nversion = \"1\"\ndependencies = [\n  \"requests>=2.28\",\n  \"httpx\", \"requests[socks]>=2 ; python_version>'3'\",\n]\nkeywords = [\"requests\"]\n\n[project.optional-dependencies]\ntest = [\"pytest>=8\", 'requests']\n\n[dependency-groups]\ndev = [\"requests<3\"]\n\n[tool.poetry.dependencies]\npython = \"^3.10\"\nrequests = { version = \"^2.28\", extras = [\"socks\"] }  # http\n[tool.poetry.group.dev.dependencies]\nrequests = \"^2.0\"\n[tool.other]\nrequests = \"x\"\n"
+  },
+  "poetry_bad": {
+   "pyproject.toml": "[tool.poetry.dependencies]\nrequests = { git = \"https://x\" }\n"
+  },
+  "poetry_table": {
+   "pyproject.toml": "[tool.poetry.dependencies]\nrequests = 2\n"
+  },
+  "unsupported": {
+   "go.mod": "module x\n"
+  }
+ },
+ "cases": {
+  "npm": {
+   "package": "lodash",
+   "ecosystem": "npm",
+   "changed": [
+    "app/package.json",
+    "package.json"
+   ],
+   "files": {
+    "package.json": "{\n    \"name\": \"fixture\",\n    \"version\": \"1.0.0\",\n    \"private\": true,\n    \"dependencies\": {\n        \"zeta\": \"1.0.0\",\n        \"lodash\": \"9.9.9\",\n        \"é-pkg\": \"1\"\n    },\n    \"devDependencies\": {\n        \"Lodash\": \"9.9.9\"\n    },\n    \"scripts\": {\n        \"t\": \"a<b&c\"\n    },\n    \"nested\": {\n        \"list\": [\n            1,\n            2.5,\n            null,\n            {\n                \"k\": []\n            }\n        ],\n        \"empty\": {}\n    }\n}\n",
+    "app/package.json": "{\n    \"peerDependencies\": {\n        \"lodash\": \"9.9.9\"\n    }\n}",
+    "app/node_modules/lodash/package.json": "{\"dependencies\": {\"lodash\": \"1\"}}\n",
+    "other/package.json": "{\"dependencies\": {\"left-pad\": \"1.0.0\"}}\n"
+   }
+  },
+  "npm_git": {
+   "package": "lodash",
+   "ecosystem": "npm",
+   "error": "C:\\Users\\iniad\\AppData\\Local\\Temp\\tmpd6_5sh_d\\package.json: dependency lodash uses a non-registry source",
+   "files": {
+    "package.json": "{\"dependencies\": {\"lodash\": \"git+https://example.com/lodash.git\"}}\n"
+   }
+  },
+  "npm_missing": {
+   "package": "lodash",
+   "ecosystem": "npm",
+   "error": "no supported direct declaration of 'lodash' was found",
+   "files": {
+    "package.json": "{\"dependencies\": {\"left-pad\": \"1.0.0\"}}\n"
+   }
+  },
+  "pypi": {
+   "package": "requests",
+   "ecosystem": "pypi",
+   "changed": [
+    "pyproject.toml",
+    "requirements-dev.txt",
+    "requirements.in",
+    "requirements.txt"
+   ],
+   "files": {
+    "requirements.txt": "# core\nrequests[security]==9.9.9; python_version >= \"3.10\"  # runtime\nRequests==9.9.9\nrequests_toolbelt>=1\n  requests==9.9.9\nflask\nrequests==9.9.9\n",
+    "requirements-dev.txt": "requests==9.9.9\n",
+    "requirements.in": "requests==9.9.9\n",
+    "docs/requirements.txt": "sphinx\n",
+    "pyproject.toml": "[project]\nname = \"requests\"\nversion = \"1\"\ndependencies = [\n  \"requests==9.9.9\",\n  \"httpx\", \"requests[socks]>=2 ; python_version>'3'\",\n]\nkeywords = [\"requests\"]\n\n[project.optional-dependencies]\ntest = [\"pytest>=8\", 'requests==9.9.9']\n\n[dependency-groups]\ndev = [\"requests==9.9.9\"]\n\n[tool.poetry.dependencies]\npython = \"^3.10\"\nrequests = { version = \"9.9.9\", extras = [\"socks\"] }  # http\n[tool.poetry.group.dev.dependencies]\nrequests = \"9.9.9\"\n[tool.other]\nrequests = \"x\"\n"
+   }
+  },
+  "poetry_bad": {
+   "package": "requests",
+   "ecosystem": "pypi",
+   "error": "Poetry inline dependency has no editable version field",
+   "files": {
+    "pyproject.toml": "[tool.poetry.dependencies]\nrequests = { git = \"https://x\" }\n"
+   }
+  },
+  "poetry_table": {
+   "package": "requests",
+   "ecosystem": "pypi",
+   "error": "Poetry dependency uses an unsupported non-string constraint",
+   "files": {
+    "pyproject.toml": "[tool.poetry.dependencies]\nrequests = 2\n"
+   }
+  },
+  "unsupported": {
+   "package": "x",
+   "ecosystem": "golang",
+   "error": "automatic remediation is not supported for ecosystem 'golang'",
+   "files": {
+    "go.mod": "module x\n"
+   }
+  }
+ }
+}

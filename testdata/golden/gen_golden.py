@@ -287,8 +287,79 @@ def ai_audit_cases() -> None:
     print(f"wrote ai_audit_python.json ({len(cases)} cases)")
 
 
+# Manifest edits (patchtriage.remediation.update_dependency_manifests).
+REMEDIATION_WORKSPACES = {
+    "npm": {
+        "package.json": json.dumps({"name": "fixture", "version": "1.0.0", "private": True,
+                                    "dependencies": {"zeta": "1.0.0", "lodash": "^4.17.20", "é-pkg": "1"},
+                                    "devDependencies": {"Lodash": "4.17.0"}, "scripts": {"t": "a<b&c"},
+                                    "nested": {"list": [1, 2.5, None, {"k": []}], "empty": {}}},
+                                   indent=2, ensure_ascii=False) + "\n",
+        "app/package.json": '{\n    "peerDependencies": {\n        "lodash": "4.x"\n    }\n}',
+        "app/node_modules/lodash/package.json": '{"dependencies": {"lodash": "1"}}\n',
+        "other/package.json": '{"dependencies": {"left-pad": "1.0.0"}}\n',
+    },
+    "npm_git": {"package.json": '{"dependencies": {"lodash": "git+https://example.com/lodash.git"}}\n'},
+    "npm_missing": {"package.json": '{"dependencies": {"left-pad": "1.0.0"}}\n'},
+    "pypi": {
+        "requirements.txt": (
+            "# core\nrequests[security]>=2.28; python_version >= \"3.10\"  # runtime\n"
+            "Requests==2.0\nrequests_toolbelt>=1\n  requests ~= 2.1\nflask\nrequests\n"),
+        "requirements-dev.txt": "requests>=2.0,<3\n",
+        "requirements.in": "requests\n",
+        "docs/requirements.txt": "sphinx\n",
+        "pyproject.toml": (
+            '[project]\nname = "requests"\nversion = "1"\ndependencies = [\n  "requests>=2.28",\n'
+            '  "httpx", "requests[socks]>=2 ; python_version>\'3\'",\n]\nkeywords = ["requests"]\n\n'
+            '[project.optional-dependencies]\ntest = ["pytest>=8", \'requests\']\n\n'
+            '[dependency-groups]\ndev = ["requests<3"]\n\n'
+            '[tool.poetry.dependencies]\npython = "^3.10"\n'
+            'requests = { version = "^2.28", extras = ["socks"] }  # http\n'
+            '[tool.poetry.group.dev.dependencies]\nrequests = "^2.0"\n'
+            '[tool.other]\nrequests = "x"\n'),
+    },
+    "poetry_bad": {"pyproject.toml": '[tool.poetry.dependencies]\nrequests = { git = "https://x" }\n'},
+    "poetry_table": {"pyproject.toml": '[tool.poetry.dependencies]\nrequests = 2\n'},
+    "unsupported": {"go.mod": "module x\n"},
+}
+REMEDIATION_ACTIONS = {
+    "npm": ("lodash", "npm"), "npm_git": ("lodash", "npm"), "npm_missing": ("lodash", "npm"),
+    "pypi": ("requests", "pypi"), "poetry_bad": ("requests", "pypi"), "poetry_table": ("requests", "pypi"),
+    "unsupported": ("x", "golang"),
+}
+
+
+def remediation_cases() -> None:
+    from patchtriage.plan import Action
+    from patchtriage.remediation import RemediationError, update_dependency_manifests
+    cases = {}
+    for name, files in REMEDIATION_WORKSPACES.items():
+        with tempfile.TemporaryDirectory() as work:
+            root = Path(work)
+            for rel, content in files.items():
+                (root / rel).parent.mkdir(parents=True, exist_ok=True)
+                (root / rel).write_bytes(content.encode("utf-8"))
+            package, ecosystem = REMEDIATION_ACTIONS[name]
+            action = Action(action_id="a", kind="upgrade", summary="s", asset="repo", package=package,
+                            ecosystem=ecosystem, installed_version="1", target_version="9.9.9")
+            case = {"package": package, "ecosystem": ecosystem}
+            try:
+                changed = update_dependency_manifests(root, action)
+                case["changed"] = sorted(p.relative_to(root).as_posix() for p in changed)
+            except RemediationError as exc:
+                case["error"] = str(exc)
+            case["files"] = {rel: (root / rel).read_bytes().decode("utf-8").replace("\r\n", "\n")
+                             for rel in files}
+            cases[name] = case
+    out = ROOT / "testdata" / "remediation_python.json"
+    out.write_text(json.dumps({"workspaces": REMEDIATION_WORKSPACES, "cases": cases}, indent=1,
+                              ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+    print("wrote remediation_python.json")
+
+
 if __name__ == "__main__":
     main()
     choose_cases()
     manifest_cases()
     ai_audit_cases()
+    remediation_cases()
