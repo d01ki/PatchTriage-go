@@ -537,6 +537,12 @@ func ApplyToEnv(cfg map[string]any) {
 	}
 }
 
+// Models endpoints `patchtriage setup` validates keys against.
+const (
+	AnthropicModelsURL = "https://api.anthropic.com/v1/models"
+	OpenAIModelsURL    = "https://api.openai.com/v1/models"
+)
+
 // ValidateKey checks a key against the provider's models endpoint without
 // spending tokens. provider is "anthropic" or "openai".
 func ValidateKey(ctx context.Context, client *http.Client, provider, url, key string) (bool, string) {

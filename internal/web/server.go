@@ -952,7 +952,8 @@ func (s *Server) delete(w http.ResponseWriter, r *http.Request, ws string) error
 
 // ------------------------------------------------------------ serve
 
-func openBrowser(target string) {
+// OpenBrowser opens target in the desktop browser, best effort.
+func OpenBrowser(target string) {
 	var cmd *exec.Cmd
 	switch runtime.GOOS {
 	case "windows":
@@ -977,7 +978,7 @@ func Serve(ctx context.Context, host string, port int, open bool, runner *Runner
 	link := "http://" + address + "/"
 	fmt.Printf("PatchTriage console: %s  (Ctrl-C to stop)\n", link)
 	if open {
-		time.AfterFunc(600*time.Millisecond, func() { openBrowser(link) })
+		time.AfterFunc(600*time.Millisecond, func() { OpenBrowser(link) })
 	}
 	go func() {
 		ticker := time.NewTicker(10 * time.Minute)

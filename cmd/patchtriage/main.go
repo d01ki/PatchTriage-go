@@ -1,6 +1,7 @@
 // Command patchtriage turns scanner evidence into SSVC patch deployment
 // decisions: run (scriptable pipeline), demo (offline demonstration),
-// verify (conformance proof) and serve (GUI).
+// verify (conformance proof), serve (GUI), and the guided setup, start and
+// remediate workflows.
 package main
 
 import (
@@ -31,6 +32,9 @@ commands:
   demo           fully offline demo with bundled evidence
   verify         offline SSVC conformance and reproducibility proof
   serve          GUI console (default http://127.0.0.1:8765)
+  remediate      prepare one dependency patch in an isolated local clone (guided without arguments)
+  setup          first-run wizard: AI provider, API keys and default backend
+  start          guided run: answer a few questions, get a prioritized patch plan
 `
 
 func main() {
@@ -51,7 +55,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 	case "run":
 		var cfg runConfig
 		if cfg, err = parseRun(args[1:]); err == nil {
-			err = execute(ctx, cfg, stdout)
+			_, err = execute(ctx, cfg, stdout)
 		}
 	case "demo":
 		err = demo(ctx, args[1:], stdout)
@@ -59,11 +63,21 @@ func run(args []string, stdout, stderr io.Writer) int {
 		err = verify(args[1:], stdout)
 	case "serve":
 		err = serve(ctx, args[1:])
+	case "remediate":
+		err = remediate(args[1:], stdout)
+	case "setup":
+		err = setup(ctx, stdout)
+	case "start":
+		err = start(ctx, stdout)
 	default:
 		fmt.Fprintf(stderr, "unknown command %q\n%s", args[0], usage)
 		return 2
 	}
-	if err != nil {
+	var code exitCode
+	switch {
+	case errors.As(err, &code):
+		return int(code)
+	case err != nil:
 		if !errors.Is(err, flag.ErrHelp) {
 			fmt.Fprintln(stderr, "error:", err)
 		}
@@ -92,7 +106,11 @@ type runConfig struct {
 	files        []string
 	options      pipeline.Options
 	output, html string
+	warnings     []string // repository coverage warnings shown in the HTML report
 }
+
+// assess runs the pipeline; tests replace it.
+var assess = pipeline.Assess
 
 func firstEnv(names ...string) string {
 	for _, name := range names {
@@ -198,11 +216,11 @@ func parseRun(args []string) (runConfig, error) {
 	return cfg, nil
 }
 
-func execute(ctx context.Context, cfg runConfig, stdout io.Writer) error {
+func execute(ctx context.Context, cfg runConfig, stdout io.Writer) (*pipeline.Assessment, error) {
 	cfg.options.Progress = func(msg string) { fmt.Fprintln(stdout, msg) }
-	result, err := pipeline.Assess(ctx, cfg.files, cfg.options)
+	result, err := assess(ctx, cfg.files, cfg.options)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	escalated, fellBack := 0, 0
 	for _, f := range result.Subset {
@@ -219,11 +237,11 @@ func execute(ctx context.Context, cfg runConfig, stdout io.Writer) error {
 	if fellBack > 0 {
 		fmt.Fprintf(stdout, "%d findings fell back to the rules baseline after API errors (tagged in the report)\n", fellBack)
 	}
-	return emit(result, cfg.output, cfg.html, stdout)
+	return result, emit(result, cfg.output, cfg.html, cfg.warnings, stdout)
 }
 
 // emit prints the action queue and writes the requested reports.
-func emit(result *pipeline.Assessment, output, html string, stdout io.Writer) error {
+func emit(result *pipeline.Assessment, output, html string, warnings []string, stdout io.Writer) error {
 	fmt.Fprintln(stdout, "\nRemediation actions (SSVC deployment outcome first)")
 	for i, a := range result.Actions {
 		if i == 20 {
@@ -257,7 +275,7 @@ func emit(result *pipeline.Assessment, output, html string, stdout io.Writer) er
 		fmt.Fprintln(stdout, msg)
 	}
 	if html != "" {
-		if err := report.WriteHTML(html, result.Subset, result.Actions, result.EvalRows, report.HTMLOptions{Coverage: result.Coverage}); err != nil {
+		if err := report.WriteHTML(html, result.Subset, result.Actions, result.EvalRows, report.HTMLOptions{Coverage: result.Coverage, CoverageWarnings: warnings}); err != nil {
 			return err
 		}
 		fmt.Fprintln(stdout, "HTML report:", html)
@@ -311,7 +329,7 @@ func demo(ctx context.Context, args []string, stdout io.Writer) error {
 	if err != nil {
 		return err
 	}
-	if err := emit(result, *output, *html, stdout); err != nil {
+	if err := emit(result, *output, *html, nil, stdout); err != nil {
 		return err
 	}
 	fmt.Fprintf(stdout, "\nDemo complete. Open %s in a browser.\n", strings.TrimSpace(*html))
