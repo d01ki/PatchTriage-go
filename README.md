@@ -1,5 +1,7 @@
 # PatchTriage (Go)
 
+English | [日本語](README.ja.md)
+
 PatchTriage turns scanner evidence into patch deployment decisions for a
 specific environment. It ingests vulnerability scans or SBOMs, deduplicates
 findings, adds exploitation and vendor evidence, and applies the deterministic
@@ -212,3 +214,8 @@ Tests never reach the network. The files under `testdata/golden/` and
 `testdata/*_python.json` were produced by the Python implementation (see
 `testdata/golden/gen_golden.py`). They are the reference for decision parity:
 regenerate them from Python and never from this engine.
+
+## License
+
+Apache License 2.0, the same license as the Python PatchTriage. See
+[LICENSE](LICENSE).
