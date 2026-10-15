@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -318,5 +320,55 @@ func TestStartAcceptsARepositoryURLLikeTheGUI(t *testing.T) {
 	}
 	if _, err := os.Stat(output); err != nil {
 		t.Error(err)
+	}
+}
+
+func TestFleetImportsAssessesAndWritesRollup(t *testing.T) {
+	dir := isolateConfig(t)
+	t.Setenv("PATCHTRIAGE_CACHE_DIR", filepath.Join(dir, "cache"))
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/users/acme/repos" {
+			repos := []map[string]any{}
+			if r.URL.Query().Get("page") == "1" {
+				for _, n := range []string{"app", "broken"} {
+					repos = append(repos, map[string]any{"full_name": "acme/" + n, "html_url": "https://github.com/acme/" + n})
+				}
+			}
+			_ = json.NewEncoder(w).Encode(repos)
+			return
+		}
+		if strings.Contains(r.URL.Path, "broken") {
+			http.NotFound(w, r)
+			return
+		}
+		// Packages without a purl are recorded as unqueryable: no OSV.dev call.
+		_, _ = w.Write([]byte(`{"sbom": {"spdxVersion": "SPDX-2.3", "name": "acme/app", "packages": [{"name": "pkg0", "versionInfo": "1.0.0"}]}}`))
+	}))
+	defer server.Close()
+	original := fleetGitHub
+	fleetGitHub = repository.GitHub{HTTP: server.Client(), APIRoot: server.URL, RawRoot: server.URL}
+	t.Cleanup(func() { fleetGitHub = original })
+	html, output := filepath.Join(dir, "fleet.html"), filepath.Join(dir, "fleet.json")
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"fleet", "https://github.com/acme", "--ssvc-exposure", "open", "--no-nvd", "--html", html, "-o", output}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit %d: %s %s", code, stdout.String(), stderr.String())
+	}
+	for _, want := range []string{"acme/app", "imported", "acme/broken", "failed", "[1/1] acme/app: 0 finding(s)", "Fleet: 1/1 targets assessed"} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Errorf("output lacks %q:\n%s", want, stdout.String())
+		}
+	}
+	page, _ := os.ReadFile(html)
+	if !strings.Contains(string(page), "PatchTriage - Fleet Report - acme") || !strings.Contains(string(page), "acme/app") {
+		t.Errorf("fleet HTML:\n%s", page)
+	}
+	var rollup struct {
+		Import map[string]any `json:"import"`
+		Rollup map[string]any `json:"rollup"`
+	}
+	raw, _ := os.ReadFile(output)
+	if err := json.Unmarshal(raw, &rollup); err != nil || rollup.Import["imported"] != 1.0 || rollup.Rollup["targets_assessed"] != 1.0 {
+		t.Errorf("rollup %s (%v)", raw, err)
 	}
 }

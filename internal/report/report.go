@@ -3,6 +3,7 @@
 package report
 
 import (
+	"cmp"
 	_ "embed"
 	"encoding/json"
 	"fmt"
@@ -23,6 +24,11 @@ import (
 var pageTemplate string
 
 var page = template.Must(template.New("report").Parse(pageTemplate))
+
+//go:embed fleet.html.tmpl
+var fleetTemplate string
+
+var fleetPage = template.Must(template.New("fleet").Parse(fleetTemplate))
 
 const defaultTitle = "PatchTriage — Situation Report"
 
@@ -573,4 +579,146 @@ func writeFile(path string, content []byte) error {
 		return err
 	}
 	return os.WriteFile(path, content, 0o644)
+}
+
+// ------------------------------------------------------------ fleet
+
+var fleetOutcomes = []struct{ key, label, color string }{
+	{"immediate", "Immediate", "#DC2626"}, {"out_of_cycle", "Out-of-Cycle", "#D97706"},
+	{"scheduled", "Scheduled", "#2563EB"}, {"defer", "Defer", "#6B7280"},
+}
+
+type fleetCount struct {
+	Label, Color string
+	Count        int
+}
+
+type fleetQueueRow struct {
+	Color, Outcome, Target, Package, Versions, Summary string
+	Deadline, KEV, Findings                            any
+}
+
+type fleetTargetRow struct {
+	Name, State, Coverage, ReportURL string
+	Assessed                         bool
+	Findings, KEV                    any
+	Chips                            []fleetCount
+}
+
+func anyInt(v any) int {
+	switch x := v.(type) {
+	case int:
+		return x
+	case float64:
+		return int(x)
+	}
+	return 0
+}
+
+func anyText(v any) string {
+	if v == nil {
+		return ""
+	}
+	return fmt.Sprint(v)
+}
+
+func orDash(m map[string]any, key string) any {
+	if v, ok := m[key]; ok && v != nil {
+		return v
+	}
+	return "—"
+}
+
+func mapsOf(v any) []map[string]any {
+	var out []map[string]any
+	switch list := v.(type) {
+	case []map[string]any:
+		return list
+	case []any:
+		for _, item := range list {
+			if m, ok := item.(map[string]any); ok {
+				out = append(out, m)
+			}
+		}
+	}
+	return out
+}
+
+// RenderFleetHTML renders a fleet rollup (web.AggregateFleet) as one
+// self-contained page. It adds nothing of its own: every number shown was
+// decided per target by the deterministic SSVC engine.
+func RenderFleetHTML(rollup map[string]any, title string) (string, error) {
+	if title == "" {
+		title = "PatchTriage — Fleet Report"
+	}
+	outcomes, _ := rollup["outcomes"].(map[string]int)
+	if outcomes == nil {
+		outcomes = map[string]int{}
+		if m, ok := rollup["outcomes"].(map[string]any); ok {
+			for k, v := range m {
+				outcomes[k] = anyInt(v)
+			}
+		}
+	}
+	view := map[string]any{
+		"Title": title, "Assessed": anyInt(rollup["targets_assessed"]), "Total": anyInt(rollup["targets_total"]),
+		"Findings": anyInt(rollup["findings_total"]), "KEV": anyInt(rollup["kev_total"]),
+		"GeneratedAt": anyText(rollup["generated_at"]), "QueueTruncated": rollup["queue_truncated"] == true,
+		"Incomplete": anyInt(rollup["coverage_incomplete_targets"]), "Unassessed": anyInt(rollup["targets_unassessed"]),
+	}
+	var cards []fleetCount
+	for _, o := range fleetOutcomes {
+		cards = append(cards, fleetCount{o.label, o.color, outcomes[o.key]})
+	}
+	view["Cards"] = cards
+	var queue []fleetQueueRow
+	for _, e := range mapsOf(rollup["queue"]) {
+		priority := anyText(e["top_priority"])
+		if priority == "" {
+			priority = "P4"
+		}
+		outcome := anyText(e["outcome_label"])
+		if outcome == "" {
+			outcome = priority
+		}
+		versions := ""
+		if installed, target := anyText(e["installed_version"]), anyText(e["target_version"]); installed != "" || target != "" {
+			versions = cmp.Or(installed, "?") + " → " + cmp.Or(target, "?")
+		}
+		queue = append(queue, fleetQueueRow{Color: colorOf(priority), Outcome: outcome, Target: anyText(e["target_name"]),
+			Package: anyText(e["package"]), Versions: versions, Summary: anyText(e["summary"]),
+			Deadline: e["deadline_days"], KEV: anyInt(e["kev_count"]), Findings: e["finding_count"]})
+	}
+	view["Queue"] = queue
+	var targets []fleetTargetRow
+	for _, t := range mapsOf(rollup["targets"]) {
+		row := fleetTargetRow{Name: anyText(t["name"]), Assessed: t["assessed"] == true, ReportURL: anyText(t["report_url"]),
+			Findings: orDash(t, "total"), KEV: orDash(t, "kev")}
+		if row.Assessed {
+			row.State = cmp.Or(strings.ReplaceAll(anyText(t["result_state"]), "_", " "), "assessed")
+			if coverage := anyText(t["coverage_status"]); coverage != "complete" {
+				row.Coverage = coverage
+			}
+			counts, _ := t["outcomes"].(map[string]any)
+			for _, o := range fleetOutcomes {
+				row.Chips = append(row.Chips, fleetCount{Color: o.color, Count: anyInt(counts[o.key])})
+			}
+		}
+		targets = append(targets, row)
+	}
+	view["Targets"] = targets
+	var b strings.Builder
+	if err := fleetPage.Execute(&b, view); err != nil {
+		return "", err
+	}
+	return b.String(), nil
+}
+
+// WriteFleetHTML writes the fleet report into path.
+func WriteFleetHTML(path string, rollup map[string]any, title string) error {
+	out, err := RenderFleetHTML(rollup, title)
+	if err != nil {
+		return err
+	}
+	return writeFile(path, []byte(out))
 }

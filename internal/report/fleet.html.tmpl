@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{.Title}}</title>
+<style>
+  body { font: 15px/1.5 system-ui, sans-serif; color:#111827; margin:0;
+         background:#F9FAFB; }
+  main { max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 17px; margin: 34px 0 10px; }
+  .meta { color:#6B7280; margin-bottom: 22px; }
+  .cards { display:flex; gap:12px; flex-wrap:wrap; }
+  .card { background:#fff; border:1px solid #E5E7EB; border-radius:8px;
+          padding:14px 18px; min-width:130px; }
+  .card .v { font-size:26px; font-weight:750; }
+  .card .l { color:#6B7280; font-size:13px; }
+  table { width:100%; border-collapse:collapse; background:#fff;
+          border:1px solid #E5E7EB; border-radius:8px; overflow:hidden; }
+  th { text-align:left; font-size:12px; text-transform:uppercase;
+       letter-spacing:.04em; color:#6B7280; padding:9px 12px;
+       border-bottom:1px solid #E5E7EB; background:#F3F4F6; }
+  td { padding:9px 12px; border-bottom:1px solid #F3F4F6;
+       vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  .note { color:#6B7280; font-size:13px; }
+  a { color:#2563EB; }
+</style></head><body><main>
+<h1>{{.Title}}</h1>
+<div class="meta">
+  {{.Assessed}}/{{.Total}}
+  targets assessed · {{.Findings}} findings ·
+  {{.KEV}} on CISA KEV ·
+  generated {{.GeneratedAt}}
+</div>
+<div class="cards">{{range .Cards}}<div class="card"><div class="v" style="color:{{.Color}}">{{.Count}}</div><div class='l'>{{.Label}}</div></div>{{end}}</div>
+
+<h2>Cross-target action queue</h2>
+<table>
+<tr><th>Outcome</th><th>Target</th><th>Package</th><th>Action</th>
+<th>KEV</th><th>Findings</th></tr>
+{{range .Queue}}<tr><td><span style="color:{{.Color}};font-weight:700">{{.Outcome}}</span> <span style="color:#6B7280">({{.Deadline}}d)</span></td><td>{{.Target}}</td><td><b>{{.Package}}</b> {{.Versions}}</td><td>{{.Summary}}</td><td style='text-align:right'>{{if .KEV}}<span style="color:#DC2626;font-weight:700">{{.KEV}}</span>{{else}}—{{end}}</td><td style='text-align:right'>{{.Findings}}</td></tr>{{else}}<tr><td colspan='6' style='color:#6B7280'>No remediation actions yet — run assessments first.</td></tr>{{end}}
+</table>
+{{if .QueueTruncated}}<p class='note'>The queue is capped; open per-target reports for the complete list.</p>{{end}}
+
+<h2>Targets</h2>
+<table>
+<tr><th>Target</th><th>State</th><th>Findings</th>
+<th>Imm / OoC / Sched / Defer</th><th>KEV</th><th></th></tr>
+{{range .Targets}}<tr><td><b>{{.Name}}</b></td><td>{{if .Assessed}}{{.State}}{{if .Coverage}} <span style="color:#D97706" title="coverage: {{.Coverage}}">◐</span>{{end}}{{else}}<span style="color:#6B7280">not assessed</span>{{end}}</td><td style='text-align:right'>{{.Findings}}</td><td>{{if .Assessed}}{{range $i, $c := .Chips}}{{if $i}} {{end}}<span style="color:{{$c.Color}};font-weight:650">{{$c.Count}}</span>{{end}}{{else}}—{{end}}</td><td style='text-align:right'>{{.KEV}}</td><td>{{if .ReportURL}}<a href="{{.ReportURL}}">report</a>{{end}}</td></tr>{{end}}
+</table>
+{{if .Incomplete}}<p class='note'>◐ {{.Incomplete}} target(s) have bounded or provider-reported evidence coverage; absence of findings there is not proof of absence.</p>{{end}}
+{{if .Unassessed}}<p class='note'>{{.Unassessed}} target(s) are imported but not yet assessed and are excluded from every total above.</p>{{end}}
+</main></body></html>
