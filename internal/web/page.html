@@ -275,15 +275,12 @@
   .sidebar .kpi .value{font-weight:600}
   .outcomesummary .microtitle,.microtitle{letter-spacing:.055em}
   .outcomerow .count{font-weight:600}
-  .priority{font-weight:700}
   .action{font-weight:600}
   .resulttabs{gap:22px}
   .resulttab{font-weight:500}
-  .tree .edge.on{stroke-width:2.6}
   .tree .node text{font-weight:400}
   .tree .node.on text{font-weight:600}
   .tree .colhead{font-weight:500}
-  .tree .leaf.off{opacity:.6}
   .emptycontent h3{font-weight:600}
   dialog,#contextdialog{border:1px solid var(--line)}
   dialog::backdrop{backdrop-filter:blur(7px)}
@@ -316,10 +313,7 @@
   .action{font-size:16px}
   .resulttools{flex-wrap:wrap}
   .resulttab{font-size:13px}
-  .tree .node text,.tree .root text,.tree .leaf text{font-size:12px}
   .tree .colhead{font-size:11px}
-  .tree .leaf.off{opacity:.55}
-  .priority{font-size:13px}
   .donutlabel{font:500 28px var(--ui-font)}
   .donutsub{font:400 10px var(--ui-font);letter-spacing:.04em}
   .outcomesummary{grid-template-columns:100px minmax(0,1fr);min-height:120px;padding:12px 20px;gap:26px}
@@ -351,16 +345,10 @@
   .flowcanvas{padding:12px 14px;overflow-x:auto}
   .treecanvas svg.flowchart{display:block;width:100%;min-width:720px;max-height:none;height:auto}
   .flowchart .colhead{font:500 11px var(--ui-font)}
-  .flowchart .ribbon{fill-opacity:.42;cursor:pointer;transition:fill-opacity .15s}
-  .flowchart .ribbon:hover,.flowchart .ribbon:focus-visible{fill-opacity:.8}
-  .flowchart .ribbon.dim{fill-opacity:.1}
-  .flowchart .ribbon.hit{fill-opacity:.75;pointer-events:none}
   .flowchart .flownode{cursor:pointer}
   .flowchart .flownode text{font:500 12px var(--ui-font);pointer-events:none}
   .flowchart .flownode .count{font-variant-numeric:tabular-nums}
-  .flowchart .flownode.leaf text{font-weight:600}
   .flowchart .flownode.empty{cursor:default}
-  .flowchart .flownode:hover rect,.flowchart .flownode:focus-visible rect{stroke-width:1.5}
   .flowchart .flownode.on rect{stroke-width:2}
   .overviewbar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:30px}
   .overviewtable td{vertical-align:middle}
@@ -393,7 +381,7 @@
   .mono,.eyebrow,.proofhead,.nodecode,.decision .outcome-now,.factorcode,.kpi .value,.kpi .label,
   .sectiontitle span,.enginelabel,.standardtag,.ssvcprogress,.fieldnum,.derivedlabel,.targetid,.tag,
   .priority,.prioritydue,.metric,.microtitle,.barvalue,.outcomemicro b,.factor span,.decisionline b,
-  .signal b,.evidenceicon,.advisoryline a,.advisoryline span,.outcomerow .count small,
+  .signal b,.evidenceicon,.advisoryline a,.advisoryline span,.outcomerow .count,.outcomerow .count small,
   .breakdown .chip b,.queuetable td.num,.startstep span,.vs,.tree .node text,.tree .root text,
   .tree .leaf text,.tree .colhead{font-family:var(--ui-font)}
 
@@ -475,14 +463,8 @@
   .resulttab{color:var(--mut)}
   .resulttab:hover{color:var(--ink)}
 
-  .resulttab[aria-selected=true]{color:var(--acc);border-color:var(--acc)}
 
-  .priority{background:var(--c-defer);color:var(--bg);border-radius:5px}
 
-  .priority.immediate{background:var(--c-immediate);color:var(--bg)}
-  .priority.out-of-cycle{background:var(--c-outofcycle);color:var(--bg)}
-  .priority.scheduled{background:var(--c-scheduled);color:var(--bg)}
-  .priority.no-findings{background:var(--s2);color:var(--ink)}
 
   .outcomepill.immediate i{background:var(--c-immediate)}
   .outcomepill.out-of-cycle i{background:var(--c-outofcycle)}
@@ -492,24 +474,13 @@
   .donutsub{fill:var(--mut)}
   .donut circle:not(.seg){stroke:var(--line2)}
 
-  .tree .edge{stroke:var(--line2)}
-  .tree .edge.on{stroke:var(--mut)}
 
-  .tree .node rect,.tree .root rect,.flowchart .flownode rect{fill:var(--s2);stroke:var(--line2)}
 
-  .tree .node.on rect,.tree .node.on.assumed rect{fill:var(--s2);stroke:var(--mut)}
 
-  .tree .node text,.tree .root text,.tree .node.on text,.tree .leaf text,.tree .colhead,.flowchart .colhead,.flowchart .flownode text,.flowchart .flownode .count{fill:var(--ink)}
 
-  .tree .leaf.on rect{stroke:var(--ink)}
 
-  .flowchart .flownode.leaf rect{stroke:none}
-  .flowchart .flownode.leaf text{fill:var(--bg)}
 
-  .flowchart .flownode.empty rect{fill:var(--s1);stroke:var(--line)}
-  .flowchart .flownode.empty text{fill:var(--dim)}
 
-  .flowchart .flownode:hover rect,.flowchart .flownode:focus-visible rect,.flowchart .flownode.on rect{stroke:var(--acc)}
 
   .pathsource.assumed{background:transparent}
   .queuetable tbody tr:hover,.ssvcinputtable tbody tr:hover{background:var(--s2)}
@@ -525,6 +496,51 @@
   .statecard.failed,.statecard.running{border-left-color:var(--line2)}
 
   .cve,.hash{font-family:var(--mono-font)}
+  .cve{font-weight:500}.hash{font-weight:400}
+
+  /* Results retain their own palette; cyan denotes interaction and selection. */
+  [data-outcome]{--outcome:var(--line2);--outcome-ink:var(--ink)}
+  [data-outcome="immediate"]{--outcome:var(--c-immediate);--outcome-ink:var(--c-immediate)}
+  [data-outcome="out_of_cycle"]{--outcome:var(--c-outofcycle);--outcome-ink:var(--c-outofcycle)}
+  [data-outcome="scheduled"]{--outcome:var(--c-scheduled);--outcome-ink:var(--c-scheduled)}
+  /* Keep Defer geometry at the exact token; lighten only text to meet AA. */
+  [data-outcome="defer"]{--outcome:var(--c-defer);--outcome-ink:color-mix(in srgb,var(--c-defer) 70%,var(--ink))}
+  .resulthead{border-top:2px solid var(--top,var(--line2));border-radius:8px 8px 0 0}
+  .priority[data-outcome]{font:600 13px var(--ui-font);border:1px solid var(--outcome);color:var(--outcome-ink);background:color-mix(in srgb,var(--outcome) 8%,transparent);border-radius:5px}
+  .priority.no-findings{color:var(--ink);background:var(--s2)}
+  .resulttab[aria-selected=true]{color:var(--ink);border-color:var(--acc)}
+  .outcomestrip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+  .outcomestrip>div{background:var(--s1);border-left:2px solid var(--outcome);padding:10px 16px}
+  .outcomestrip b{display:block;font-size:22px;font-weight:500;color:var(--ink)}
+  .outcomestrip span{display:block;font-size:12px;color:var(--mut)}
+  .overviewtable .textbutton{font-family:var(--mono-font);font-weight:500;color:var(--acc)}
+  .tag.hot{border-color:color-mix(in srgb,var(--c-immediate) 40%,transparent);color:#ff8a8d;background:color-mix(in srgb,var(--c-immediate) 8%,transparent)}
+  .treecanvas{background:var(--bg)}
+  .tree .edge{stroke:var(--line2)}
+  .tree .edge.on{stroke:var(--acc);stroke-width:2.6}
+  .tree .node rect,.tree .root rect{fill:var(--s1);stroke:var(--line2)}
+  .tree .node text,.tree .root text,.tree .node.on text{fill:var(--ink);font-family:var(--ui-font)}
+  .tree .colhead,.flowchart .colhead{fill:var(--mut);font-family:var(--ui-font)}
+  .tree .node.on rect{fill:color-mix(in srgb,var(--acc) 14%,var(--s1));stroke:var(--acc)}
+  .tree .node.on.assumed rect{stroke:var(--c-outofcycle)}
+  .tree .leaf.off{opacity:1}
+  .tree .leaf rect,.flowchart .flownode.leaf rect{fill:color-mix(in srgb,var(--outcome) 12%,transparent);stroke:var(--outcome)}
+  .tree .leaf.on rect{stroke:var(--outcome);stroke-width:2.5}
+  .tree .leaf text,.flowchart .flownode.leaf text{fill:var(--outcome-ink);font-family:var(--ui-font);font-weight:500}
+  .tree .root text.cve{font-family:var(--mono-font);font-weight:400}
+  .flowchart .ribbon{fill:var(--outcome);fill-opacity:.3;mix-blend-mode:screen;cursor:pointer;transition:fill-opacity .15s}
+  .flowchart .ribbon:hover,.flowchart .ribbon:focus-visible{fill-opacity:.6}
+  .flowchart .ribbon.dim{fill-opacity:.08}
+  .flowchart .ribbon.hit{fill-opacity:.3;pointer-events:none}
+  .flowchart .flownode rect{fill:var(--s1);stroke:var(--line2)}
+  .flowchart .flownode text,.flowchart .flownode .count{fill:var(--ink)}
+  .flowchart .flownode.leaf rect{fill:color-mix(in srgb,var(--outcome) 12%,transparent);stroke:var(--outcome)}
+  .flowchart .flownode.leaf text,.flowchart .flownode.leaf .count{fill:var(--outcome-ink)}
+  .flowchart .flownode.empty rect{stroke:var(--line)}
+  .flowchart .flownode.empty text,.flowchart .flownode.empty .count{fill:var(--mut)}
+  .flowchart .flownode:hover rect,.flowchart .flownode:focus-visible rect,.flowchart .flownode.on rect{stroke:var(--acc);stroke-width:1.5}
+  .flowchart .flownode.on rect{stroke-width:2}
+  @media(max-width:700px){.outcomestrip{grid-template-columns:repeat(2,minmax(0,1fr))}.outcomestrip>div{padding:8px 12px}}
 </style></head>
 <body>
 <header class="topbar">
@@ -852,7 +868,7 @@ function ssvcInputBlock(summary){
   const review=summary.ssvc_inputs_review_total==null?inputs.filter(item=>item.needs_review).length:summary.ssvc_inputs_review_total;
   const visible=inputs.slice(0,(CFG.limits&&CFG.limits.ssvc_review_rows)||250);
   const rows=visible.map(item=>`<tr data-key="${esc(item.finding_key)}" data-exploitation="${esc((item.override||{}).exploitation||"auto")}" data-automatable="${esc((item.override||{}).automatable||"auto")}">
-    <td><b>${esc(item.vuln_id)}</b><span class="inputsource">${esc(item.package)}</span></td>
+    <td><b class="cve">${esc(item.vuln_id)}</b><span class="inputsource">${esc(item.package)}</span></td>
     <td>${ssvcInputSelect("exploitation",item)}</td>
     <td>${ssvcInputSelect("automatable",item)}</td>
     <td>${item.needs_review?'<span class="reviewflag">Review requested</span>':'Confirmed / evidence-backed'}</td>
@@ -902,7 +918,7 @@ function treeSvg(path){
   const ys=n=>Array.from({length:n},(_,i)=>top+(H-top-20)*(i+0.5)/n);
   let edges="",nodes="",prev={x:colX[0]+nodeW,y:top+(H-top-20)/2};
   const clip=(v,n)=>{v=String(v||"");return v.length>n?v.slice(0,n-1)+"…":v;};
-  nodes+=`<g class="node root"><rect x="${colX[0]}" y="${prev.y-27}" width="${nodeW}" height="54" rx="6"></rect><text x="${colX[0]+nodeW/2}" y="${prev.y-6}" text-anchor="middle">${esc(clip(path.asset,18))}</text><text x="${colX[0]+nodeW/2}" y="${prev.y+13}" text-anchor="middle">${esc(clip(path.vuln_id,18))}</text><title>${esc(path.asset)} · ${esc(path.package)} ${esc(path.version)} · ${esc(path.vuln_id)}</title></g>`;
+  nodes+=`<g class="node root"><rect x="${colX[0]}" y="${prev.y-27}" width="${nodeW}" height="54" rx="6"></rect><text x="${colX[0]+nodeW/2}" y="${prev.y-6}" text-anchor="middle">${esc(clip(path.asset,18))}</text><text class="cve" x="${colX[0]+nodeW/2}" y="${prev.y+13}" text-anchor="middle">${esc(clip(path.vuln_id,18))}</text><title>${esc(path.asset)} · ${esc(path.package)} ${esc(path.version)} · ${esc(path.vuln_id)}</title></g>`;
   const heads=["Finding","Exploitation","System Exposure","Automatable","Human Impact","SSVC outcome"].map((h,i)=>`<text class="colhead" x="${colX[i]+(i===5?66:nodeW/2)}" y="20" text-anchor="middle">${h}</text>`).join("");
   let hiYs=[];
   TREE_LEVELS.forEach(([key,,values],level)=>{
@@ -919,7 +935,7 @@ function treeSvg(path){
   (path.branches||[]).forEach((branch,i)=>{
     const on=branch.human_impact===(P.human_impact||{}).value,k=branch.decision,x=colX[5],y=hiYs[i],sx=colX[4]+nodeW;
     edges+=`<path class="edge${on?" on":""}" d="M${sx} ${y} L ${x} ${y}"></path>`;
-    nodes+=`<g class="leaf ${on?"on":"off"}"><rect x="${x}" y="${y-nodeH/2}" width="132" height="${nodeH}" rx="16" style="fill:${OUTCOME_COLOR[k]||"#7d8799"}"></rect><text x="${x+66}" y="${y+4}" text-anchor="middle"${k==="out_of_cycle"?' style="fill:#2d1d00"':""}>${esc(branch.decision_label)}</text><title>Human Impact ${esc(branch.human_impact_label)} → ${esc(branch.decision_label)}</title></g>`;
+    nodes+=`<g class="leaf ${on?"on":"off"}" data-outcome="${esc(k)}"><rect x="${x}" y="${y-nodeH/2}" width="132" height="${nodeH}" rx="5"></rect><text x="${x+66}" y="${y+4}" text-anchor="middle">${esc(branch.decision_label)}</text><title>Human Impact ${esc(branch.human_impact_label)} → ${esc(branch.decision_label)}</title></g>`;
   });
   return `<svg class="tree" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(pathSentencePlain(path))}">${heads}${edges}${nodes}</svg>`;
 }
@@ -968,7 +984,7 @@ function flowSvg(rows,filter){
         off["o"+ka+a]=so+w;off["i"+kb+b]=ti+w;
         const y1=p.y+(p.h-p.n*scale)/2+so,y2=q.y+(q.h-q.n*scale)/2+ti,x1=p.x+nodeW,x2=q.x,mx=(x1+x2)/2;
         const title=`${n} finding${n===1?"":"s"}: ${FLOW_LABEL[ka][a]} → ${FLOW_LABEL[kb][b]} · ${olabel}`;
-        out+=`<path class="ribbon ${cls}" data-flow='${esc(JSON.stringify({[ka]:a,[kb]:b,decision:o}))}' tabindex="${cls==="base"&&!active?0:-1}" role="button" aria-label="${esc(title)}" style="fill:${OUTCOME_COLOR[o]}" d="M${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2} L ${x2} ${y2+w} C ${mx} ${y2+w}, ${mx} ${y1+w}, ${x1} ${y1+w} Z"><title>${esc(title)}</title></path>`;
+        out+=`<path class="ribbon ${cls}" data-outcome="${esc(o)}" data-flow='${esc(JSON.stringify({[ka]:a,[kb]:b,decision:o}))}' tabindex="${cls==="base"&&!active?0:-1}" role="button" aria-label="${esc(title)}" d="M${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2} L ${x2} ${y2+w} C ${mx} ${y2+w}, ${mx} ${y1+w}, ${x1} ${y1+w} Z"><title>${esc(title)}</title></path>`;
       })));
     }
     return out;};
@@ -977,7 +993,7 @@ function flowSvg(rows,filter){
   FLOW_LEVELS.forEach(([key,,values],c)=>values.forEach(([v,label])=>{
     const node=nodes[key+":"+v],leaf=key==="decision",on=active&&filter[key]===v,hits=active?rows.filter(r=>r[key]===v&&matchesFilter(r,filter)).length:node.n;
     const title=`${FLOW_LABEL[key][v]}: ${node.n} finding${node.n===1?"":"s"} · filter the list`;
-    svg+=`<g class="flownode${leaf?" leaf":""}${node.n?"":" empty"}${on?" on":""}" data-flow='${esc(JSON.stringify({[key]:v}))}' tabindex="${node.n?0:-1}" role="button" aria-label="${esc(title)}"><rect x="${colX[c]}" y="${node.y}" width="${nodeW}" height="${node.h}" rx="${leaf?9:5}"${leaf?` style="fill:${OUTCOME_COLOR[v]}"`:""}></rect><text x="${colX[c]+8}" y="${node.y+node.h/2+4}">${esc(label)}</text><text class="count" x="${colX[c]+nodeW-8}" y="${node.y+node.h/2+4}" text-anchor="end">${active&&hits!==node.n?`${hits}/`:""}${node.n}</text><title>${esc(title)}</title></g>`;
+    svg+=`<g class="flownode${leaf?" leaf":""}${node.n?"":" empty"}${on?" on":""}"${leaf?` data-outcome="${esc(v)}"`:""} data-flow='${esc(JSON.stringify({[key]:v}))}' tabindex="${node.n?0:-1}" role="button" aria-label="${esc(title)}"><rect x="${colX[c]}" y="${node.y}" width="${nodeW}" height="${node.h}" rx="5"></rect><text x="${colX[c]+8}" y="${node.y+node.h/2+4}">${esc(label)}</text><text class="count" x="${colX[c]+nodeW-8}" y="${node.y+node.h/2+4}" text-anchor="end">${active&&hits!==node.n?`${hits}/`:""}${node.n}</text><title>${esc(title)}</title></g>`;
   }));
   return `<svg class="flowchart" viewBox="0 0 ${W} ${H}" role="group" aria-label="Decision flow of ${rows.length} findings through the SSVC Deployer tree">${svg}</svg>`;
 }
@@ -988,10 +1004,12 @@ function overviewBlock(summary){
   const filterText=Object.entries(filter).map(([k,v])=>`${FLOW_LEVELS.find(l=>l[0]===k)[1]} ${FLOW_LABEL[k][v]}`).join(" · ");
   const cell=(row,key)=>`${esc(FLOW_LABEL[key][row[key]]||row[key]||"—")}${(row.assumed||[]).includes(key)?' <span class="assumedmark" title="Conservative default; needs confirmation">?</span>':""}`;
   const body=shown.map(row=>`<tr><td><span class="outcomepill ${esc(String(row.decision).replaceAll("_","-"))}"><i style="background:${OUTCOME_COLOR[row.decision]||"var(--c-defer)"}" aria-hidden="true"></i>${esc(row.decision_label)}</span></td>
-    <td>${row.path!=null?`<button class="textbutton openpath" data-path="${esc(row.path)}" title="Open this finding's decision path">${esc(row.vuln_id)}</button>`:esc(row.vuln_id)}${row.kev?' <span class="tag hot">KEV</span>':""}</td>
+    <td>${row.path!=null?`<button class="textbutton openpath cve" data-path="${esc(row.path)}" title="Open this finding's decision path">${esc(row.vuln_id)}</button>`:esc(row.vuln_id)}${row.kev?' <span class="tag hot">KEV</span>':""}</td>
     <td>${esc(row.package)} <span class="hint">${esc(row.version||"")}</span></td><td class="hint">${esc(row.asset||"")}</td>
     <td>${cell(row,"exploitation")}</td><td>${cell(row,"system_exposure")}</td><td>${cell(row,"automatable")}</td><td>${cell(row,"human_impact")}</td></tr>`).join("");
+  const strip=OUTCOME_ORDER.map(([key,label])=>`<div data-outcome="${key}"><b>${esc(summary.outcomes?.[key]||0)}</b><span>${esc(label)}</span></div>`).join("");
   return `<section class="overview" aria-label="All findings at a glance">
+    <div class="outcomestrip" aria-label="Finding counts by SSVC outcome">${strip}</div>
     <div class="microtitle">Decision flow · ${rows.length} findings · ribbon width = findings, color = SSVC outcome · click a box or ribbon to filter</div>
     <div class="treecanvas flowcanvas">${flowSvg(rows,filter)}</div>
     <div class="overviewbar"><span class="microtitle">${active?`Showing ${shown.length} of ${rows.length} · ${esc(filterText)}`:`All ${rows.length} findings · most urgent first`}</span>${active?'<button class="btn small clearflow">Clear filter</button>':""}</div>
@@ -1051,7 +1069,7 @@ function queueBlock(summary){
     const cves=item.cves||[],more=Math.max(0,(item.finding_count||cves.length)-cves.length);
     const kind=item.kind==="mitigate"?'<span class="kindtag mitigate">No fix</span>':"";
     return `<tr><td class="num">${index+1}</td><td><span class="outcomepill ${esc(cls)}"><i aria-hidden="true"></i>${esc(label)}</span></td>
-      <td>${kind}${esc(item.summary)}<span class="cves">${esc(cves.join(", "))}${more?` and ${more} more`:""}</span></td>
+      <td>${kind}${esc(item.summary)}<span class="cves"><span class="cve">${esc(cves.join(", "))}</span>${more?` and ${more} more`:""}</span></td>
       <td class="num">${item.kev_count?`${esc(item.kev_count)} KEV`:"—"}</td><td class="num">${esc(item.finding_count)}</td>
       <td class="num">${item.deadline_days==null?"—":`≤ ${esc(item.deadline_days)} days`}</td>
       <td>${bodCell(item.bod2604)}</td><td>${effectiveCell(item)}</td></tr>`;}).join("");
@@ -1064,15 +1082,16 @@ function renderResult(summary){
   const hasFindings=summary.total>0,coverage=summary.source?.coverage_status||"unknown";
   const outcome=hasFindings?(summary.top_ssvc_decision||"No decision"):summary.result_state==="coverage_incomplete"?"Partial coverage":"No findings";
   const cls=hasFindings?outcome.toLowerCase().replaceAll(" ","-"):"no-findings";
+  const outcomeKey=OUTCOME_ORDER.find(([,label])=>label===outcome)?.[0]||"";
   const view=VIEWS.get(summary.target_id)||{tab:"overview",finding:0};
   const review=summary.ssvc_inputs_review_total||0;
   const tabs=[["overview","Overview",summary.total],["path","Decision path",""],["actions","Action queue",summary.actions],["evidence","Evidence & policy",""],["review","Review inputs",review]];
   const content=view.tab==="overview"?overviewBlock(summary):view.tab==="actions"?(queueBlock(summary)||'<div class="emptyresult"><b>No package actions</b><span>Review the evidence and coverage in the report.</span></div>'):view.tab==="evidence"?`<div class="microtitle">Highest-priority finding · ${esc(summary.explanation?.vuln_id||"No findings")}</div>${explainBlock(summary)}${qualityBlock(summary)}<details class="compare"><summary>Compare ranking methods</summary>${compareBlock(summary)}</details>`:view.tab==="review"?(ssvcInputBlock(summary)||'<div class="emptyresult"><b>No finding inputs to review</b></div>'):treeBlock(summary);
   const warnings=[...(summary.enrichment_errors||[]),...(summary.vendor_errors||[])];
   const context=summary.evaluated_context||{};
-  return `<article class="result" data-result="${esc(summary.target_id)}" data-id="${esc(summary.target_id)}">
+  return `<article class="result" style="--top:${OUTCOME_COLOR[outcomeKey]||"var(--line2)"}" data-result="${esc(summary.target_id)}" data-id="${esc(summary.target_id)}">
     <div class="resulthead">
-      <div class="prioritybox"><div class="priority ${esc(cls)}">${esc(outcome)}</div><div class="prioritymeaning" title="Highest-priority SSVC outcome">${hasFindings?"Top outcome":"Evidence coverage"}</div><div class="prioritydue">${summary.top_deadline_days==null?"":`workflow ≤ ${esc(summary.top_deadline_days)} days`}</div></div>
+      <div class="prioritybox"><div class="priority ${esc(cls)}" data-outcome="${outcomeKey}">${esc(outcome)}</div><div class="prioritymeaning" title="Highest-priority SSVC outcome">${hasFindings?"Top outcome":"Evidence coverage"}</div><div class="prioritydue">${summary.top_deadline_days==null?"":`workflow ≤ ${esc(summary.top_deadline_days)} days`}</div></div>
       <div><div class="rname">${esc(summary.name)} · ${summary.total} findings · ${summary.actions} actions${summary.demo?" · offline demo":""}</div><div class="action">${esc(summary.top_action||"Assessment completed")}</div><div class="resulttools"><button class="textbutton" data-action="edit">Review context</button><button class="textbutton" data-action="manage">Manage evidence</button><button class="textbutton" data-action="run">Run again</button></div></div>
       <div class="reportlinks"><a class="reportlink" href="${esc(summary.report_url)}" target="_blank" rel="noopener">Open full report →</a><a class="reportlink" href="${esc(summary.report_url)}" download="${esc(reportFilename(summary))}">Download HTML report</a></div>
     </div>
@@ -1107,7 +1126,7 @@ function statusCard(id,status){
 }
 function emptyWorkspace(){return `<div class="empty lightpanel"><div class="emptycontent"><div class="eyebrow">Evidence → decision → action</div><h3>What should you patch first?</h3><p>Add a system and its scan or SBOM. See the next action and the evidence behind every decision.</p><div class="startsteps"><div class="startstep"><b><span>01</span> Add a target</b>Name the system and its context.</div><div class="startstep"><b><span>02</span> Add evidence</b>Upload a scan or import a repository.</div><div class="startstep"><b><span>03</span> Run triage</b>Review the path. Save your report.</div></div><div class="startactions"><button class="btn primary new-target-trigger">+ Add your first target</button><button class="btn demo-trigger">Try the offline demo</button></div></div></div>`;}
 function targetSetup(target){
-  return `<article class="empty lightpanel" data-id="${esc(target.id)}"><div class="emptycontent"><div class="eyebrow">${target.source_file?"Ready to assess":"Step 2 · Add evidence"}</div><h3>${esc(target.name)}</h3><p>${target.source_file?"Your evidence is attached. Run triage to produce the decision path and a downloadable report.":"Upload CycloneDX/SPDX JSON (or Trivy/Grype/OSV scanner JSON), or import a repository."}</p><div class="targetsummary">${contextTags(target)}</div>${target.source_file?`<p class="source ready">${esc(target.source_name||target.source_format)} · ${Math.max(1,Math.round((target.source_size||0)/1024))} KiB · SHA-256 ${esc((target.source_sha256||"").slice(0,12))}</p>`:""}<div class="startactions">${target.source_file?'<button class="btn primary" data-action="run">Run triage →</button>':''}<button class="btn ${target.source_file?"":"primary"}" data-action="import">Upload SBOM</button><button class="btn attach" data-action="repository">Import repository</button></div><div class="targetactions"><button class="textbutton" data-action="edit">Review context</button><button class="textbutton" data-action="delete">Delete target</button>${RESULTS.has(target.id)?'<button class="textbutton" data-action="view">Back to results</button>':""}</div></div></article>`;
+  return `<article class="empty lightpanel" data-id="${esc(target.id)}"><div class="emptycontent"><div class="eyebrow">${target.source_file?"Ready to assess":"Step 2 · Add evidence"}</div><h3>${esc(target.name)}</h3><p>${target.source_file?"Your evidence is attached. Run triage to produce the decision path and a downloadable report.":"Upload CycloneDX/SPDX JSON (or Trivy/Grype/OSV scanner JSON), or import a repository."}</p><div class="targetsummary">${contextTags(target)}</div>${target.source_file?`<p class="source ready">${esc(target.source_name||target.source_format)} · ${Math.max(1,Math.round((target.source_size||0)/1024))} KiB · SHA-256 <span class="hash">${esc((target.source_sha256||"").slice(0,12))}</span></p>`:""}<div class="startactions">${target.source_file?'<button class="btn primary" data-action="run">Run triage →</button>':''}<button class="btn ${target.source_file?"":"primary"}" data-action="import">Upload SBOM</button><button class="btn attach" data-action="repository">Import repository</button></div><div class="targetactions"><button class="textbutton" data-action="edit">Review context</button><button class="textbutton" data-action="delete">Delete target</button>${RESULTS.has(target.id)?'<button class="textbutton" data-action="view">Back to results</button>':""}</div></div></article>`;
 }
 function renderResults(){
   const results=document.getElementById("results"),target=TARGETS.find(t=>t.id===selectedTarget);
