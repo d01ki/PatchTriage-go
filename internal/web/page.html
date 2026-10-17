@@ -409,6 +409,12 @@
   .pathsource strong{font-size:16px;font-weight:500;color:var(--ink);margin:3px 0}
   .pathsource .sourcevia{font-size:12px;font-weight:400;color:#9aa6be}
   .pathsource.assumed{background:transparent;border-radius:0}.pathsource.assumed strong{color:#dfbf88}
+  /* Desktop: scroll the whole decision column, not just the panel under the result header. */
+  @media(min-width:1001px){
+    .decisionpane{overflow-y:auto;scrollbar-gutter:stable}
+    .results,.result{flex:none}.resultpanel{flex:none;overflow:visible}
+    .resulttabs{position:sticky;top:0;z-index:3;background:var(--panel)}
+  }
   .overview{display:grid;gap:12px}.flowcanvas{padding:12px 14px;overflow-x:auto}
   .treecanvas svg.flowchart{display:block;width:100%;min-width:720px;max-height:none;height:auto}
   .flowchart .colhead{fill:#c5cee3;font:500 11px var(--ui-font)}
