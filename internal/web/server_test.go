@@ -345,3 +345,41 @@ func TestAIBackendIsOfferedAndRunsWhenConfigured(t *testing.T) {
 		t.Errorf("job = %v (calls %d)", job, calls)
 	}
 }
+
+func TestFontsAreServedFromBinary(t *testing.T) {
+	c, _ := newServerClient(t)
+	fonts := []string{"IBMPlexSans-Regular.woff2", "IBMPlexSans-Medium.woff2", "IBMPlexSans-SemiBold.woff2", "IBMPlexMono-Regular.woff2", "IBMPlexMono-Medium.woff2"}
+	total := 0
+	for _, name := range fonts {
+		t.Run(name, func(t *testing.T) {
+			status, raw, headers := c.do("GET", "/fonts/"+name, nil)
+			if status != http.StatusOK {
+				t.Fatalf("status = %d, want 200", status)
+			}
+			if !bytes.HasPrefix(raw, []byte("wOF2")) {
+				t.Error("missing WOFF2 signature")
+			}
+			if got := headers.Get("Content-Type"); got != "font/woff2" {
+				t.Errorf("Content-Type = %q", got)
+			}
+			if got := headers.Get("Cache-Control"); got != "public, max-age=31536000, immutable" {
+				t.Errorf("Cache-Control = %q", got)
+			}
+			if got := headers.Get("Set-Cookie"); got != "" {
+				t.Errorf("public font response sets a session cookie: %q", got)
+			}
+			total += len(raw)
+		})
+	}
+	if total > 250000 {
+		t.Errorf("fonts total %d bytes exceeds 250KB", total)
+	}
+	for _, path := range []string{"/fonts/missing.woff2", "/fonts/OFL.txt", "/fonts/", "/fonts/../fonts/IBMPlexSans-Regular.woff2", "/fonts/%2e%2e/fonts/IBMPlexSans-Regular.woff2", "/fonts/sub/../IBMPlexSans-Regular.woff2", "/fonts/IBMPlexSans..Regular.woff2", "/fonts/sub/IBMPlexSans-Regular.woff2"} {
+		t.Run(path, func(t *testing.T) {
+			status, _, _ := c.do("GET", path, nil)
+			if status != http.StatusNotFound {
+				t.Errorf("status = %d, want 404", status)
+			}
+		})
+	}
+}

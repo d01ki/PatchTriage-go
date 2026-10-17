@@ -478,6 +478,12 @@ func (s *Server) config() map[string]any {
 }
 
 func (s *Server) get(w http.ResponseWriter, r *http.Request, ws string) error {
+	if strings.HasPrefix(r.URL.Path, "/fonts/") {
+		if serveFont(w, strings.TrimPrefix(r.URL.Path, "/fonts/")) {
+			return nil
+		}
+		return badRequest(404, "not found")
+	}
 	switch path := r.URL.Path; path {
 	case "/":
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
