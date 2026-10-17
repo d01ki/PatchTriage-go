@@ -75,7 +75,8 @@ func TestRunTargetDemoSummaryMatchesPython(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, volatile := range []string{"target_id", "report_url", "duration_ms"} {
+	// overview is Go-only (no Python counterpart); TestRunTargetOverview covers it.
+	for _, volatile := range []string{"target_id", "report_url", "duration_ms", "overview", "overview_truncated"} {
 		delete(summary, volatile)
 	}
 	raw, _ := json.Marshal(summary)
@@ -89,6 +90,62 @@ func TestRunTargetDemoSummaryMatchesPython(t *testing.T) {
 	id := target["id"].(string)
 	if stored := s.LoadSummary("", id); stored == nil || stored["run_generation"] == nil || len(s.CurrentReport("", id)) == 0 {
 		t.Error("the run must publish its summary and report")
+	}
+}
+
+func TestRunTargetOverview(t *testing.T) {
+	s := newStore(t)
+	summary, err := (&Runner{Store: s}).Run(t.Context(), "", demoTarget(t, s, ""), "rules")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows, ok := summary["overview"].([]map[string]any)
+	if !ok || len(rows) != summary["total"].(int) {
+		t.Fatalf("overview = %#v, want one row per finding (%v)", summary["overview"], summary["total"])
+	}
+	if summary["overview_truncated"] != false {
+		t.Error("demo overview must not be truncated")
+	}
+	paths := summary["decision_paths"].([]map[string]any)
+	outcomes := map[string]int{}
+	for i, row := range rows {
+		for _, key := range []string{"finding_key", "vuln_id", "package", "decision", "decision_label",
+			"exploitation", "system_exposure", "automatable", "human_impact"} {
+			if strOf(row[key]) == "" {
+				t.Errorf("row %d: missing %s: %#v", i, key, row)
+			}
+		}
+		if _, ok := row["assumed"].([]string); !ok {
+			t.Errorf("row %d: assumed must be a list: %#v", i, row["assumed"])
+		}
+		// path links the row to its detailed decision path in decision_paths.
+		if p, ok := row["path"].(int); !ok || paths[p]["finding_key"] != row["finding_key"] {
+			t.Errorf("row %d: path %v does not point at its decision path", i, row["path"])
+		}
+		outcomes[strOf(row["decision"])]++
+	}
+	for k, n := range summary["outcomes"].(map[string]int) {
+		if outcomes[k] != n {
+			t.Errorf("overview %s = %d, summary outcomes = %d", k, outcomes[k], n)
+		}
+	}
+	// Rows follow the decision order, most urgent first.
+	if rows[0]["decision"] != "immediate" {
+		t.Errorf("first row decision = %v, want immediate", rows[0]["decision"])
+	}
+}
+
+func TestRunTargetOverviewLimit(t *testing.T) {
+	old := maxOverviewRows
+	maxOverviewRows = 2
+	defer func() { maxOverviewRows = old }()
+	s := newStore(t)
+	summary, err := (&Runner{Store: s}).Run(t.Context(), "", demoTarget(t, s, ""), "rules")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if rows := summary["overview"].([]map[string]any); len(rows) != 2 || summary["overview_truncated"] != true {
+		t.Errorf("overview rows = %d truncated = %v, want 2 and true", len(rows), summary["overview_truncated"])
 	}
 }
 
