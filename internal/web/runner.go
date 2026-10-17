@@ -37,6 +37,7 @@ var (
 	maxWebSSVCInputs  = envLimit("PATCHTRIAGE_MAX_WEB_SSVC_INPUTS", 250)
 	maxSummaryActions = envLimit("PATCHTRIAGE_MAX_SUMMARY_ACTIONS", 25)
 	maxDecisionPaths  = envLimit("PATCHTRIAGE_MAX_DECISION_PATHS", 100)
+	maxOverviewRows   = envLimit("PATCHTRIAGE_MAX_OVERVIEW_ROWS", 5000)
 )
 
 var sourceNames = map[string]string{"msrc": "Microsoft", "rhsa": "Red Hat", "usn": "Ubuntu",
@@ -165,6 +166,38 @@ func DecisionPath(f *model.Finding) map[string]any {
 		"branches": decision.HumanImpactBranches(s.Exploitation.Value, s.SystemExposure.Value, s.Automatable.Value),
 		"bod2604":  policy, "evidence": evidenceLinks(f),
 	}
+}
+
+// OverviewRow is the compact per-finding record behind the GUI overview:
+// the SSVC decision point values only, so every finding fits in the summary.
+// path is the index of the finding's full entry in decision_paths, when the
+// summary carries one.
+func OverviewRow(f *model.Finding, path int) map[string]any {
+	if f.Triage == nil || f.Triage.SSVC == nil {
+		return nil
+	}
+	s := f.Triage.SSVC
+	assumed := []string{}
+	for _, p := range []struct {
+		key   string
+		point model.DecisionPoint
+	}{{"exploitation", s.Exploitation}, {"system_exposure", s.SystemExposure}, {"automatable", s.Automatable},
+		{"human_impact", s.HumanImpact}} {
+		if p.point.NeedsConfirmation {
+			assumed = append(assumed, p.key)
+		}
+	}
+	row := map[string]any{
+		"finding_key": f.Key, "vuln_id": f.VulnID, "package": f.Package.Name, "version": f.Package.Version,
+		"asset": f.Asset.Identifier, "decision": s.Decision, "decision_label": s.DecisionLabel,
+		"exploitation": s.Exploitation.Value, "system_exposure": s.SystemExposure.Value,
+		"automatable": s.Automatable.Value, "human_impact": s.HumanImpact.Value, "assumed": assumed,
+		"kev": f.Enrichment.InCISAKEV,
+	}
+	if path >= 0 {
+		row["path"] = path
+	}
+	return row
 }
 
 func cvssOf(f *model.Finding) *float64 {
@@ -394,9 +427,21 @@ func (r *Runner) Run(ctx context.Context, ws string, target Target, backend stri
 		}
 	}
 	paths := []map[string]any{}
+	pathIndex := map[string]int{}
 	for _, f := range ordered[:min(maxDecisionPaths, len(ordered))] {
 		if p := DecisionPath(f); p != nil {
+			pathIndex[f.Key] = len(paths)
 			paths = append(paths, p)
+		}
+	}
+	overview := []map[string]any{}
+	for _, f := range ordered[:min(maxOverviewRows, len(ordered))] {
+		index, ok := pathIndex[f.Key]
+		if !ok {
+			index = -1
+		}
+		if row := OverviewRow(f, index); row != nil {
+			overview = append(overview, row)
 		}
 	}
 	queue := []map[string]any{}
@@ -476,6 +521,7 @@ func (r *Runner) Run(ctx context.Context, ws string, target Target, backend stri
 			"sha256": sha, "size": target["source_size"], "provenance": provenance, "coverage_status": status},
 		"ssvc_confirmation_fields": sortedSet(confirmation), "ssvc_inputs": inputs, "decision_paths": paths,
 		"decision_paths_truncated": len(ordered) > maxDecisionPaths, "ssvc_inputs_total": len(ordered),
+		"overview": overview, "overview_truncated": len(ordered) > maxOverviewRows,
 		"ssvc_inputs_review_total": reviewTotal, "ssvc_inputs_truncated": len(ordered) > len(inputs),
 		"explanation": explain, "comparison": comparison(result.EvalRows, len(findings)), "demo": target["demo"] == true,
 		"duration_ms": time.Since(started).Milliseconds(), "report_url": "/report/" + id,
