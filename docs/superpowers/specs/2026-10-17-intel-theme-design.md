@@ -3,7 +3,7 @@
 - 作成日: 2026-10-17
 - 対象: `serve` の Web GUI（`internal/web/page.html`）
 - ブランチ: `feature/overview-polish`（作業中のスクロール修正を含む）
-- 確認済みモックアップ: `.superpowers/brainstorm/1075-1792228074/content/intel-theme.html` の B 案
+- 確認済みモックアップ: `docs/superpowers/specs/2026-10-17-intel-theme-mockup.html`（B 案。ブラウザで直接開ける）
 
 ## 1. 目的と背景
 
