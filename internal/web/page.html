@@ -514,10 +514,6 @@
   .priority[data-outcome]{font:600 13px var(--ui-font);border:1px solid var(--outcome);color:var(--outcome-ink);background:color-mix(in srgb,var(--outcome) 8%,transparent);border-radius:5px}
   .priority.no-findings{color:var(--ink);background:var(--s2)}
   .resulttab[aria-selected=true]{color:var(--ink);border-color:var(--acc)}
-  .outcomestrip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
-  .outcomestrip>div{background:var(--s1);border-left:2px solid var(--outcome);padding:10px 16px}
-  .outcomestrip b{display:block;font-size:22px;font-weight:500;color:var(--ink)}
-  .outcomestrip span{display:block;font-size:12px;color:var(--mut)}
   .overviewtable .textbutton{font-family:var(--mono-font);font-weight:500;color:var(--acc);white-space:nowrap}
   .tag.hot{border-color:color-mix(in srgb,var(--c-immediate) 40%,transparent);color:#ff8a8d;background:color-mix(in srgb,var(--c-immediate) 8%,transparent)}
   .treecanvas{background:var(--bg)}
@@ -545,12 +541,10 @@
   .flowchart .flownode.empty text,.flowchart .flownode.empty .count{fill:var(--mut)}
   .flowchart .flownode:hover rect,.flowchart .flownode:focus-visible rect,.flowchart .flownode.on rect{stroke:var(--acc);stroke-width:1.5}
   .flowchart .flownode.on rect{stroke-width:2}
-  /* Flow depth: lit grid floor, extruded node blocks, glowing outcome leaves. */
+  /* Flow depth: lit floor, extruded node blocks, glowing outcome leaves. */
   .flowchart .flowfloor{fill:url(#flow-floor)}
   .flowchart .floorlit{stop-color:color-mix(in srgb,var(--acc) 7%,var(--s1))}
   .flowchart .floordark{stop-color:var(--bg)}
-  .flowchart .flowgrid{fill:url(#flow-grid);pointer-events:none}
-  .flowchart #flow-grid path{stroke:color-mix(in srgb,var(--acc) 9%,transparent);stroke-width:1}
   .flowchart .nodetop{stop-color:var(--s2)}
   .flowchart .nodebottom{stop-color:var(--s1)}
   .flowchart .flownode rect.face{fill:url(#flow-node)}
@@ -568,7 +562,6 @@
   .flowchart .ribbon[data-outcome="scheduled"]{fill:url(#flow-rib-scheduled)}
   .flowchart .ribbon[data-outcome="defer"]{fill:url(#flow-rib-defer)}
   .flowchart .ribbon:hover,.flowchart .ribbon:focus-visible{filter:drop-shadow(0 0 5px var(--outcome))}
-  @media(max-width:700px){.outcomestrip{grid-template-columns:repeat(2,minmax(0,1fr))}.outcomestrip>div{padding:8px 12px}}
 </style></head>
 <body>
 <header class="topbar">
@@ -998,13 +991,12 @@ function flowSvg(rows,filter){
   const W=1000,H=340,top=34,bottom=10,nodeW=128,minH=18,gap=10,colX=[0,218,436,654,872],plotH=H-top-bottom;
   const scale=rows.length?Math.min(16,(plotH-3*gap-4*minH)/rows.length):0,active=Object.keys(filter||{}).length>0;
   const nodes={};
-  // Depth cues: a faint grid floor, ribbons that brighten mid-span and nodes lit from above.
+  // Depth cues: a softly lit floor, ribbons that brighten mid-span and nodes lit from above.
   const stops=(o,a,b)=>`<stop offset="0" style="stop-color:${OUTCOME_COLOR[o]};stop-opacity:${a}"></stop><stop offset=".5" style="stop-color:${OUTCOME_COLOR[o]};stop-opacity:${b}"></stop><stop offset="1" style="stop-color:${OUTCOME_COLOR[o]};stop-opacity:${a}"></stop>`;
-  let svg=`<defs><pattern id="flow-grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none"></path></pattern>
-    <radialGradient id="flow-floor" cx=".5" cy=".55" r=".65"><stop offset="0" class="floorlit"></stop><stop offset="1" class="floordark"></stop></radialGradient>
+  let svg=`<defs><radialGradient id="flow-floor" cx=".5" cy=".55" r=".65"><stop offset="0" class="floorlit"></stop><stop offset="1" class="floordark"></stop></radialGradient>
     <linearGradient id="flow-node" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nodetop"></stop><stop offset="1" class="nodebottom"></stop></linearGradient>
     ${OUTCOME_ORDER.map(([o])=>`<linearGradient id="flow-rib-${o}" x1="0" y1="0" x2="1" y2="0">${stops(o,.65,1)}</linearGradient>`).join("")}</defs>
-    <rect class="flowfloor" x="-8" y="26" width="${W+16}" height="${H-26}" rx="8"></rect><rect class="flowgrid" x="-8" y="26" width="${W+16}" height="${H-26}" rx="8"></rect>`;
+    <rect class="flowfloor" x="-8" y="26" width="${W+16}" height="${H-26}" rx="8"></rect>`;
   FLOW_LEVELS.forEach(([key,label,values],c)=>{
     const counts=values.map(([v])=>rows.filter(r=>r[key]===v).length);
     const heights=counts.map(n=>minH+n*scale),colH=heights.reduce((a,b)=>a+b,0)+gap*(values.length-1);
@@ -1045,9 +1037,7 @@ function overviewBlock(summary){
     <td>${row.path!=null?`<button class="textbutton openpath cve" data-path="${esc(row.path)}" title="Open this finding's decision path">${esc(row.vuln_id)}</button>`:esc(row.vuln_id)}${row.kev?' <span class="tag hot">KEV</span>':""}</td>
     <td>${esc(row.package)} <span class="hint">${esc(row.version||"")}</span></td><td class="hint">${esc(row.asset||"")}</td>
     <td>${cell(row,"exploitation")}</td><td>${cell(row,"system_exposure")}</td><td>${cell(row,"automatable")}</td><td>${cell(row,"human_impact")}</td></tr>`).join("");
-  const strip=OUTCOME_ORDER.map(([key,label])=>`<div data-outcome="${key}"><b>${esc(summary.outcomes?.[key]||0)}</b><span>${esc(label)}</span></div>`).join("");
   return `<section class="overview" aria-label="All findings at a glance">
-    <div class="outcomestrip" aria-label="Finding counts by SSVC outcome">${strip}</div>
     <div class="microtitle">Decision flow · ${rows.length} findings · ribbon width = findings, color = SSVC outcome · click a box or ribbon to filter</div>
     <div class="treecanvas flowcanvas">${flowSvg(rows,filter)}</div>
     <div class="overviewbar"><span class="microtitle">${active?`Showing ${shown.length} of ${rows.length} · ${esc(filterText)}`:`All ${rows.length} findings · most urgent first`}</span>${active?'<button class="btn small clearflow">Clear filter</button>':""}</div>
