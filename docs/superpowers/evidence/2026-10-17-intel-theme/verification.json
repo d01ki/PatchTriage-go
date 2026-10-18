@@ -1,0 +1,130 @@
+{
+  "1440": {
+    "layout": {
+      "width": 1440,
+      "scroll": 1440,
+      "bodyOverflow": "hidden"
+    },
+    "scroll": {
+      "scrollTop": 452,
+      "tabTop": 78,
+      "tabBottom": 118.84375,
+      "paneTop": 78,
+      "paneBottom": 782,
+      "position": "sticky"
+    },
+    "external_requests": [],
+    "console_errors": [],
+    "fonts": [
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexSans-SemiBold.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexSans-Regular.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexSans-Medium.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexMono-Medium.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexMono-Regular.woff2",
+        "status": 200
+      }
+    ],
+    "select_option": {
+      "color": "rgb(228, 234, 246)",
+      "background": "rgb(16, 26, 47)"
+    },
+    "interactions": "box/ribbon/clear/Enter/Space/CVE/tab arrows/Home/End/dialog/select/Escape PASS"
+  },
+  "1000": {
+    "layout": {
+      "width": 1000,
+      "scroll": 1000,
+      "bodyOverflow": "auto"
+    },
+    "scroll": {
+      "width": 1000,
+      "scroll": 1000,
+      "bodyOverflow": "auto"
+    },
+    "external_requests": [],
+    "console_errors": [],
+    "fonts": [
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexSans-SemiBold.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexSans-Regular.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexSans-Medium.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexMono-Medium.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexMono-Regular.woff2",
+        "status": 200
+      }
+    ],
+    "select_option": {
+      "color": "rgb(228, 234, 246)",
+      "background": "rgb(16, 26, 47)"
+    },
+    "interactions": "box/ribbon/clear/Enter/Space/CVE/tab arrows/Home/End/dialog/select/Escape PASS"
+  },
+  "390": {
+    "layout": {
+      "width": 390,
+      "scroll": 390,
+      "bodyOverflow": "auto"
+    },
+    "scroll": {
+      "width": 390,
+      "scroll": 390,
+      "bodyOverflow": "auto"
+    },
+    "external_requests": [],
+    "console_errors": [],
+    "fonts": [
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexSans-SemiBold.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexSans-Regular.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexSans-Medium.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexMono-Medium.woff2",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:8801/fonts/IBMPlexMono-Regular.woff2",
+        "status": 200
+      }
+    ],
+    "select_option": {
+      "color": "rgb(228, 234, 246)",
+      "background": "rgb(16, 26, 47)"
+    },
+    "interactions": "box/ribbon/clear/Enter/Space/CVE/tab arrows/Home/End/dialog/select/Escape PASS"
+  },
+  "smoke": "SSVC save/rerun persistence; new target+context+upload ready; upload fixture+run on offline demo PASS",
+  "font_fallback": "404 fonts: visible heading and no pageerror PASS (expected 404 resource errors excluded from main console check)"
+}

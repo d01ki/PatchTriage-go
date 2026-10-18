@@ -1,0 +1,65 @@
+{
+  "ink": {
+    "s1": 15.48,
+    "bg": 16.41,
+    "s2": 14.37
+  },
+  "mut": {
+    "s1": 5.88,
+    "bg": 6.23,
+    "s2": 5.45
+  },
+  "acc": {
+    "s1": 10.34,
+    "bg": 10.96,
+    "s2": 9.6
+  },
+  "immediate": {
+    "s1": 6.12,
+    "bg": 6.49,
+    "s2": 5.68
+  },
+  "outofcycle": {
+    "s1": 10.48,
+    "bg": 11.1,
+    "s2": 9.72
+  },
+  "scheduled": {
+    "s1": 5.91,
+    "bg": 6.26,
+    "s2": 5.48
+  },
+  "defer": {
+    "s1": 3.93,
+    "bg": 4.16,
+    "s2": 3.64
+  },
+  "dim": {
+    "s1": 3.09,
+    "bg": 3.27,
+    "s2": 2.87
+  },
+  "primary button": {
+    "white on blue": 3.68,
+    "white on cyan": 1.81,
+    "bg on blue": 5.38,
+    "bg on cyan": 10.96
+  },
+  "defer text mix": {
+    "s1": 6.34,
+    "bg": 6.72,
+    "s2": 5.89
+  },
+  "outcome text on 12% leaf tint": {
+    "immediate": 5.79,
+    "outofcycle": 9.22,
+    "scheduled": 5.5,
+    "defer": 6.11
+  },
+  "outcome text on 8% badge tint": {
+    "immediate": 5.66,
+    "outofcycle": 9.22,
+    "scheduled": 5.37,
+    "defer": 5.91
+  }
+}

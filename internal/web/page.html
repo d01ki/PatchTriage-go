@@ -2,6 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#060a13">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b1222'/%3E%3Cpath d='M16 6v20M6 12h20' stroke='%2322d3ee' stroke-width='3'/%3E%3C/svg%3E">
 <title>PatchTriage</title>
 <style>
   :root{
@@ -337,6 +338,8 @@
 
   @media(min-width:1001px){.decisionpane{overflow-y:auto;scrollbar-gutter:stable}
   .results,.result{flex:none}
+  /* A hidden overflow ancestor prevents the tabs from sticking to the pane. */
+  .result{overflow:visible}
   .resultpanel{flex:none;overflow:visible}
   .resulttabs{position:sticky;top:0;z-index:3}
 
@@ -434,7 +437,8 @@
 
   .nodecode,.factorcode,.derivedlabel,.startstep span,.outcomemicro b,.decisionline b,.reviewflag,.assumedmark,.pathcontext .policyhint,.pathsource.assumed strong{color:var(--ink)}
 
-  .reportlink,.textbutton,.source.ready,.contextintro a,.ssvcabout a,.ssvcabout>summary,.evidencelinks a,.advisoryline a{color:var(--acc)}
+  .reportlink,.textbutton,.contextintro a,.ssvcabout a,.ssvcabout>summary,.evidencelinks a,.advisoryline a{color:var(--acc)}
+  .source.ready{color:var(--ink)}
 
   .evidencelinks a:hover,.reportlink:hover,.textbutton:hover{color:var(--ink)}
 
@@ -454,7 +458,8 @@
   .decision,.decisionline,.emptyviz{background:var(--s2);border-color:var(--line2);border-radius:6px;color:var(--ink)}
 
   .decision .outcome-now{color:var(--c-immediate)}
-  .arrow{color:var(--dim)}
+  .arrow{color:var(--mut)}
+  .outcomesummary .microtitle,.treepick .fieldlabel{color:var(--mut)}
 
   .track,.scanline{background:var(--line)}
   .fill,.fill.epss,.fill.pt,.scanline:after{background:var(--mut)}
@@ -513,7 +518,7 @@
   .outcomestrip>div{background:var(--s1);border-left:2px solid var(--outcome);padding:10px 16px}
   .outcomestrip b{display:block;font-size:22px;font-weight:500;color:var(--ink)}
   .outcomestrip span{display:block;font-size:12px;color:var(--mut)}
-  .overviewtable .textbutton{font-family:var(--mono-font);font-weight:500;color:var(--acc)}
+  .overviewtable .textbutton{font-family:var(--mono-font);font-weight:500;color:var(--acc);white-space:nowrap}
   .tag.hot{border-color:color-mix(in srgb,var(--c-immediate) 40%,transparent);color:#ff8a8d;background:color-mix(in srgb,var(--c-immediate) 8%,transparent)}
   .treecanvas{background:var(--bg)}
   .tree .edge{stroke:var(--line2)}
