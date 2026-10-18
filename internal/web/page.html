@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#10151e">
+<meta name="theme-color" content="#060a13">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b1222'/%3E%3Cpath d='M16 6v20M6 12h20' stroke='%2322d3ee' stroke-width='3'/%3E%3C/svg%3E">
 <title>PatchTriage</title>
 <style>
   :root{
@@ -224,213 +225,327 @@
   @media(max-width:700px){.brand{font-size:14px}.topbar{height:auto;min-height:64px;gap:8px}.topactions .btn{font-size:13px;padding:7px 9px}.topactions{flex-wrap:wrap;justify-content:flex-end;padding:8px 0}.workspaceinner{display:flex}.sidebar{max-height:none}.sidebar .kpis{grid-template-columns:repeat(3,1fr);gap:10px;padding-top:12px}.sidebar .kpi:last-child{grid-column:auto}.sidebar .kpi .value{font-size:18px}.sidebarfoot .hint{display:none}.targetlist{max-height:180px}.sectiontitle span{font-size:14px}.outcomerow .name{font-size:14px}.resulthead{grid-template-columns:100px minmax(0,1fr)}.resulttabs{gap:18px}.landing{padding:28px 20px;gap:24px}.landing h1{font-size:52px}.landing .hero p{font-size:17px}.landing .proofhead{flex-wrap:wrap;gap:5px}.landing .node{min-height:0}.landing .decision{flex-wrap:wrap}.landing .outcome{border-left:1px solid var(--line)}.landing .heroactions{flex-direction:column;align-items:stretch}.landing .heroactions .btn{text-align:center}}
 </style>
 <style id="console-theme">
-  /* Presentation-only theme. Keep the assessment controls and responsive layout. */
+  @font-face{font-family:"IBM Plex Sans";src:url("/fonts/IBMPlexSans-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+
+  @font-face{font-family:"IBM Plex Sans";src:url("/fonts/IBMPlexSans-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+
+  @font-face{font-family:"IBM Plex Sans";src:url("/fonts/IBMPlexSans-SemiBold.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+
+  @font-face{font-family:"IBM Plex Mono";src:url("/fonts/IBMPlexMono-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+
+  @font-face{font-family:"IBM Plex Mono";src:url("/fonts/IBMPlexMono-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+
   :root{
-    color-scheme:dark;
-    --void:#090b11;--void2:#10131b;--panel:#171c28;--panel2:#20283b;
-    --ink:#edf0f7;--muted:#9da8bd;--line:#2b3244;
-    --hot:#baadff;--amber:#ffd18a;--blue:#a9bfff;--cyan:#8ce4ef;
-    --paper:#10131b;--dark:#edf0f7;
-    --immediate:#c0647b;--outofcycle:#b79552;--scheduled:#657edb;--defer:#65728d;
-    --c-immediate:#c0647b;--c-outofcycle:#b79552;--c-scheduled:#657edb;--c-defer:#48546e;
-    --glass:#171c28;
-    --surface:#10151f;--accent:#87a8fa;
-    --ui-font:"Segoe UI Variable Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+  --bg:#060a13;--s1:#0b1222;--s2:#101a2f;--line:#1b2740;--line2:#26344f;
+  --ink:#e4eaf6;--mut:#8391ab;--dim:#56637c;--acc:#22d3ee;--acc2:#3b82f6;
+  --glow:0 0 0 1px #22d3ee66,0 0 20px #22d3ee33;
+  --c-immediate:#ff5a5f;--c-outofcycle:#ffb340;--c-scheduled:#5b8cff;--c-defer:#64748b;
+  --void:var(--bg);--void2:var(--s1);--panel:var(--s1);--panel2:var(--s2);
+  --muted:var(--mut);--paper:var(--bg);--dark:var(--ink);--glass:var(--s1);--surface:var(--s2);
+  --hot:var(--ink);--amber:var(--mut);--blue:var(--acc2);--cyan:var(--acc);--accent:var(--acc);
+  --immediate:var(--c-immediate);--outofcycle:var(--c-outofcycle);--scheduled:var(--c-scheduled);--defer:var(--c-defer);
+  --ui-font:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono-font:"IBM Plex Mono",ui-monospace,Consolas,monospace;
   }
-  body{
-    padding:0;gap:0;background:var(--void);
-    color:var(--ink);font-family:var(--ui-font);font-weight:400;letter-spacing:.005em;
-  }
-  ::selection{background:#9985dd;color:#fff}
-  *{scrollbar-width:thin;scrollbar-color:#7987a9 transparent}
-  .topbar{
-    min-height:60px;padding:0 24px;border:0;border-bottom:1px solid var(--line);
-    border-radius:0;background:var(--void);box-shadow:none;
-  }
+
+  /* Existing layout, typography sizing, and responsive behavior. */
+  body{padding:0;gap:0;font-weight:400;letter-spacing:.005em}
+  *{scrollbar-width:thin}
+  .topbar{min-height:60px;padding:0 24px;border:0;border-bottom:1px solid var(--line)}
   .brand{font-weight:650;letter-spacing:.025em;gap:7px}
-  .brand,.brand span{color:var(--ink)}.brand small{color:var(--muted);font-size:13px}
-  .brandmark{border-radius:9px;border-color:#b4a6f0;background:#8979cf22}
-  .brandmark:before,.brandmark:after{background:#d2c7ff}
-  .btn{border-radius:10px;border-color:var(--line);background:#687a9d29;color:var(--ink);font-weight:600;transition:background .18s,border-color .18s,transform .18s}
-  .btn:hover{background:#8d9dc53d;border-color:#b2bfe68c}
-  .btn.primary{background:#3c5caa;color:#f5f7ff;border-color:#5877c4;font-weight:600}
-  .btn.primary:hover{background:#486bbd;border-color:#7896df}
-  .btn.ghost{background:transparent}.btn.attach{background:#ac9cee20;color:#e0d8ff;border-color:#a598d96b}
-  .btn.danger{color:#ffb0bd}.btn:disabled{opacity:.45;transform:none}
-  .btn:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
-  .landing,.workspace{
-    background:var(--void2);border:0;border-radius:0;
-    box-shadow:none;color:var(--ink);
-  }
+  .brand small{font-size:13px}
+  .btn{font-weight:600;transition:background .18s,border-color .18s,transform .18s}
+  .btn.primary{font-weight:600}
+  .btn:disabled{opacity:.45;transform:none}
+  .btn:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline-offset:3px}
+  .landing,.workspace{border:0}
   .landing{padding:28px 32px;gap:26px}
-  .landing h1{font-weight:650;letter-spacing:-.045em}.landing h1 em{color:#c6b7ff}
-  .landing .hero p,.landing .benchmarkcopy p{color:var(--muted)}
-  .eyebrow,.landing .eyebrow{color:#c6b7ff;font-family:var(--ui-font);font-weight:650;letter-spacing:.12em}
-  .proof,.benchmarkcopy,.outcome,.node,.lightpanel,.result,.target{
-    background:var(--glass);border-color:var(--line);border-radius:16px;
-    box-shadow:inset 0 1px 0 #e4eaff0a,0 10px 26px #15233c1c;
-  }
+  .landing h1{font-weight:650;letter-spacing:-.045em}
+  .eyebrow,.landing .eyebrow{font-weight:650;letter-spacing:.12em}
   .proof:after{display:none}
-  .proofhead,.node small,.decision span{color:var(--muted)}
-  .landing .node{border-radius:12px;background:var(--surface)}
-  .landing .benchmark{gap:14px}.landing .outcomes{gap:10px}.landing .outcome{border:1px solid var(--line)}
-  .factorcode{background:#8ce4ef12;border-color:#8ce4ef42;color:#a6eaf4}
-  .factorquestion,.outcome small b{color:#e0e7f8}.outcome small{color:var(--muted)}
-  .decision{border-radius:12px;background:#af97ee17;border-left-color:#bbaaff}
-  .decision .outcome-now{color:#dacfff}.arrow{color:#a6b5d2}
-  .workspace{padding:18px}.workspaceinner{gap:20px}
-  .sidebar{border-color:var(--line);padding-right:18px}
-  .sidebarhint,.sidebarfoot .hint,.hint,.sectiontitle span,.enginelabel{color:var(--muted)}
+  .landing .benchmark{gap:14px}
+  .landing .outcomes{gap:10px}
+  .landing .outcome{border:1px solid var(--line)}
+  .workspace{padding:18px}
+  .workspaceinner{gap:20px}
+  .sidebar{padding-right:18px}
   .sectiontitle h2{font-weight:600;letter-spacing:-.025em}
-  .target{border-radius:13px;overflow:hidden}.target:hover{border-color:#a4b3d769}
-  .target.selected{border-color:#bfaff5;box-shadow:0 0 0 1px #baa6f038,0 8px 22px #14213c26}
-  .targetselect{color:var(--ink);border-radius:12px}
-  .targetselect[aria-pressed=true]{background:#1e2944}
-  .targetname{font-weight:600}.targetmeta{color:var(--muted)}.targetstate{color:#bcbaff}.targetstate.failed{color:#ffb0bd}
-  .sidebar .kpis{border-color:var(--line)}.sidebar .kpi .value{color:var(--ink);font-family:var(--ui-font);font-weight:600}
-  .sidebar .kpi .label{color:var(--muted)}.sidebarfoot .btn{background:#9aacd015}
-  .enginevalue{color:#dcd5fa}.outcomesummary{background:var(--glass);border-radius:14px}
-  .outcomesummary .microtitle,.microtitle{color:var(--muted);font-family:var(--ui-font);letter-spacing:.055em}
-  .outcomerow .name,.outcomerow .count{color:var(--ink)}.outcomerow .count{font-family:var(--ui-font);font-weight:600}
-  .outcomerow .count small,.outcomerow .meaning{color:var(--muted)}
-  .donutlabel{fill:var(--ink)}.donutsub{fill:#d0d9ef}.donut circle:not(.seg){stroke:#8a9abb40}
-  .result{background:var(--panel);border-radius:8px}
-  .resulthead{border-color:var(--line);background:#91a3cc08}
-  .priority{font-family:var(--ui-font);font-weight:700;border-radius:9px;background:#73869e;color:#162136}
-  .priority.immediate{color:#281720}.priority.scheduled{color:#17203e}.priority.no-findings{background:#8796b0;color:#1b263f}
-  .prioritymeaning,.prioritydue,.rname{color:var(--muted)}.action{font-weight:600}
-  .reportlink,.textbutton,.source.ready{color:#d0c6ff}
-  .resulttabs{border-color:var(--line);background:#18233a14;gap:22px}
-  .resulttab{color:var(--muted);font-weight:500}.resulttab:hover{color:#fff}
-  .resulttab[aria-selected=true]{color:#e0d7ff;border-color:#bca8fa}
-  .tabcount,.metric,.tag{background:#aec0e519;color:#d5def3;border-color:var(--line);border-radius:8px}
-  .tag.hot,.metric.alert{background:#e7778926;color:#ffbac5;border-color:#e777895c}
-  .tag.demo,.tag.warn,.tabcount.warn{background:#e8b66820;color:#ffe0aa;border-color:#e8b66852}
-  .treecanvas{background:var(--surface);border-color:var(--line);border-radius:12px}
-  .tree .edge{stroke:#8d9eb94d}.tree .edge.on{stroke:#c6b6ff;stroke-width:2.6}
-  .tree .node rect{fill:#475674;stroke:#8d9abb66}.tree .node text{fill:#d0d8ec;font-family:var(--ui-font);font-weight:400}
-  .tree .node.on rect{fill:#7867ab;stroke:#c5b5f4}.tree .node.on text{fill:#fff;font-weight:600}
-  .tree .node.on.assumed rect{fill:#5c507c;stroke:#f1c780}
-  .tree .root rect{fill:#4a4d76;stroke:#b5a7eb}.tree .root text{fill:#f1ebff}
-  .tree .colhead{fill:#c5cee3;font-family:var(--ui-font);font-weight:500}
-  .tree .leaf.off{opacity:.6}.tree .leaf.on rect{stroke:#e9e4ff}.tree .leaf text{font-family:var(--ui-font)}
-  .treelegend,.pathsource,.pathcontext,.pathsentence,.pathsentence .src{color:var(--muted)}
-  .pathsource{border-color:#a898df6b}.pathsource strong,.pathcontext b{color:#edf0fc}
-  .pathsource.assumed{background:#e8b66813;border-color:#e8b668;border-radius:0 7px 7px 0}
-  .pathcontext .policyhint{color:#e9cd9d}
-  .evidencelinks a,.evidencelinks span,.advisoryline a,.advisoryline span{color:#d9d0ff;background:#9e8fd01a;border-color:#b7a8e738;border-radius:7px}
-  .evidencelinks a:hover,.reportlink:hover,.textbutton:hover{color:#fff}
-  .queuetable th,.queuetable td,.ssvcinputtable th,.ssvcinputtable td,.metricrow,.breakdown,.form,.bodpanel{border-color:var(--line)}
-  .queuetable th,.ssvcinputtable th,.queuetable .cves,.inputsource,.bodcell.reference b{color:var(--muted)}
-  .queuetable tbody tr:hover,.ssvcinputtable tbody tr:hover{background:#b2bfe80a}
-  .kindtag{background:#a8b9df14;border-color:var(--line);color:#d6e0f5;border-radius:6px}
-  .outcomepill.immediate i{background:var(--c-immediate)}.outcomepill.out-of-cycle i{background:var(--c-outofcycle)}.outcomepill.scheduled i{background:var(--c-scheduled)}
-  .breakdown .chip{color:var(--ink);border-color:var(--line)}
-  .emptycontent .eyebrow{color:#d0c0ff}.emptycontent h3{font-weight:600}.emptycontent p,.statecard span,.previousresult{color:var(--muted)}
-  .startstep,.emptyresult,.factor,.signal,.outcomemicro,.decisionnote,.ssvcfield,.derived{background:var(--surface);border-color:var(--line);border-radius:12px;color:var(--ink)}
-  .startstep b,.fieldname,.fieldnow b,.derivedvalue b,.signal b,.decisionnote b{color:var(--ink)}
-  .startstep{color:var(--muted)}.startstep span{color:#cfbfff}
-  .emptyresult span,.factor span,.factor small,.signal span,.comparefoot,.outcomemicro span,.ssvcinputreview p,.actionqueue p,.evidence small{color:var(--muted)}
-  .outcomemicro b{color:#d0c0ff}.basis{background:#bca8fa1a;color:#e7dfff;border-left-color:#bca8fa;border-radius:10px}
-  .decisionline{background:#252f49;border-radius:10px}.decisionline b{color:#cfbfff}.decisionline span{color:var(--muted)}
-  .metric.audit{background:#8ce4ef1a;color:#b4f0f7}.metricrow,.ssvcinputreview{background:transparent}
-  .evidence li{border-color:var(--line);border-radius:10px}.evidenceicon{background:#c0cbea20;color:#e0e7f9}
-  .evidenceicon.confirmed{background:#83d7b02b;color:#b0f1d3}.evidenceicon.attention{background:#e8b66826;color:#ffdda0}
-  .track,.scanline{background:#bcc9ea26}.fill.pt,.scanline:after{background:#baa8f4}
-  .privacy,.confirmbar,.resultnotice,.fieldnow.fallback,.patchtriagenote,.kindtag.mitigate{background:#e8b66817;color:#ffe0af;border-color:#e8b66855}
-  .privacy,.confirmbar{border-radius:10px}.reviewflag{color:#ffd59a}.patchtriagenote{color:#ffe0af!important}
-  .patchtriagenote b,.fieldnow.fallback b{color:#ffe8c6}
-  dialog,#contextdialog{background:#36435f;color:var(--ink);border:1px solid #aabce44d;border-radius:18px;box-shadow:0 30px 90px #111b3e88}
-  dialog::backdrop{background:#18213999;backdrop-filter:blur(7px)}
-  #contextdialog .add{background:transparent}.dialogbody p,.addhead .hint,.fieldhelp,.fieldq,.fieldnow,.derivednote,.derivedvalue span,.ssvcabout{color:var(--muted)}
-  input[type=text],select{background:#26334e;color:var(--ink);border-color:#a5b5d94a;border-radius:9px;accent-color:#bca8fa}
-  input::placeholder{color:#a7b4ce}select option{background:#26334e;color:var(--ink)}
-  .fieldlabel,.fieldhelp b,.advgroup,.advanced summary{color:#d1dbef}
-  .advanced,.advcol+.advcol{border-color:var(--line)}
-  .ssvcblock,.contextintro{background:#a0b6e00b;border-color:var(--line);border-radius:12px}
-  .ssvcfield.set{border-left-color:#bca8fa}.ssvcfield.pending{border-left-color:#e8b668}
-  .fieldnum,.ssvcfield.set .fieldnum{background:#7363a5;color:#fff}
-  .standardtag{background:#baa6f51a;border-color:#bca8fa55;color:#e4daff}
-  .ssvcprogress{background:#e8b6681a;border-color:#e8b66855;color:#ffdfa8}
-  .ssvcprogress.done{background:#83d7b01a;border-color:#83d7b055;color:#b0f1d3}
-  .derivedlabel,.contextintro a,.ssvcabout a,.ssvcabout>summary{color:#d1c4ff}.contextintro span{color:var(--muted)}
-  .toast{background:#34415d;border-color:#a6b9e666;border-radius:12px;color:var(--ink)}.toast.error{border-color:#ee8da1}
-  @media(max-width:1100px){.workspace{padding:14px}.landing{padding:24px}}
-  @media(max-width:700px){
-    .topbar{padding:8px 12px;border-radius:0}
-    .brand{font-size:13px}.topactions .btn{font-size:12px}.workspace{padding:14px 12px;border-radius:0}
-    .sidebar{padding-right:0}.landing{padding:24px 18px}.landing h1{font-size:46px}
-    .landing .benchmark{gap:12px}.landing .outcomes{gap:8px}.outcomesummary{padding:10px}
+  .target{overflow:hidden}
+  .targetname{font-weight:600}
+  .sidebar .kpi .value{font-weight:600}
+  .outcomesummary .microtitle,.microtitle{letter-spacing:.055em}
+  .outcomerow .count{font-weight:600}
+  .action{font-weight:600}
+  .resulttabs{gap:22px}
+  .resulttab{font-weight:500}
+  .tree .node text{font-weight:400}
+  .tree .node.on text{font-weight:600}
+  .tree .colhead{font-weight:500}
+  .emptycontent h3{font-weight:600}
+  dialog,#contextdialog{border:1px solid var(--line)}
+  dialog::backdrop{backdrop-filter:blur(7px)}
+
+  @media(max-width:1100px){.workspace{padding:14px}
+  .landing{padding:24px}
   }
-  /* Proportional UI typography, with aligned digits for metrics and tables. */
-  .mono,.eyebrow,.proofhead,.nodecode,.decision .outcome-now,.factorcode,.kpi .value,.kpi .label,
-  .sectiontitle span,.enginelabel,.standardtag,.ssvcprogress,.fieldnum,.derivedlabel,.targetid,.tag,
-  .priority,.prioritydue,.metric,.microtitle,.barvalue,.outcomemicro b,.factor span,.decisionline b,
-  .signal b,.evidenceicon,.advisoryline a,.advisoryline span,.outcomerow .count small,
-  .breakdown .chip b,.queuetable td.num,.startstep span,.vs{font-family:var(--ui-font)}
+
+  @media(max-width:700px){.topbar{padding:8px 12px}
+  .brand{font-size:13px}
+  .topactions .btn{font-size:12px}
+  .workspace{padding:14px 12px}
+  .sidebar{padding-right:0}
+  .landing{padding:24px 18px}
+  .landing h1{font-size:46px}
+  .landing .benchmark{gap:12px}
+  .landing .outcomes{gap:8px}
+  .outcomesummary{padding:10px}
+
+  }
   .kpi .value,.outcomerow .count,.donutlabel,.donutcount,.metric,.queuetable td.num{font-variant-numeric:tabular-nums}
   .brand{font-weight:600;letter-spacing:.01em}
   .sectiontitle h2,.emptycontent h3,.dialogbody h3,.addhead h3{font-weight:500;letter-spacing:-.015em}
   .targetname,.action,.btn,.resulttab,.fieldlabel,.outcomerow .name{font-weight:600}
   .proofhead,.microtitle,.enginelabel,.kpi .label{letter-spacing:.03em}
-  /* Flat console surfaces and readable counts at every viewport size. */
-  .proof,.benchmarkcopy,.outcome,.node,.lightpanel,.target,.outcomesummary,.treecanvas,.emptyresult,
-  .startstep,.factor,.signal,.ssvcfield,.derived,.decisionnote,.btn{border-radius:6px;box-shadow:none}
-  .brandmark{border-radius:5px}.brand small{font-size:12px}
+  .brand small{font-size:12px}
   .landing h1{font-size:clamp(38px,4vw,64px);letter-spacing:-.05em}
-  .landing h1 em,.eyebrow,.landing .eyebrow,.emptycontent .eyebrow{color:#b5c3df}
-  .target.selected{border-color:#899bbe;box-shadow:none}
-  .targetname,.sectiontitle h2{font-size:18px}.targetmeta,.targetstate{font-size:12px}
-  .targetstate,.reportlink,.textbutton,.source.ready,.derivedlabel,.ssvcabout a,.ssvcabout>summary{color:#b8c8e7}
-  .action{font-size:16px}.resulttools{flex-wrap:wrap}.resulttab{font-size:13px}
-  .resulttab[aria-selected=true]{color:#d1dcf0;border-color:#90a5c9}
-  .tree .node text,.tree .root text,.tree .leaf text{font-family:var(--ui-font);font-size:12px}
-  .tree .colhead{font-size:11px}.tree .node rect{fill:#263246;stroke:#43536c}
-  .tree .node.on rect{fill:#2c4277;stroke:#7392d1}.tree .edge.on{stroke:#6d8ed3}
-  .tree .root rect{fill:#1b263c;stroke:#50658c}.tree .node.on.assumed rect{fill:#3b3043;stroke:#b79552}
-  .tree .leaf.on rect{stroke:#ccd7e8}.tree .leaf.off{opacity:.55}
-  .priority{font-size:13px}.priority.immediate{background:#512936;color:#f3bdcc}.priority.scheduled{background:#263762;color:#c2d0ff}
-  .priority.out-of-cycle{background:#493b25;color:#efd3a1}
-  dialog,#contextdialog{background:var(--panel);border-color:var(--line);border-radius:8px}
-  input[type=text],select,select option{background:var(--surface);color:var(--ink)}
-  .donutlabel{font:500 28px var(--ui-font);fill:var(--ink)}
-  .donutsub{font:400 10px var(--ui-font);fill:var(--muted);letter-spacing:.04em}
+  .targetname,.sectiontitle h2{font-size:18px}
+  .targetmeta,.targetstate{font-size:12px}
+  .action{font-size:16px}
+  .resulttools{flex-wrap:wrap}
+  .resulttab{font-size:13px}
+  .tree .colhead{font-size:11px}
+  .donutlabel{font:500 28px var(--ui-font)}
+  .donutsub{font:400 10px var(--ui-font);letter-spacing:.04em}
   .outcomesummary{grid-template-columns:100px minmax(0,1fr);min-height:120px;padding:12px 20px;gap:26px}
   .outcomesummary .donut{width:100px;height:100px;overflow:visible}
   .outcomesummary .microtitle{display:block;margin-bottom:14px;font-size:11px}
-  .outcomerows{gap:16px}.outcomerow{display:block;border:0;padding-left:0}
-  .outcomerow .name{font-size:12px;white-space:nowrap}.outcomerow .count{display:flex;align-items:baseline;gap:8px;font-size:25px;margin-top:6px}
-  .outcomerow .count small{display:inline;font-size:12px;margin:0;color:var(--muted)}
-  .outcomerow .count{font-weight:500}.outcomerow .name{color:#b0bad0;font-weight:400}
+  .outcomerows{gap:16px}
+  .outcomerow{display:block;border:0;padding-left:0}
+  .outcomerow .name{font-size:12px;white-space:nowrap}
+  .outcomerow .count{display:flex;align-items:baseline;gap:8px;font-size:25px;margin-top:6px}
+  .outcomerow .count small{display:inline;font-size:12px;margin:0}
+  .outcomerow .count{font-weight:500}
+  .outcomerow .name{font-weight:400}
   .pathsources{gap:0;margin-top:16px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .pathsource{border:0;padding:0 16px;font-family:var(--ui-font);line-height:1.5}
-  .pathsource:first-child{padding-left:0}.pathsource+.pathsource{border-left:1px solid var(--line)}
-  .pathsource .sourcekey{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:0}
-  .pathsource strong{font-size:16px;font-weight:500;color:var(--ink);margin:3px 0}
-  .pathsource .sourcevia{font-size:12px;font-weight:400;color:#9aa6be}
-  .pathsource.assumed{background:transparent;border-radius:0}.pathsource.assumed strong{color:#dfbf88}
-  .overview{display:grid;gap:12px}.flowcanvas{padding:12px 14px;overflow-x:auto}
-  .treecanvas svg.flowchart{display:block;width:100%;min-width:720px;max-height:none;height:auto}
-  .flowchart .colhead{fill:#c5cee3;font:500 11px var(--ui-font)}
-  .flowchart .ribbon{fill-opacity:.42;cursor:pointer;transition:fill-opacity .15s}.flowchart .ribbon:hover,.flowchart .ribbon:focus-visible{fill-opacity:.8;outline:none}
-  .flowchart .ribbon.dim{fill-opacity:.1}.flowchart .ribbon.hit{fill-opacity:.75;pointer-events:none}
-  .flowchart .flownode{cursor:pointer}.flowchart .flownode rect{fill:#263246;stroke:#43536c}
-  .flowchart .flownode text{fill:#d0d8ec;font:500 12px var(--ui-font);pointer-events:none}.flowchart .flownode .count{font-variant-numeric:tabular-nums;fill:#edf0f7}
-  .flowchart .flownode.leaf rect{stroke:none}.flowchart .flownode.leaf text{fill:#fff;font-weight:600}
-  .flowchart .flownode.empty{cursor:default}.flowchart .flownode.empty rect{fill:#1a2231;stroke:#2b3244}.flowchart .flownode.empty text{fill:#5f6a80}
-  .flowchart .flownode:hover rect,.flowchart .flownode:focus-visible rect{stroke:#ccd7e8;stroke-width:1.5}.flowchart .flownode:focus-visible{outline:none}
-  .flowchart .flownode.on rect{stroke:#fff;stroke-width:2}
-  .overviewbar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:30px}
-  .overviewtable td{vertical-align:middle}.overviewtable .textbutton{font-weight:600;padding:0}
-  .assumedmark{color:#dfbf88;font-weight:700}
-  @media(max-width:1100px){.outcomerows{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.outcomerow .count{font-size:20px;margin-top:2px}}
-  @media(max-width:700px){
-    .outcomesummary{grid-template-columns:100px minmax(0,1fr);padding:12px;gap:12px}
-    .outcomesummary .donut{width:100px;height:100px}.outcomesummary .microtitle{font-size:10px;margin-bottom:10px}
-    .outcomerow{padding-left:7px}.outcomerow .name{font-size:10px;white-space:normal}.outcomerow .count{font-size:18px;gap:5px}
-    .outcomerow .count small{font-size:10px}.brand{font-size:12px}.topactions .btn{font-size:11px}
-    .pathsources{row-gap:16px}.pathsource{padding:0 10px}.pathsource:nth-child(odd){border-left:0;padding-left:0}
+  .pathsource{border:0;padding:0 16px;line-height:1.5}
+  .pathsource:first-child{padding-left:0}
+  .pathsource+.pathsource{border-left:1px solid var(--line)}
+  .pathsource .sourcekey{font-size:12px;font-weight:400;letter-spacing:0}
+  .pathsource strong{font-size:16px;font-weight:500;margin:3px 0}
+  .pathsource .sourcevia{font-size:12px;font-weight:400}
+
+
+  @media(min-width:1001px){.decisionpane{overflow-y:auto;scrollbar-gutter:stable}
+  .results,.result{flex:none}
+  /* A hidden overflow ancestor prevents the tabs from sticking to the pane. */
+  .result{overflow:visible}
+  .resultpanel{flex:none;overflow:visible}
+  .resulttabs{position:sticky;top:0;z-index:3}
+
   }
+  .overview{display:grid;gap:12px}
+  .flowcanvas{padding:12px 14px;overflow-x:auto}
+  .treecanvas svg.flowchart{display:block;width:100%;min-width:720px;max-height:none;height:auto}
+  .flowchart .colhead{font:500 11px var(--ui-font)}
+  .flowchart .flownode{cursor:pointer}
+  .flowchart .flownode text{font:500 12px var(--ui-font);pointer-events:none}
+  .flowchart .flownode .count{font-variant-numeric:tabular-nums}
+  .flowchart .flownode.empty{cursor:default}
+  .flowchart .flownode.on rect{stroke-width:2}
+  .overviewbar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:30px}
+  .overviewtable td{vertical-align:middle}
+  .overviewtable .textbutton{font-weight:600;padding:0}
+  .assumedmark{font-weight:700}
+
+  @media(max-width:1100px){.outcomerows{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .outcomerow .count{font-size:20px;margin-top:2px}
+  }
+
+  @media(max-width:700px){.outcomesummary{grid-template-columns:100px minmax(0,1fr);padding:12px;gap:12px}
+  .outcomesummary .donut{width:100px;height:100px}
+  .outcomesummary .microtitle{font-size:10px;margin-bottom:10px}
+  .outcomerow{padding-left:7px}
+  .outcomerow .name{font-size:10px;white-space:normal}
+  .outcomerow .count{font-size:18px;gap:5px}
+  .outcomerow .count small{font-size:10px}
+  .brand{font-size:12px}
+  .topactions .btn{font-size:11px}
+  .pathsources{row-gap:16px}
+  .pathsource{padding:0 10px}
+  .pathsource:nth-child(odd){border-left:0;padding-left:0}
+
+  }
+
+  /* Token-based surfaces; outcome colors are reserved for assessment results. */
+  body{background:var(--bg);color:var(--ink);font-family:var(--ui-font);font-variant-numeric:tabular-nums}
+
+  body *{font-family:var(--ui-font)}
+  .mono,.eyebrow,.proofhead,.nodecode,.decision .outcome-now,.factorcode,.kpi .value,.kpi .label,
+  .sectiontitle span,.enginelabel,.standardtag,.ssvcprogress,.fieldnum,.derivedlabel,.targetid,.tag,
+  .priority,.prioritydue,.metric,.microtitle,.barvalue,.outcomemicro b,.factor span,.decisionline b,
+  .signal b,.evidenceicon,.advisoryline a,.advisoryline span,.outcomerow .count,.outcomerow .count small,
+  .breakdown .chip b,.queuetable td.num,.startstep span,.vs,.tree .node text,.tree .root text,
+  .tree .leaf text,.tree .colhead{font-family:var(--ui-font)}
+
+  *{scrollbar-color:var(--line2) transparent}
+
+  ::selection{background:var(--acc);color:var(--bg)}
+
+  .topbar{background:linear-gradient(180deg,#0a1120,#060a13);border-color:var(--line);box-shadow:none}
+
+  .brand,.brand span,.landing h1 em,.eyebrow,.landing .eyebrow,.emptycontent .eyebrow{color:var(--ink)}
+
+  .brandmark{border-color:var(--acc);background:linear-gradient(90deg,var(--acc2),var(--acc));border-radius:5px}
+
+  .brandmark:before,.brandmark:after{background:var(--bg)}
+
+  .statusdot{background:var(--mut);box-shadow:none}
+
+  .landing,.workspace{background:var(--bg);color:var(--ink);box-shadow:none}
+
+  .proof,.benchmarkcopy,.outcome,.lightpanel,.result,.outcomesummary,dialog,#contextdialog{background:var(--s1);border-color:var(--line);border-radius:8px;box-shadow:none}
+
+  .node,.landing .node,.target,.startstep,.emptyresult,.factor,.signal,.outcomemicro,.decisionnote,.ssvcfield,.derived,.contextintro,.ssvcblock,.treecanvas{background:var(--s2);border-color:var(--line);border-radius:6px;box-shadow:none;color:var(--ink)}
+
+  .sidebar{background:var(--s1)}
+
+  .target{background:var(--s1)}
+  .target:hover{border-color:var(--line2)}
+
+  .target.selected{border-color:var(--acc);box-shadow:var(--glow)}
+
+  .targetselect{color:var(--ink);border-radius:6px}
+  .targetselect[aria-pressed=true]{background:var(--s2)}
+
+  .btn,.btn.ghost,.btn.attach,.btn.danger,.sidebarfoot .btn{background:transparent;border-color:var(--line2);color:var(--ink);border-radius:6px;box-shadow:none}
+
+  .btn:hover,.btn.ghost:hover,.btn.attach:hover,.btn.danger:hover,.sidebarfoot .btn:hover{background:var(--s2);border-color:var(--line2)}
+
+  /* Dark text meets 4.5:1 across this gradient; white does not. */
+  .btn.primary,.btn.primary:hover{background:linear-gradient(90deg,var(--acc2),var(--acc));border-color:transparent;color:var(--bg)}
+
+  .btn:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+
+  .sidebar,.sidebar .kpis,.form,.advanced,.advcol+.advcol,.queuetable th,.queuetable td,.ssvcinputtable th,.ssvcinputtable td,.metricrow,.breakdown,.bodpanel,.resulthead,.resulttabs,.evidence li,.pathsources,.pathsource+.pathsource,.treeview,.actionqueue,.compare{border-color:var(--line)}
+
+  .kpis,.metricrow,.ssvcinputreview,.resulthead{background:transparent}
+
+  .sidebar .kpi .value,.kpi .value,.factorquestion,.outcome small b,.fieldname,.fieldnow b,.derivedvalue b,.signal b,.decisionnote b,.startstep b,.outcomerow .name,.outcomerow .count,.pathsource strong,.pathcontext b,.fieldlabel,.fieldhelp b,.advgroup,.advanced summary,.enginevalue{color:var(--ink)}
+
+  .brand small,.landing .hero p,.landing .benchmarkcopy p,.proofhead,.node small,.decision span,.outcome small,.sidebarhint,.sidebarfoot .hint,.hint,.sectiontitle span,.enginelabel,.targetmeta,.targetid,.targetstate,.targetstate.failed,.sidebar .kpi .label,.microtitle,.outcomerow .count small,.outcomerow .meaning,.prioritymeaning,.prioritydue,.rname,.treelegend,.pathsource,.pathcontext,.pathsentence,.pathsentence .src,.pathsource .sourcekey,.pathsource .sourcevia,.queuetable th,.ssvcinputtable th,.queuetable .cves,.inputsource,.bodcell.reference b,.emptycontent p,.statecard span,.previousresult,.startstep,.emptyresult span,.factor span,.factor small,.signal span,.comparefoot,.outcomemicro span,.ssvcinputreview p,.actionqueue p,.evidence small,.dialogbody p,.addhead .hint,.fieldhelp,.fieldq,.fieldnow,.derivednote,.derivedvalue span,.ssvcabout,.contextintro span,.source,.emptycopy p{color:var(--mut)}
+
+  .nodecode,.factorcode,.derivedlabel,.startstep span,.outcomemicro b,.decisionline b,.reviewflag,.assumedmark,.pathcontext .policyhint,.pathsource.assumed strong{color:var(--ink)}
+
+  .reportlink,.textbutton,.contextintro a,.ssvcabout a,.ssvcabout>summary,.evidencelinks a,.advisoryline a{color:var(--acc)}
+  .source.ready{color:var(--ink)}
+
+  .evidencelinks a:hover,.reportlink:hover,.textbutton:hover{color:var(--ink)}
+
+  .tag,.tag.hot,.tag.demo,.tag.warn,.metric,.metric.alert,.metric.audit,.tabcount,.tabcount.warn,.kindtag,.kindtag.mitigate,.standardtag,.ssvcprogress,.ssvcprogress.done,.factorcode,.evidencelinks a,.evidencelinks span,.advisoryline a,.advisoryline span,.breakdown .chip{background:var(--s2);border-color:var(--line2);color:var(--mut);border-radius:4px}
+
+  .evidencelinks a,.advisoryline a{color:var(--acc)}
+
+  .privacy,.confirmbar,.resultnotice,.fieldnow.fallback,.patchtriagenote,.basis,.decisionnote{background:var(--s2);border-color:var(--line2);color:var(--mut);border-radius:6px}
+
+  .patchtriagenote{color:var(--mut)!important}
+  .patchtriagenote b,.fieldnow.fallback b{color:var(--ink)}
+
+  .ssvcfield.set,.ssvcfield.pending{border-left-color:var(--line2)}
+
+  .fieldnum,.ssvcfield.set .fieldnum,.evidenceicon,.evidenceicon.confirmed,.evidenceicon.attention{background:var(--s2);color:var(--ink)}
+
+  .decision,.decisionline,.emptyviz{background:var(--s2);border-color:var(--line2);border-radius:6px;color:var(--ink)}
+
+  .decision .outcome-now{color:var(--c-immediate)}
+  .arrow{color:var(--mut)}
+  .outcomesummary .microtitle,.treepick .fieldlabel{color:var(--mut)}
+
+  .track,.scanline{background:var(--line)}
+  .fill,.fill.epss,.fill.pt,.scanline:after{background:var(--mut)}
+
+  .resulttabs{background:var(--s1)}
+  .resulttab{color:var(--mut)}
+  .resulttab:hover{color:var(--ink)}
+
+
+
+
+  .outcomepill.immediate i{background:var(--c-immediate)}
+  .outcomepill.out-of-cycle i{background:var(--c-outofcycle)}
+  .outcomepill.scheduled i{background:var(--c-scheduled)}
+
+  .donutlabel{fill:var(--ink)}
+  .donutsub{fill:var(--mut)}
+  .donut circle:not(.seg){stroke:var(--line2)}
+
+
+
+
+
+
+
+
+
+  .pathsource.assumed{background:transparent}
+  .queuetable tbody tr:hover,.ssvcinputtable tbody tr:hover{background:var(--s2)}
+
+  input[type=text],select,select option{background:var(--s2);color:var(--ink);border-color:var(--line2);border-radius:6px;accent-color:var(--acc)}
+
+  input::placeholder{color:var(--mut);opacity:1}
+
+  dialog::backdrop{background:#060a13cc;backdrop-filter:blur(7px)}
+
+  .toast,.toast.error{background:var(--s2);color:var(--ink);border-color:var(--line2);border-radius:6px;box-shadow:none}
+
+  .statecard.failed,.statecard.running{border-left-color:var(--line2)}
+
+  .cve,.hash{font-family:var(--mono-font)}
+  .cve{font-weight:500}.hash{font-weight:400}
+
+  /* Results retain their own palette; cyan denotes interaction and selection. */
+  [data-outcome]{--outcome:var(--line2);--outcome-ink:var(--ink)}
+  [data-outcome="immediate"]{--outcome:var(--c-immediate);--outcome-ink:var(--c-immediate)}
+  [data-outcome="out_of_cycle"]{--outcome:var(--c-outofcycle);--outcome-ink:var(--c-outofcycle)}
+  [data-outcome="scheduled"]{--outcome:var(--c-scheduled);--outcome-ink:var(--c-scheduled)}
+  /* Keep Defer geometry at the exact token; lighten only text to meet AA. */
+  [data-outcome="defer"]{--outcome:var(--c-defer);--outcome-ink:color-mix(in srgb,var(--c-defer) 70%,var(--ink))}
+  .resulthead{border-top:2px solid var(--top,var(--line2));border-radius:8px 8px 0 0}
+  .priority[data-outcome]{font:600 13px var(--ui-font);border:1px solid var(--outcome);color:var(--outcome-ink);background:color-mix(in srgb,var(--outcome) 8%,transparent);border-radius:5px}
+  .priority.no-findings{color:var(--ink);background:var(--s2)}
+  .resulttab[aria-selected=true]{color:var(--ink);border-color:var(--acc)}
+  .outcomestrip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+  .outcomestrip>div{background:var(--s1);border-left:2px solid var(--outcome);padding:10px 16px}
+  .outcomestrip b{display:block;font-size:22px;font-weight:500;color:var(--ink)}
+  .outcomestrip span{display:block;font-size:12px;color:var(--mut)}
+  .overviewtable .textbutton{font-family:var(--mono-font);font-weight:500;color:var(--acc);white-space:nowrap}
+  .tag.hot{border-color:color-mix(in srgb,var(--c-immediate) 40%,transparent);color:#ff8a8d;background:color-mix(in srgb,var(--c-immediate) 8%,transparent)}
+  .treecanvas{background:var(--bg)}
+  .tree .edge{stroke:var(--line2)}
+  .tree .edge.on{stroke:var(--acc);stroke-width:2.6}
+  .tree .node rect,.tree .root rect{fill:var(--s1);stroke:var(--line2)}
+  .tree .node text,.tree .root text,.tree .node.on text{fill:var(--ink);font-family:var(--ui-font)}
+  .tree .colhead,.flowchart .colhead{fill:var(--mut);font-family:var(--ui-font)}
+  .tree .node.on rect{fill:color-mix(in srgb,var(--acc) 14%,var(--s1));stroke:var(--acc)}
+  .tree .node.on.assumed rect{stroke:var(--c-outofcycle)}
+  .tree .leaf.off{opacity:1}
+  .tree .leaf rect,.flowchart .flownode.leaf rect{fill:color-mix(in srgb,var(--outcome) 12%,transparent);stroke:var(--outcome)}
+  .tree .leaf.on rect{stroke:var(--outcome);stroke-width:2.5}
+  .tree .leaf text,.flowchart .flownode.leaf text{fill:var(--outcome-ink);font-family:var(--ui-font);font-weight:500}
+  .tree .root text.cve{font-family:var(--mono-font);font-weight:400}
+  .flowchart .ribbon{fill:var(--outcome);fill-opacity:.3;mix-blend-mode:screen;cursor:pointer;transition:fill-opacity .15s}
+  .flowchart .ribbon:hover,.flowchart .ribbon:focus-visible{fill-opacity:.6}
+  .flowchart .ribbon.dim{fill-opacity:.08}
+  .flowchart .ribbon.hit{fill-opacity:.3;pointer-events:none}
+  .flowchart .flownode rect{fill:var(--s1);stroke:var(--line2)}
+  .flowchart .flownode text,.flowchart .flownode .count{fill:var(--ink)}
+  .flowchart .flownode.leaf rect{fill:color-mix(in srgb,var(--outcome) 12%,transparent);stroke:var(--outcome)}
+  .flowchart .flownode.leaf text,.flowchart .flownode.leaf .count{fill:var(--outcome-ink)}
+  .flowchart .flownode.empty rect{stroke:var(--line)}
+  .flowchart .flownode.empty text,.flowchart .flownode.empty .count{fill:var(--mut)}
+  .flowchart .flownode:hover rect,.flowchart .flownode:focus-visible rect,.flowchart .flownode.on rect{stroke:var(--acc);stroke-width:1.5}
+  .flowchart .flownode.on rect{stroke-width:2}
+  @media(max-width:700px){.outcomestrip{grid-template-columns:repeat(2,minmax(0,1fr))}.outcomestrip>div{padding:8px 12px}}
 </style></head>
 <body>
 <header class="topbar">
@@ -758,7 +873,7 @@ function ssvcInputBlock(summary){
   const review=summary.ssvc_inputs_review_total==null?inputs.filter(item=>item.needs_review).length:summary.ssvc_inputs_review_total;
   const visible=inputs.slice(0,(CFG.limits&&CFG.limits.ssvc_review_rows)||250);
   const rows=visible.map(item=>`<tr data-key="${esc(item.finding_key)}" data-exploitation="${esc((item.override||{}).exploitation||"auto")}" data-automatable="${esc((item.override||{}).automatable||"auto")}">
-    <td><b>${esc(item.vuln_id)}</b><span class="inputsource">${esc(item.package)}</span></td>
+    <td><b class="cve">${esc(item.vuln_id)}</b><span class="inputsource">${esc(item.package)}</span></td>
     <td>${ssvcInputSelect("exploitation",item)}</td>
     <td>${ssvcInputSelect("automatable",item)}</td>
     <td>${item.needs_review?'<span class="reviewflag">Review requested</span>':'Confirmed / evidence-backed'}</td>
@@ -808,7 +923,7 @@ function treeSvg(path){
   const ys=n=>Array.from({length:n},(_,i)=>top+(H-top-20)*(i+0.5)/n);
   let edges="",nodes="",prev={x:colX[0]+nodeW,y:top+(H-top-20)/2};
   const clip=(v,n)=>{v=String(v||"");return v.length>n?v.slice(0,n-1)+"…":v;};
-  nodes+=`<g class="node root"><rect x="${colX[0]}" y="${prev.y-27}" width="${nodeW}" height="54" rx="6"></rect><text x="${colX[0]+nodeW/2}" y="${prev.y-6}" text-anchor="middle">${esc(clip(path.asset,18))}</text><text x="${colX[0]+nodeW/2}" y="${prev.y+13}" text-anchor="middle">${esc(clip(path.vuln_id,18))}</text><title>${esc(path.asset)} · ${esc(path.package)} ${esc(path.version)} · ${esc(path.vuln_id)}</title></g>`;
+  nodes+=`<g class="node root"><rect x="${colX[0]}" y="${prev.y-27}" width="${nodeW}" height="54" rx="6"></rect><text x="${colX[0]+nodeW/2}" y="${prev.y-6}" text-anchor="middle">${esc(clip(path.asset,18))}</text><text class="cve" x="${colX[0]+nodeW/2}" y="${prev.y+13}" text-anchor="middle">${esc(clip(path.vuln_id,18))}</text><title>${esc(path.asset)} · ${esc(path.package)} ${esc(path.version)} · ${esc(path.vuln_id)}</title></g>`;
   const heads=["Finding","Exploitation","System Exposure","Automatable","Human Impact","SSVC outcome"].map((h,i)=>`<text class="colhead" x="${colX[i]+(i===5?66:nodeW/2)}" y="20" text-anchor="middle">${h}</text>`).join("");
   let hiYs=[];
   TREE_LEVELS.forEach(([key,,values],level)=>{
@@ -825,7 +940,7 @@ function treeSvg(path){
   (path.branches||[]).forEach((branch,i)=>{
     const on=branch.human_impact===(P.human_impact||{}).value,k=branch.decision,x=colX[5],y=hiYs[i],sx=colX[4]+nodeW;
     edges+=`<path class="edge${on?" on":""}" d="M${sx} ${y} L ${x} ${y}"></path>`;
-    nodes+=`<g class="leaf ${on?"on":"off"}"><rect x="${x}" y="${y-nodeH/2}" width="132" height="${nodeH}" rx="16" style="fill:${OUTCOME_COLOR[k]||"#7d8799"}"></rect><text x="${x+66}" y="${y+4}" text-anchor="middle"${k==="out_of_cycle"?' style="fill:#2d1d00"':""}>${esc(branch.decision_label)}</text><title>Human Impact ${esc(branch.human_impact_label)} → ${esc(branch.decision_label)}</title></g>`;
+    nodes+=`<g class="leaf ${on?"on":"off"}" data-outcome="${esc(k)}"><rect x="${x}" y="${y-nodeH/2}" width="132" height="${nodeH}" rx="5"></rect><text x="${x+66}" y="${y+4}" text-anchor="middle">${esc(branch.decision_label)}</text><title>Human Impact ${esc(branch.human_impact_label)} → ${esc(branch.decision_label)}</title></g>`;
   });
   return `<svg class="tree" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(pathSentencePlain(path))}">${heads}${edges}${nodes}</svg>`;
 }
@@ -874,7 +989,7 @@ function flowSvg(rows,filter){
         off["o"+ka+a]=so+w;off["i"+kb+b]=ti+w;
         const y1=p.y+(p.h-p.n*scale)/2+so,y2=q.y+(q.h-q.n*scale)/2+ti,x1=p.x+nodeW,x2=q.x,mx=(x1+x2)/2;
         const title=`${n} finding${n===1?"":"s"}: ${FLOW_LABEL[ka][a]} → ${FLOW_LABEL[kb][b]} · ${olabel}`;
-        out+=`<path class="ribbon ${cls}" data-flow='${esc(JSON.stringify({[ka]:a,[kb]:b,decision:o}))}' tabindex="${cls==="base"&&!active?0:-1}" role="button" aria-label="${esc(title)}" style="fill:${OUTCOME_COLOR[o]}" d="M${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2} L ${x2} ${y2+w} C ${mx} ${y2+w}, ${mx} ${y1+w}, ${x1} ${y1+w} Z"><title>${esc(title)}</title></path>`;
+        out+=`<path class="ribbon ${cls}" data-outcome="${esc(o)}" data-flow='${esc(JSON.stringify({[ka]:a,[kb]:b,decision:o}))}' tabindex="${cls==="base"&&!active?0:-1}" role="button" aria-label="${esc(title)}" d="M${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2} L ${x2} ${y2+w} C ${mx} ${y2+w}, ${mx} ${y1+w}, ${x1} ${y1+w} Z"><title>${esc(title)}</title></path>`;
       })));
     }
     return out;};
@@ -883,7 +998,7 @@ function flowSvg(rows,filter){
   FLOW_LEVELS.forEach(([key,,values],c)=>values.forEach(([v,label])=>{
     const node=nodes[key+":"+v],leaf=key==="decision",on=active&&filter[key]===v,hits=active?rows.filter(r=>r[key]===v&&matchesFilter(r,filter)).length:node.n;
     const title=`${FLOW_LABEL[key][v]}: ${node.n} finding${node.n===1?"":"s"} · filter the list`;
-    svg+=`<g class="flownode${leaf?" leaf":""}${node.n?"":" empty"}${on?" on":""}" data-flow='${esc(JSON.stringify({[key]:v}))}' tabindex="${node.n?0:-1}" role="button" aria-label="${esc(title)}"><rect x="${colX[c]}" y="${node.y}" width="${nodeW}" height="${node.h}" rx="${leaf?9:5}"${leaf?` style="fill:${OUTCOME_COLOR[v]}"`:""}></rect><text x="${colX[c]+8}" y="${node.y+node.h/2+4}">${esc(label)}</text><text class="count" x="${colX[c]+nodeW-8}" y="${node.y+node.h/2+4}" text-anchor="end">${active&&hits!==node.n?`${hits}/`:""}${node.n}</text><title>${esc(title)}</title></g>`;
+    svg+=`<g class="flownode${leaf?" leaf":""}${node.n?"":" empty"}${on?" on":""}"${leaf?` data-outcome="${esc(v)}"`:""} data-flow='${esc(JSON.stringify({[key]:v}))}' tabindex="${node.n?0:-1}" role="button" aria-label="${esc(title)}"><rect x="${colX[c]}" y="${node.y}" width="${nodeW}" height="${node.h}" rx="5"></rect><text x="${colX[c]+8}" y="${node.y+node.h/2+4}">${esc(label)}</text><text class="count" x="${colX[c]+nodeW-8}" y="${node.y+node.h/2+4}" text-anchor="end">${active&&hits!==node.n?`${hits}/`:""}${node.n}</text><title>${esc(title)}</title></g>`;
   }));
   return `<svg class="flowchart" viewBox="0 0 ${W} ${H}" role="group" aria-label="Decision flow of ${rows.length} findings through the SSVC Deployer tree">${svg}</svg>`;
 }
@@ -894,10 +1009,12 @@ function overviewBlock(summary){
   const filterText=Object.entries(filter).map(([k,v])=>`${FLOW_LEVELS.find(l=>l[0]===k)[1]} ${FLOW_LABEL[k][v]}`).join(" · ");
   const cell=(row,key)=>`${esc(FLOW_LABEL[key][row[key]]||row[key]||"—")}${(row.assumed||[]).includes(key)?' <span class="assumedmark" title="Conservative default; needs confirmation">?</span>':""}`;
   const body=shown.map(row=>`<tr><td><span class="outcomepill ${esc(String(row.decision).replaceAll("_","-"))}"><i style="background:${OUTCOME_COLOR[row.decision]||"var(--c-defer)"}" aria-hidden="true"></i>${esc(row.decision_label)}</span></td>
-    <td>${row.path!=null?`<button class="textbutton openpath" data-path="${esc(row.path)}" title="Open this finding's decision path">${esc(row.vuln_id)}</button>`:esc(row.vuln_id)}${row.kev?' <span class="tag hot">KEV</span>':""}</td>
+    <td>${row.path!=null?`<button class="textbutton openpath cve" data-path="${esc(row.path)}" title="Open this finding's decision path">${esc(row.vuln_id)}</button>`:esc(row.vuln_id)}${row.kev?' <span class="tag hot">KEV</span>':""}</td>
     <td>${esc(row.package)} <span class="hint">${esc(row.version||"")}</span></td><td class="hint">${esc(row.asset||"")}</td>
     <td>${cell(row,"exploitation")}</td><td>${cell(row,"system_exposure")}</td><td>${cell(row,"automatable")}</td><td>${cell(row,"human_impact")}</td></tr>`).join("");
+  const strip=OUTCOME_ORDER.map(([key,label])=>`<div data-outcome="${key}"><b>${esc(summary.outcomes?.[key]||0)}</b><span>${esc(label)}</span></div>`).join("");
   return `<section class="overview" aria-label="All findings at a glance">
+    <div class="outcomestrip" aria-label="Finding counts by SSVC outcome">${strip}</div>
     <div class="microtitle">Decision flow · ${rows.length} findings · ribbon width = findings, color = SSVC outcome · click a box or ribbon to filter</div>
     <div class="treecanvas flowcanvas">${flowSvg(rows,filter)}</div>
     <div class="overviewbar"><span class="microtitle">${active?`Showing ${shown.length} of ${rows.length} · ${esc(filterText)}`:`All ${rows.length} findings · most urgent first`}</span>${active?'<button class="btn small clearflow">Clear filter</button>':""}</div>
@@ -957,7 +1074,7 @@ function queueBlock(summary){
     const cves=item.cves||[],more=Math.max(0,(item.finding_count||cves.length)-cves.length);
     const kind=item.kind==="mitigate"?'<span class="kindtag mitigate">No fix</span>':"";
     return `<tr><td class="num">${index+1}</td><td><span class="outcomepill ${esc(cls)}"><i aria-hidden="true"></i>${esc(label)}</span></td>
-      <td>${kind}${esc(item.summary)}<span class="cves">${esc(cves.join(", "))}${more?` and ${more} more`:""}</span></td>
+      <td>${kind}${esc(item.summary)}<span class="cves"><span class="cve">${esc(cves.join(", "))}</span>${more?` and ${more} more`:""}</span></td>
       <td class="num">${item.kev_count?`${esc(item.kev_count)} KEV`:"—"}</td><td class="num">${esc(item.finding_count)}</td>
       <td class="num">${item.deadline_days==null?"—":`≤ ${esc(item.deadline_days)} days`}</td>
       <td>${bodCell(item.bod2604)}</td><td>${effectiveCell(item)}</td></tr>`;}).join("");
@@ -970,15 +1087,16 @@ function renderResult(summary){
   const hasFindings=summary.total>0,coverage=summary.source?.coverage_status||"unknown";
   const outcome=hasFindings?(summary.top_ssvc_decision||"No decision"):summary.result_state==="coverage_incomplete"?"Partial coverage":"No findings";
   const cls=hasFindings?outcome.toLowerCase().replaceAll(" ","-"):"no-findings";
+  const outcomeKey=OUTCOME_ORDER.find(([,label])=>label===outcome)?.[0]||"";
   const view=VIEWS.get(summary.target_id)||{tab:"overview",finding:0};
   const review=summary.ssvc_inputs_review_total||0;
   const tabs=[["overview","Overview",summary.total],["path","Decision path",""],["actions","Action queue",summary.actions],["evidence","Evidence & policy",""],["review","Review inputs",review]];
   const content=view.tab==="overview"?overviewBlock(summary):view.tab==="actions"?(queueBlock(summary)||'<div class="emptyresult"><b>No package actions</b><span>Review the evidence and coverage in the report.</span></div>'):view.tab==="evidence"?`<div class="microtitle">Highest-priority finding · ${esc(summary.explanation?.vuln_id||"No findings")}</div>${explainBlock(summary)}${qualityBlock(summary)}<details class="compare"><summary>Compare ranking methods</summary>${compareBlock(summary)}</details>`:view.tab==="review"?(ssvcInputBlock(summary)||'<div class="emptyresult"><b>No finding inputs to review</b></div>'):treeBlock(summary);
   const warnings=[...(summary.enrichment_errors||[]),...(summary.vendor_errors||[])];
   const context=summary.evaluated_context||{};
-  return `<article class="result" data-result="${esc(summary.target_id)}" data-id="${esc(summary.target_id)}">
+  return `<article class="result" style="--top:${OUTCOME_COLOR[outcomeKey]||"var(--line2)"}" data-result="${esc(summary.target_id)}" data-id="${esc(summary.target_id)}">
     <div class="resulthead">
-      <div class="prioritybox"><div class="priority ${esc(cls)}">${esc(outcome)}</div><div class="prioritymeaning" title="Highest-priority SSVC outcome">${hasFindings?"Top outcome":"Evidence coverage"}</div><div class="prioritydue">${summary.top_deadline_days==null?"":`workflow ≤ ${esc(summary.top_deadline_days)} days`}</div></div>
+      <div class="prioritybox"><div class="priority ${esc(cls)}" data-outcome="${outcomeKey}">${esc(outcome)}</div><div class="prioritymeaning" title="Highest-priority SSVC outcome">${hasFindings?"Top outcome":"Evidence coverage"}</div><div class="prioritydue">${summary.top_deadline_days==null?"":`workflow ≤ ${esc(summary.top_deadline_days)} days`}</div></div>
       <div><div class="rname">${esc(summary.name)} · ${summary.total} findings · ${summary.actions} actions${summary.demo?" · offline demo":""}</div><div class="action">${esc(summary.top_action||"Assessment completed")}</div><div class="resulttools"><button class="textbutton" data-action="edit">Review context</button><button class="textbutton" data-action="manage">Manage evidence</button><button class="textbutton" data-action="run">Run again</button></div></div>
       <div class="reportlinks"><a class="reportlink" href="${esc(summary.report_url)}" target="_blank" rel="noopener">Open full report →</a><a class="reportlink" href="${esc(summary.report_url)}" download="${esc(reportFilename(summary))}">Download HTML report</a></div>
     </div>
@@ -1013,7 +1131,7 @@ function statusCard(id,status){
 }
 function emptyWorkspace(){return `<div class="empty lightpanel"><div class="emptycontent"><div class="eyebrow">Evidence → decision → action</div><h3>What should you patch first?</h3><p>Add a system and its scan or SBOM. See the next action and the evidence behind every decision.</p><div class="startsteps"><div class="startstep"><b><span>01</span> Add a target</b>Name the system and its context.</div><div class="startstep"><b><span>02</span> Add evidence</b>Upload a scan or import a repository.</div><div class="startstep"><b><span>03</span> Run triage</b>Review the path. Save your report.</div></div><div class="startactions"><button class="btn primary new-target-trigger">+ Add your first target</button><button class="btn demo-trigger">Try the offline demo</button></div></div></div>`;}
 function targetSetup(target){
-  return `<article class="empty lightpanel" data-id="${esc(target.id)}"><div class="emptycontent"><div class="eyebrow">${target.source_file?"Ready to assess":"Step 2 · Add evidence"}</div><h3>${esc(target.name)}</h3><p>${target.source_file?"Your evidence is attached. Run triage to produce the decision path and a downloadable report.":"Upload CycloneDX/SPDX JSON (or Trivy/Grype/OSV scanner JSON), or import a repository."}</p><div class="targetsummary">${contextTags(target)}</div>${target.source_file?`<p class="source ready">${esc(target.source_name||target.source_format)} · ${Math.max(1,Math.round((target.source_size||0)/1024))} KiB · SHA-256 ${esc((target.source_sha256||"").slice(0,12))}</p>`:""}<div class="startactions">${target.source_file?'<button class="btn primary" data-action="run">Run triage →</button>':''}<button class="btn ${target.source_file?"":"primary"}" data-action="import">Upload SBOM</button><button class="btn attach" data-action="repository">Import repository</button></div><div class="targetactions"><button class="textbutton" data-action="edit">Review context</button><button class="textbutton" data-action="delete">Delete target</button>${RESULTS.has(target.id)?'<button class="textbutton" data-action="view">Back to results</button>':""}</div></div></article>`;
+  return `<article class="empty lightpanel" data-id="${esc(target.id)}"><div class="emptycontent"><div class="eyebrow">${target.source_file?"Ready to assess":"Step 2 · Add evidence"}</div><h3>${esc(target.name)}</h3><p>${target.source_file?"Your evidence is attached. Run triage to produce the decision path and a downloadable report.":"Upload CycloneDX/SPDX JSON (or Trivy/Grype/OSV scanner JSON), or import a repository."}</p><div class="targetsummary">${contextTags(target)}</div>${target.source_file?`<p class="source ready">${esc(target.source_name||target.source_format)} · ${Math.max(1,Math.round((target.source_size||0)/1024))} KiB · SHA-256 <span class="hash">${esc((target.source_sha256||"").slice(0,12))}</span></p>`:""}<div class="startactions">${target.source_file?'<button class="btn primary" data-action="run">Run triage →</button>':''}<button class="btn ${target.source_file?"":"primary"}" data-action="import">Upload SBOM</button><button class="btn attach" data-action="repository">Import repository</button></div><div class="targetactions"><button class="textbutton" data-action="edit">Review context</button><button class="textbutton" data-action="delete">Delete target</button>${RESULTS.has(target.id)?'<button class="textbutton" data-action="view">Back to results</button>':""}</div></div></article>`;
 }
 function renderResults(){
   const results=document.getElementById("results"),target=TARGETS.find(t=>t.id===selectedTarget);

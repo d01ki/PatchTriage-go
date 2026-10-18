@@ -1,0 +1,13 @@
+ok  	github.com/d01ki/PatchTriage-go/cmd/patchtriage	6.712s
+ok  	github.com/d01ki/PatchTriage-go/data	0.577s
+ok  	github.com/d01ki/PatchTriage-go/internal/ai	2.551s
+ok  	github.com/d01ki/PatchTriage-go/internal/decision	0.739s
+ok  	github.com/d01ki/PatchTriage-go/internal/enrich	3.771s
+ok  	github.com/d01ki/PatchTriage-go/internal/ingest	3.479s
+ok  	github.com/d01ki/PatchTriage-go/internal/model	0.736s
+ok  	github.com/d01ki/PatchTriage-go/internal/pipeline	3.658s
+ok  	github.com/d01ki/PatchTriage-go/internal/remediation	6.822s
+ok  	github.com/d01ki/PatchTriage-go/internal/report	2.597s
+ok  	github.com/d01ki/PatchTriage-go/internal/repository	14.367s
+ok  	github.com/d01ki/PatchTriage-go/internal/validation	1.867s
+ok  	github.com/d01ki/PatchTriage-go/internal/web	6.335s
